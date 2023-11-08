@@ -1,5 +1,9 @@
 package dto;
 
-public interface ISinhVien {
+import java.util.List;
 
+import entity.SinhVien;
+
+public interface ISinhVien {
+	List<SinhVien> findAll();
 }
