@@ -1,11 +1,13 @@
 package view;
 
-import static constant.Main.*;
+import static constant.Main.CT;
 import static constant.Main.DSSV;
 import static constant.Main.HD;
 import static constant.Main.K;
 import static constant.Main.LH;
 import static constant.Main.PT;
+import static constant.Main.QLCT;
+import static constant.Main.TKSV;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,16 +17,12 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -44,7 +42,7 @@ public class DefaultLayout {
 
 	private JPanel getSidebar() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.red);
+		container.setBackground(Color.GRAY);
 		container.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
 				new EmptyBorder(0, 15, 0, 700)));
 		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
@@ -55,11 +53,8 @@ public class DefaultLayout {
 		String[][] emptyOptions = {};
 
 		container.add(makeNavButton("Sinh Viên", StudentOptions, "src//image//sinh_vien.gif"));
-//		container.add(Box.createHorizontalStrut(10));
 		container.add(makeNavButton(PT, emptyOptions, "src//image//phong_tro.gif"));
-//		container.add(Box.createHorizontalStrut(10));
 		container.add(makeNavButton(CT, chuTroOptions, "src//image//chu_tro.gif"));
-//		container.add(Box.createHorizontalStrut(10));
 		container.add(makeNavButton(HD, emptyOptions, "src//image//hop_dong.gif"));
 
 		return container;
@@ -82,10 +77,6 @@ public class DefaultLayout {
 	}
 
 	private JButton createNavItem(String title, String iconPath) {
-//		JButton container = new JPanel();
-
-//		JButton jLabel = new JButton(title);
-//		jLabel.setFont(new Font("Arial", Font.BOLD, 30));
 		JButton btn = new JButton(title);
 		ImageIcon icon = createImageIcon(iconPath);
 		btn.setBorder(new EmptyBorder(15, 0, 15, 0));
@@ -95,7 +86,6 @@ public class DefaultLayout {
 		btn.setFocusPainted(false);
 		btn.setOpaque(true);
 		btn.setFont(new Font("Arial", Font.BOLD, 30));
-//		container.add(btn);
 		return btn;
 	}
 

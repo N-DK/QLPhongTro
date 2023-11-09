@@ -1,20 +1,18 @@
 package view;
 
-import static constant.Main.*;
+import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
+import static constant.Main.XR;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -25,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -118,7 +115,7 @@ public class SinhVienUI {
 		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInputComboBox("Mã khoa"));
 		container.add(getInputCalender("Ngày sinh"));
-		wrapper.add(container);
+		wrapper.add(container);	
 		return wrapper;
 	}
 
