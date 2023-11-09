@@ -10,4 +10,9 @@ public class Main {
 	public final static String THEM = "Thêm";
 	public final static String XOA = "Xóa";
 	public final static String SUA = "Sửa";
+	public final static String QLCT = "Quản lý chủ trọ";
+	public final static String TKSV = "Tìm kiếm sinh viên";
+	public final static String TKPT = "Tìm kiếm phòng trọ";
+	public final static String XR = "Làm mới";
+	public final static String TIMKIEM = "Tìm kiếm";
 }

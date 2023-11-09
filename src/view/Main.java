@@ -1,6 +1,5 @@
 package view;
 
-<<<<<<< HEAD
 import javax.swing.JFrame;
 
 public class Main {
@@ -13,12 +12,6 @@ public class Main {
 		jFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		jFrame.setDefaultCloseOperation(3);
 		jFrame.setVisible(true);
-
+		jFrame.setResizable(false);
 	}
-=======
-public class Main {
-    public static void main(String[] args) {
-        
-    }
->>>>>>> 34c95781100bd9924a1cbf048dc63a8cb84ee8ce
 }

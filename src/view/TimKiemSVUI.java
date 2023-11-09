@@ -1,20 +1,16 @@
 package view;
 
-import static constant.Main.*;
+import static constant.Main.SUA;
 import static constant.Main.THEM;
+import static constant.Main.TIMKIEM;
 import static constant.Main.XOA;
+import static constant.Main.XR;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.util.Locale;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -25,21 +21,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
-import com.toedter.calendar.JDateChooser;
-
-public class SinhVienUI {
+public class TimKiemSVUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ho, ten, queQuan, sdt;
 
-	public SinhVienUI() {
+	public TimKiemSVUI() {
 		wrapper = new JPanel();
 	}
 
@@ -47,25 +38,9 @@ public class SinhVienUI {
 		JPanel container = new JPanel();
 		container.setBackground(Color.WHITE);
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
-		JLabel title = new JLabel("QUẢN LÝ SINH VIÊN");
+		JLabel title = new JLabel("TÌM KIẾM SINH VIÊN");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
 		container.add(title);
-		return container;
-	}
-
-	private JPanel getButtons() {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setBorder(new EmptyBorder(20, 0, 20, 0));
-		JPanel btnsContainer = new JPanel();
-		btnsContainer.setLayout(new GridLayout(1, 4));
-
-		btnsContainer.add(createBtn(THEM, "src//image//add.gif"));
-		btnsContainer.add(createBtn(XOA, "src//image//delete.gif"));
-		btnsContainer.add(createBtn(SUA, "src//image//edit.gif"));
-		btnsContainer.add(createBtn(XR, "src//image//refresh.gif"));
-
-		container.add(btnsContainer);
 		return container;
 	}
 
@@ -82,14 +57,7 @@ public class SinhVienUI {
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = new JTable(tableModel);
-		TableColumnModel columnModel = table.getTableHeader().getColumnModel();
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnModel.getColumn(i).setHeaderRenderer(new CustomHeaderRenderer());
-		}
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.gray);
-		table.getTableHeader().setForeground(Color.white);
+
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -97,8 +65,6 @@ public class SinhVienUI {
 		container.add(getHeader());
 		container.add(Box.createVerticalStrut(15));
 		container.add(tableContainer);
-		container.add(Box.createVerticalStrut(15));
-		container.add(getButtons());
 		return container;
 	}
 
@@ -114,10 +80,10 @@ public class SinhVienUI {
 		container.add(getInput("Tên", ten = new JTextField()));
 		container.add(getInputComboBox("Mã lớp"));
 		container.add(getInput("Quê quán", queQuan = new JTextField()));
-		container.add(getInputComboBox("Giới tính"));
-		container.add(getInput("SĐT", sdt = new JTextField()));
-		container.add(getInputComboBox("Mã khoa"));
-		container.add(getInputCalender("Ngày sinh"));
+		container.add(Box.createVerticalStrut(15));
+		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
+		container.add(Box.createVerticalStrut(15));
+		container.add(createBtn(XR, "src//image//refresh.gif"));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -200,24 +166,6 @@ public class SinhVienUI {
 		return btnContainer;
 	}
 
-	private JPanel getInputCalender(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel chooserContainer = new JPanel();
-		chooserContainer.setBackground(Color.WHITE);
-		JDateChooser chooser = new JDateChooser();
-		chooser.setLocale(Locale.US);
-		chooser.setPreferredSize(new Dimension(208, 30));
-		chooserContainer.add(chooser);
-		container.add(chooserContainer);
-		return container;
-	}
-
 	private void themSinhVien() {
 		System.out.println(ma.getText() + ho.getText() + ten.getText());
 	}
@@ -228,19 +176,5 @@ public class SinhVienUI {
 
 	private void chinhSuaSinhVien() {
 
-	}
-
-	static class CustomHeaderRenderer extends DefaultTableCellRenderer {
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			JPanel container = new JPanel();
-			container.setLayout(new BorderLayout());
-			JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-					column);
-			label.setFont(new Font("Arial", Font.BOLD, 15));
-			label.setPreferredSize(new Dimension(0, 30));
-			container.add(label);
-			return container;
-		}
 	}
 }

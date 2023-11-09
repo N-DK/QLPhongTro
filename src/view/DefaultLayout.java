@@ -1,6 +1,6 @@
 package view;
 
-import static constant.Main.CT;
+import static constant.Main.*;
 import static constant.Main.DSSV;
 import static constant.Main.HD;
 import static constant.Main.K;
@@ -19,8 +19,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -42,17 +44,22 @@ public class DefaultLayout {
 
 	private JPanel getSidebar() {
 		JPanel container = new JPanel();
+		container.setBackground(Color.GRAY);
 		container.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
 				new EmptyBorder(0, 15, 0, 700)));
 		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
 		String[][] StudentOptions = { { DSSV, "src//image//list.gif" }, { LH, "src//image//school.gif" },
-				{ K, "src//image//department.gif" } };
+				{ K, "src//image//department.gif" }, { TKSV, "src//image//search.gif" } };
+		String[][] chuTroOptions = { { QLCT, "src//image//list.gif" } };
 		String[][] emptyOptions = {};
 
 		container.add(makeNavButton("Sinh Viên", StudentOptions, "src//image//sinh_vien.gif"));
+//		container.add(Box.createHorizontalStrut(10));
 		container.add(makeNavButton(PT, emptyOptions, "src//image//phong_tro.gif"));
-		container.add(makeNavButton(CT, emptyOptions, "src//image//chu_tro.gif"));
+//		container.add(Box.createHorizontalStrut(10));
+		container.add(makeNavButton(CT, chuTroOptions, "src//image//chu_tro.gif"));
+//		container.add(Box.createHorizontalStrut(10));
 		container.add(makeNavButton(HD, emptyOptions, "src//image//hop_dong.gif"));
 
 		return container;
@@ -74,23 +81,29 @@ public class DefaultLayout {
 		return wrapper;
 	}
 
-	private JPanel createNavItem(String title, String iconPath) {
-		JPanel container = new JPanel();
-		container.setBorder(new EmptyBorder(15, 0, 15, 0));
+	private JButton createNavItem(String title, String iconPath) {
+//		JButton container = new JPanel();
 
-		JLabel jLabel = new JLabel(title);
-		jLabel.setFont(new Font("Arial", Font.BOLD, 30));
+//		JButton jLabel = new JButton(title);
+//		jLabel.setFont(new Font("Arial", Font.BOLD, 30));
+		JButton btn = new JButton(title);
 		ImageIcon icon = createImageIcon(iconPath);
-		jLabel.setIcon(icon);
-		container.add(jLabel);
-		return container;
+		btn.setBorder(new EmptyBorder(15, 0, 15, 0));
+		btn.setBackground(Color.GRAY);
+		btn.setIcon(icon);
+		btn.setBorderPainted(false);
+		btn.setFocusPainted(false);
+		btn.setOpaque(true);
+		btn.setFont(new Font("Arial", Font.BOLD, 30));
+//		container.add(btn);
+		return btn;
 	}
 
 	private JPanel makeNavButton(String tilte, String[][] options, String iconPath) {
 		JPanel container = new JPanel();
 		container.setLayout(new BorderLayout());
 
-		JPanel btn = createNavItem(tilte, iconPath);
+		JButton btn = createNavItem(tilte, iconPath);
 
 		JPopupMenu popupMenu = new JPopupMenu();
 
@@ -112,45 +125,18 @@ public class DefaultLayout {
 
 		container.add(btn, BorderLayout.CENTER);
 
-		MouseListener action = new MouseListener() {
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				btn.setBackground(null);
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				btn.setBackground(new Color(135, 206, 235));
+		btn.addActionListener(e -> {
+			if (options.length == 0) {
+				repaintBody(tilte);
+			} else {
 				showPopup(e, popupMenu);
 			}
-		};
-
-		btn.addMouseListener(action);
+		});
 
 		return container;
 	}
 
-	private void showPopup(MouseEvent e, JPopupMenu popupMenu) {
+	private void showPopup(ActionEvent e, JPopupMenu popupMenu) {
 		Component b = (Component) e.getSource();
 
 		Point p = b.getLocationOnScreen();
@@ -183,6 +169,18 @@ public class DefaultLayout {
 			children = lpoHocUI.getLayout();
 			break;
 		}
+		case K:
+			KhoaUI khoaUI = new KhoaUI();
+			children = khoaUI.getLayout();
+			break;
+		case TKSV:
+			TimKiemSVUI timKiemSVUI = new TimKiemSVUI();
+			children = timKiemSVUI.getLayout();
+			break;
+		case HD:
+			HopDongUI hopDongUI = new HopDongUI();
+			children = hopDongUI.getLayout();
+			break;
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + type);
 		}
