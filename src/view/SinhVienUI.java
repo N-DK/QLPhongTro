@@ -115,7 +115,7 @@ public class SinhVienUI {
 		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInputComboBox("Mã khoa"));
 		container.add(getInputCalender("Ngày sinh"));
-		wrapper.add(container);	
+		wrapper.add(container);
 		return wrapper;
 	}
 

@@ -2,6 +2,7 @@ package view;
 
 import static constant.Main.SUA;
 import static constant.Main.THEM;
+import static constant.Main.TIMKIEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
 
@@ -9,7 +10,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -23,17 +23,14 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
-import view.SinhVienUI.CustomHeaderRenderer;
-
-public class PhongTroUI {
+public class TimKiemPhongTroUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, gia, diaChi;
+	private JTextField ma, ho, ten, queQuan, sdt;
 
-	public PhongTroUI() {
+	public TimKiemPhongTroUI() {
 		wrapper = new JPanel();
 	}
 
@@ -41,25 +38,9 @@ public class PhongTroUI {
 		JPanel container = new JPanel();
 		container.setBackground(Color.WHITE);
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
-		JLabel title = new JLabel("QUẢN LÝ PHÒNG TRỌ");
+		JLabel title = new JLabel("TÌM KIẾM PHÒNG TRỌ");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
 		container.add(title);
-		return container;
-	}
-
-	private JPanel getButtons() {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setBorder(new EmptyBorder(20, 0, 20, 0));
-		JPanel btnsContainer = new JPanel();
-		btnsContainer.setLayout(new GridLayout(1, 4));
-
-		btnsContainer.add(createBtn(THEM, "src//image//add.gif"));
-		btnsContainer.add(createBtn(XOA, "src//image//delete.gif"));
-		btnsContainer.add(createBtn(SUA, "src//image//edit.gif"));
-		btnsContainer.add(createBtn(XR, "src//image//refresh.gif"));
-
-		container.add(btnsContainer);
 		return container;
 	}
 
@@ -75,14 +56,7 @@ public class PhongTroUI {
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = new JTable(tableModel);
-		TableColumnModel columnModel = table.getTableHeader().getColumnModel();
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnModel.getColumn(i).setHeaderRenderer(new CustomHeaderRenderer());
-		}
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.gray);
-		table.getTableHeader().setForeground(Color.white);
+
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -90,8 +64,6 @@ public class PhongTroUI {
 		container.add(getHeader());
 		container.add(Box.createVerticalStrut(15));
 		container.add(tableContainer);
-		container.add(Box.createVerticalStrut(15));
-		container.add(getButtons());
 		return container;
 	}
 
@@ -102,11 +74,15 @@ public class PhongTroUI {
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
-		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
-		container.add(getInput("Giá", gia = new JTextField()));
-		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
-		container.add(getInputComboBox("Mã Chủ phòng"));
-		container.add(getInputComboBox("Tình trạng phòng"));
+		container.add(getInput("Mã sinh viên", ma = new JTextField()));
+		container.add(getInput("Họ", ho = new JTextField()));
+		container.add(getInput("Tên", ten = new JTextField()));
+		container.add(getInputComboBox("Mã lớp"));
+		container.add(getInput("Quê quán", queQuan = new JTextField()));
+		container.add(Box.createVerticalStrut(15));
+		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
+		container.add(Box.createVerticalStrut(15));
+		container.add(createBtn(XR, "src//image//refresh.gif"));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -190,6 +166,7 @@ public class PhongTroUI {
 	}
 
 	private void themSinhVien() {
+		System.out.println(ma.getText() + ho.getText() + ten.getText());
 	}
 
 	private void xoaSinhVien() {

@@ -1,9 +1,20 @@
 package connectDatabase;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 public class Main {
 	public static Connection connect() {
-		return null;
+		Connection con = null;
+		try {
+			String url = "jdbc:sqlserver://localhost:1433;databaseName=student;encrypt=false";
+			String user = "sa";
+			String password = "123";
+			con = DriverManager.getConnection(url, user, password);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		System.out.println(con != null ? "success" : "fail");
+		return con;
 	}
 }

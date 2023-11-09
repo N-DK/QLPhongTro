@@ -1,12 +1,13 @@
 package view;
 
 import static constant.Main.CT;
+import static constant.Main.DSPT;
 import static constant.Main.DSSV;
 import static constant.Main.HD;
 import static constant.Main.K;
 import static constant.Main.LH;
 import static constant.Main.PT;
-import static constant.Main.QLCT;
+import static constant.Main.TKPT;
 import static constant.Main.TKSV;
 
 import java.awt.BorderLayout;
@@ -49,12 +50,12 @@ public class DefaultLayout {
 
 		String[][] StudentOptions = { { DSSV, "src//image//list.gif" }, { LH, "src//image//school.gif" },
 				{ K, "src//image//department.gif" }, { TKSV, "src//image//search.gif" } };
-		String[][] chuTroOptions = { { QLCT, "src//image//list.gif" } };
+		String[][] phongTroOptions = { { DSPT, "src//image//list.gif" }, { TKPT, "src//image//search.gif" } };
 		String[][] emptyOptions = {};
 
 		container.add(makeNavButton("Sinh Viên", StudentOptions, "src//image//sinh_vien.gif"));
-		container.add(makeNavButton(PT, emptyOptions, "src//image//phong_tro.gif"));
-		container.add(makeNavButton(CT, chuTroOptions, "src//image//chu_tro.gif"));
+		container.add(makeNavButton(PT, phongTroOptions, "src//image//phong_tro.gif"));
+		container.add(makeNavButton(CT, emptyOptions, "src//image//chu_tro.gif"));
 		container.add(makeNavButton(HD, emptyOptions, "src//image//hop_dong.gif"));
 
 		return container;
@@ -159,18 +160,36 @@ public class DefaultLayout {
 			children = lpoHocUI.getLayout();
 			break;
 		}
-		case K:
+		case K: {
 			KhoaUI khoaUI = new KhoaUI();
 			children = khoaUI.getLayout();
 			break;
-		case TKSV:
+		}
+		case TKSV: {
 			TimKiemSVUI timKiemSVUI = new TimKiemSVUI();
 			children = timKiemSVUI.getLayout();
 			break;
-		case HD:
+		}
+		case HD: {
 			HopDongUI hopDongUI = new HopDongUI();
 			children = hopDongUI.getLayout();
 			break;
+		}
+		case DSPT: {
+			PhongTroUI phongTroUI = new PhongTroUI();
+			children = phongTroUI.getLayout();
+			break;
+		}
+		case TKPT: {
+			TimKiemPhongTroUI timKiemPhongTroUI = new TimKiemPhongTroUI();
+			children = timKiemPhongTroUI.getLayout();
+			break;
+		}
+		case CT: {
+			ChuTroUI chuTroUI = new ChuTroUI();
+			children = chuTroUI.getLayout();
+			break;
+		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + type);
 		}

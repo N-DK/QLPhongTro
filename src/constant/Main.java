@@ -2,6 +2,7 @@ package constant;
 
 public class Main {
 	public final static String DSSV = "Danh sách sinh viên";
+	public final static String DSPT = "Danh sách phòng trọ";
 	public final static String LH = "Lớp học";
 	public final static String K = "Khoa";
 	public final static String PT = "Phòng Trọ";

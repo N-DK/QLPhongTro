@@ -67,7 +67,7 @@ public class KhoaUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã khoa", "Tên khoa"};
+		String[] cols = { "Mã khoa", "Tên khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = new JTable(tableModel);

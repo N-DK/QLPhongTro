@@ -15,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -67,7 +68,7 @@ public class LopHocUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã Lớp", "Tên lớp", "Tên GVCN" };
+		String[] cols = { "Mã Lớp", "Tên lớp", "Tên GVCN", "Mã khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = new JTable(tableModel);
@@ -94,6 +95,7 @@ public class LopHocUI {
 		container.add(getInput("Mã lớp", ma = new JTextField()));
 		container.add(getInput("Tên lớp", ten = new JTextField()));
 		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));
+		container.add(getInputComboBox("Mã khoa"));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -156,6 +158,24 @@ public class LopHocUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
+	}
+
+	private JPanel getInputComboBox(String label) {
+		JPanel container = new JPanel();
+		container.setBackground(Color.WHITE);
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+		JPanel Lable = new JPanel();
+		Lable.setBackground(Color.WHITE);
+		Lable.add(createLabel(label));
+		container.add(Lable);
+		JPanel Combox = new JPanel();
+		Combox.setBackground(Color.WHITE);
+		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox.setPreferredSize(new Dimension(208, 30));
+		comboBox.addItem("DHKHMT17B");
+		Combox.add(comboBox);
+		container.add(Combox);
+		return container;
 	}
 
 	private void themLopHoc() {
