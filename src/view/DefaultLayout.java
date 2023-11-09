@@ -44,7 +44,7 @@ public class DefaultLayout {
 
 	private JPanel getSidebar() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.GRAY);
+		container.setBackground(Color.red);
 		container.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
 				new EmptyBorder(0, 15, 0, 700)));
 		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
