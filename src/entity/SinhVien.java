@@ -2,6 +2,7 @@ package entity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class SinhVien extends Person {
 	private String maSinhVien;
@@ -52,6 +53,23 @@ public class SinhVien extends Person {
 		objects[7] = getSdt();
 
 		return objects;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(maSinhVien);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SinhVien other = (SinhVien) obj;
+		return Objects.equals(maSinhVien, other.maSinhVien);
 	}
 
 }

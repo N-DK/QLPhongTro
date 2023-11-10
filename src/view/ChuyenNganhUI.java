@@ -4,7 +4,9 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,13 +27,13 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class LopHocUI {
+public class ChuyenNganhUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ten, tenCN;
 
-	public LopHocUI() {
+	public ChuyenNganhUI() {
 		wrapper = new JPanel();
 	}
 
@@ -39,7 +41,7 @@ public class LopHocUI {
 		JPanel container = new JPanel();
 		container.setBackground(Color.WHITE);
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
-		JLabel title = new JLabel("LỚP HỌC");
+		JLabel title = new JLabel("CHUYÊN NGÀNH");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
 		container.add(title);
 		return container;
@@ -69,7 +71,7 @@ public class LopHocUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã Lớp", "Tên lớp", "Tên GVCN", "Mã chuyên ngành" };
+		String[] cols = { "Mã chuyên ngành", "Tên chuyên ngành", "Mã khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
@@ -93,10 +95,9 @@ public class LopHocUI {
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
-		container.add(getInput("Mã lớp", ma = new JTextField()));
-		container.add(getInput("Tên lớp", ten = new JTextField()));
-		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));
-		container.add(getInputComboBox("Mã chuyên ngành", new JComboBox<String>()));
+		container.add(getInput("Mã chuyên ngành", ma = new JTextField()));
+		container.add(getInput("Tên chuyên ngành", ten = new JTextField()));
+		container.add(getInputComboBox("Mã khoa", new JComboBox<String>()));
 		wrapper.add(container);
 		return wrapper;
 	}

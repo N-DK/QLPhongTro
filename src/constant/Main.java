@@ -5,6 +5,7 @@ public class Main {
 	public final static String DSPT = "Danh sách phòng trọ";
 	public final static String LH = "Lớp học";
 	public final static String K = "Khoa";
+	public final static String CN = "Chuyên ngành";
 	public final static String PT = "Phòng Trọ";
 	public final static String CT = "Chủ trọ";
 	public final static String HD = "Hợp đồng";

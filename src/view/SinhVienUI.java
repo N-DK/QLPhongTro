@@ -14,6 +14,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.Box;
@@ -22,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,7 +42,7 @@ import dao.SinhVienDAO;
 import entity.LopHoc;
 import entity.SinhVien;
 
-public class SinhVienUI {
+public class SinhVienUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -91,7 +97,9 @@ public class SinhVienUI {
 		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT" };
 
 		tableModel = new DefaultTableModel(cols, 0);
+
 		table = createCustomTable(tableModel);
+		table.addMouseListener(this);
 
 		for (SinhVien sinhVien : dssv) {
 			tableModel.addRow(sinhVien.getObjects());
@@ -177,11 +185,18 @@ public class SinhVienUI {
 	}
 
 	private void themSinhVien() {
-		int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
-		SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(), sdt.getText(),
-				ma.getText(), queQuan.getText(), (String) maLop.getSelectedItem());
-		tableModel.addRow(sinhVien.getObjects());
-		svDAO.insert(sinhVien);
+		if (isValid()) {
+			int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
+			SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(), sdt.getText(),
+					ma.getText(), queQuan.getText(), (String) maLop.getSelectedItem());
+			tableModel.addRow(sinhVien.getObjects());
+			if (svDAO.insert(sinhVien)) {
+				JOptionPane.showMessageDialog(wrapper, "Thêm sinh viên thành công");
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã sinh viên không được trùng");
+			}
+			lamMoi();
+		}
 	}
 
 	private void xoaSinhVien() {
@@ -189,6 +204,95 @@ public class SinhVienUI {
 	}
 
 	private void chinhSuaSinhVien() {
+
+	}
+
+	private boolean isValid() {
+		if (ma.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Mã sinh viên không được rỗng");
+			return false;
+		} else if (!ma.getText().matches("[0-9]{8}")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã sinh viên phải đủ 8 số");
+			return false;
+		}
+		if (ho.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Họ sinh viên không được rỗng");
+			return false;
+		}
+		if (ten.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Tên sinh viên không được rỗng");
+			return false;
+		}
+		if (queQuan.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Quê quán sinh viên không được rỗng");
+			return false;
+		}
+		if (sdt.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại sinh viên không được rỗng");
+			return false;
+		} else if (!sdt.getText().matches("[0-9]{10,11}")) {
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không được chứa chữ và không quá 11 số");
+			return false;
+		}
+		if (ngaySinh.getDate() == null) {
+			JOptionPane.showMessageDialog(wrapper, "Ngày sinh sinh viên không được rỗng");
+			return false;
+		}
+		return true;
+	}
+
+	private void lamMoi() {
+		ma.setText("");
+		ho.setText("");
+		ten.setText("");
+		maLop.setSelectedItem(0);
+		queQuan.setText("");
+		gioiTinh.setSelectedIndex(0);
+		sdt.setText("");
+		ngaySinh.setDate(null);
+		ma.requestFocus();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		ho.setText(table.getValueAt(row, 1) + "");
+		ten.setText(table.getValueAt(row, 2) + "");
+		maLop.setSelectedItem(table.getValueAt(row, 3));
+		queQuan.setText(table.getValueAt(row, 4) + "");
+		gioiTinh.setSelectedItem(table.getValueAt(row, 5));
+		try {
+			ngaySinh.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(row, 6)));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		sdt.setText(table.getValueAt(row, 7) + "");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 

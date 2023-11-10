@@ -1,5 +1,7 @@
 package dao;
 
-public class KhoaDAO {
+import entity.Khoa;
 
+public class KhoaDAO extends AbstractDAO<Khoa>{
+	
 }

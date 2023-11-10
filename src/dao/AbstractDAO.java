@@ -5,7 +5,7 @@ import java.util.List;
 import static connectDatabase.Main.connect;
 
 public class AbstractDAO<T> {
-	protected String sql;
+	protected String sqlFind;
 
 	public List<T> findAll() {
 		connect();

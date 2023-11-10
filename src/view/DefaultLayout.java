@@ -1,5 +1,6 @@
 package view;
 
+import static constant.Main.CN;
 import static constant.Main.CT;
 import static constant.Main.DSPT;
 import static constant.Main.DSSV;
@@ -58,7 +59,8 @@ public class DefaultLayout {
 		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
 
 		String[][] StudentOptions = { { DSSV, "src//image//list.gif" }, { LH, "src//image//school.gif" },
-				{ K, "src//image//department.gif" }, { TKSV, "src//image//search.gif" } };
+				{ K, "src//image//department.gif" }, { CN, "src//image//specialized.gif" },
+				{ TKSV, "src//image//search.gif" } };
 		String[][] phongTroOptions = { { DSPT, "src//image//list.gif" }, { TKPT, "src//image//search.gif" } };
 		String[][] emptyOptions = {};
 
@@ -199,6 +201,11 @@ public class DefaultLayout {
 			children = chuTroUI.getLayout();
 			break;
 		}
+		case CN: {
+			ChuyenNganhUI chuyenNganhUI = new ChuyenNganhUI();
+			children = chuyenNganhUI.getLayout();
+			break;
+		}
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + type);
 		}
@@ -267,7 +274,6 @@ public class DefaultLayout {
 		JPanel Combox = new JPanel();
 		Combox.setBackground(Color.WHITE);
 		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
 		Combox.add(comboBox);
 		container.add(Combox);
 		return container;
