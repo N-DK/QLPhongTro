@@ -1,14 +1,16 @@
 package dao;
 
+import java.sql.Connection;
 import static connectDatabase.Main.connect;
-
-import java.util.List;
-
 import entity.SinhVien;
 
-public class SinhVienDAO {
-	public List<SinhVien> findAll() {
-		connect();
-		return null;
+public class SinhVienDAO extends AbstractDAO<SinhVien> {
+
+	public SinhVienDAO() {
+		sql = "{call findAllSinhVien}";
+	}
+
+	public void insert(SinhVien sinhVien) {
+		Connection con = connect();
 	}
 }

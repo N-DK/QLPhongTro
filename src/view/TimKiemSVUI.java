@@ -5,6 +5,9 @@ import static constant.Main.THEM;
 import static constant.Main.TIMKIEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -56,8 +59,7 @@ public class TimKiemSVUI {
 				"Mã khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
-
+		table = createCustomTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -78,7 +80,7 @@ public class TimKiemSVUI {
 		container.add(getInput("Mã sinh viên", ma = new JTextField()));
 		container.add(getInput("Họ", ho = new JTextField()));
 		container.add(getInput("Tên", ten = new JTextField()));
-		container.add(getInputComboBox("Mã lớp"));
+		container.add(getInputComboBox("Mã lớp", new JComboBox<String>()));
 		container.add(getInput("Quê quán", queQuan = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
@@ -96,46 +98,6 @@ public class TimKiemSVUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -162,7 +124,7 @@ public class TimKiemSVUI {
 		});
 
 		btnContainer.add(btn, BorderLayout.CENTER);
-		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
+		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width, 45));
 		return btnContainer;
 	}
 

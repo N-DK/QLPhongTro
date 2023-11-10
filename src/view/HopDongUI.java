@@ -4,6 +4,7 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -74,7 +75,7 @@ public class HopDongUI {
 		String[] cols = { "Mã hợp đồng", "Mã sinh viên", "Mã phòng", "Ngày ký hợp đồng", "Ngày hết hợp đồng" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
+		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -97,13 +98,13 @@ public class HopDongUI {
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã hợp đồng", ma = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã sinh viên"));
+		container.add(getInputComboBox("Mã sinh viên", new JComboBox<String>()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã phòng"));
+		container.add(getInputComboBox("Mã phòng", new JComboBox<String>()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày ký hợp đồng"));
+		container.add(getInputCalender("Ngày ký hợp đồng", new JDateChooser()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày hết hợp đồng"));
+		container.add(getInputCalender("Ngày hết hợp đồng", new JDateChooser()));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -116,46 +117,6 @@ public class HopDongUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -184,24 +145,6 @@ public class HopDongUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
-	}
-
-	private JPanel getInputCalender(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		JDateChooser chooser = new JDateChooser();
-		chooser.setLocale(Locale.US);
-		chooser.setPreferredSize(new Dimension(208, 30));
-		TextField.add(chooser);
-		container.add(TextField);
-		return container;
 	}
 
 	private void themSinhVien() {

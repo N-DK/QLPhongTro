@@ -18,17 +18,26 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+
+import com.toedter.calendar.JDateChooser;
 
 public class DefaultLayout {
 	private JPanel wrapper;
@@ -199,4 +208,85 @@ public class DefaultLayout {
 		jFrame.add(getLayout());
 	}
 
+	public static JTable createCustomTable(DefaultTableModel tableModel) {
+		JTable table = new JTable(tableModel) {
+			@Override
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				// TODO Auto-generated method stub
+				Component component = super.prepareRenderer(renderer, row, column);
+				if (!isRowSelected(row)) {
+					component.setBackground(row % 2 != 0 ? Color.WHITE : Color.LIGHT_GRAY);
+				} else {
+					component = super.prepareRenderer(renderer, row, column);
+				}
+				return component;
+			}
+		};
+
+		table.getTableHeader().setOpaque(false);
+		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+		table.getTableHeader().setBackground(Color.WHITE);
+		table.getTableHeader().setForeground(Color.BLACK);
+		table.getTableHeader().setPreferredSize(new Dimension(table.getPreferredSize().width, 24));
+		table.setRowHeight(20);
+
+		return table;
+	}
+
+	public static JPanel getInput(String label, JTextField textField) {
+		JPanel container = new JPanel();
+		container.setBackground(Color.WHITE);
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+		JPanel Lable = new JPanel();
+		Lable.setBackground(Color.WHITE);
+		Lable.add(createLabel(label));
+		container.add(Lable);
+		JPanel TextField = new JPanel();
+		TextField.setBackground(Color.WHITE);
+		textField.setFont(new Font("Arial", Font.PLAIN, 16));
+		textField.setPreferredSize(new Dimension(208, 30));
+		TextField.add(textField);
+		container.add(TextField);
+		return container;
+	}
+
+	public static JLabel createLabel(String label) {
+		JLabel title = new JLabel(label);
+		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
+		return title;
+	}
+
+	public static JPanel getInputComboBox(String label, JComboBox<String> comboBox) {
+		JPanel container = new JPanel();
+		container.setBackground(Color.WHITE);
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+		JPanel Lable = new JPanel();
+		Lable.setBackground(Color.WHITE);
+		Lable.add(createLabel(label));
+		container.add(Lable);
+		JPanel Combox = new JPanel();
+		Combox.setBackground(Color.WHITE);
+		comboBox.setPreferredSize(new Dimension(208, 30));
+		comboBox.addItem("DHKHMT17B");
+		Combox.add(comboBox);
+		container.add(Combox);
+		return container;
+	}
+
+	public static JPanel getInputCalender(String label, JDateChooser chooser) {
+		JPanel container = new JPanel();
+		container.setBackground(Color.WHITE);
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+		JPanel Lable = new JPanel();
+		Lable.setBackground(Color.WHITE);
+		Lable.add(createLabel(label));
+		container.add(Lable);
+		JPanel chooserContainer = new JPanel();
+		chooserContainer.setBackground(Color.WHITE);
+		chooser.setLocale(Locale.US);
+		chooser.setPreferredSize(new Dimension(208, 30));
+		chooserContainer.add(chooser);
+		container.add(chooserContainer);
+		return container;
+	}
 }

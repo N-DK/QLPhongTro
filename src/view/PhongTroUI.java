@@ -4,6 +4,7 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -23,9 +24,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
-
-import view.SinhVienUI.CustomHeaderRenderer;
 
 public class PhongTroUI {
 	private JPanel wrapper;
@@ -74,15 +72,7 @@ public class PhongTroUI {
 		String[] cols = { "Mã phòng trọ", "Địa Chỉ", "Giá", "Mã chủ phòng", "Tình trạng phòng" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
-		TableColumnModel columnModel = table.getTableHeader().getColumnModel();
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnModel.getColumn(i).setHeaderRenderer(new CustomHeaderRenderer());
-		}
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.gray);
-		table.getTableHeader().setForeground(Color.white);
+		table = createCustomTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -105,8 +95,8 @@ public class PhongTroUI {
 		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
 		container.add(getInput("Giá", gia = new JTextField()));
 		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
-		container.add(getInputComboBox("Mã Chủ phòng"));
-		container.add(getInputComboBox("Tình trạng phòng"));
+		container.add(getInputComboBox("Mã Chủ phòng", new JComboBox<String>()));
+		container.add(getInputComboBox("Tình trạng phòng", new JComboBox<String>()));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -119,46 +109,6 @@ public class PhongTroUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {

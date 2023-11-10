@@ -4,6 +4,7 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -70,7 +71,7 @@ public class KhoaUI {
 		String[] cols = { "Mã khoa", "Tên khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
+		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -105,28 +106,6 @@ public class KhoaUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {

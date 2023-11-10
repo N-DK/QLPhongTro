@@ -4,19 +4,20 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputCalender;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Locale;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,11 +25,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 import com.toedter.calendar.JDateChooser;
-
-import view.SinhVienUI.CustomHeaderRenderer;
 
 public class ChuTroUI {
 	private JPanel wrapper;
@@ -74,18 +72,10 @@ public class ChuTroUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã chủ phòng", "Họ", "Tên", "SĐT", "Địa chỉ", "Ngày sinh"};
+		String[] cols = { "Mã chủ phòng", "Họ", "Tên", "SĐT", "Địa chỉ", "Ngày sinh" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
-		TableColumnModel columnModel = table.getTableHeader().getColumnModel();
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnModel.getColumn(i).setHeaderRenderer(new CustomHeaderRenderer());
-		}
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.gray);
-		table.getTableHeader().setForeground(Color.white);
+		table = createCustomTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -110,7 +100,7 @@ public class ChuTroUI {
 		container.add(getInput("Tên", ten = new JTextField()));
 		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInput("Địa chỉ", queQuan = new JTextField()));
-		container.add(getInputCalender("Ngày sinh"));
+		container.add(getInputCalender("Ngày sinh", new JDateChooser()));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -123,46 +113,6 @@ public class ChuTroUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -191,24 +141,6 @@ public class ChuTroUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
-	}
-
-	private JPanel getInputCalender(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel chooserContainer = new JPanel();
-		chooserContainer.setBackground(Color.WHITE);
-		JDateChooser chooser = new JDateChooser();
-		chooser.setLocale(Locale.US);
-		chooser.setPreferredSize(new Dimension(208, 30));
-		chooserContainer.add(chooser);
-		container.add(chooserContainer);
-		return container;
 	}
 
 	private void themSinhVien() {

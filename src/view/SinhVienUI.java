@@ -4,14 +4,17 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputCalender;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Locale;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -24,20 +27,31 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 import com.toedter.calendar.JDateChooser;
+
+import dao.LopHocDAO;
+import dao.SinhVienDAO;
+import entity.LopHoc;
+import entity.SinhVien;
 
 public class SinhVienUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ho, ten, queQuan, sdt;
+	private JComboBox<String> maLop, gioiTinh;
+	private JDateChooser ngaySinh;
+	private SinhVienDAO svDAO;
+	private LopHocDAO lopDAO;
+	private List<SinhVien> dssv;
+	private List<LopHoc> dslh;
 
 	public SinhVienUI() {
 		wrapper = new JPanel();
+		svDAO = new SinhVienDAO();
+		lopDAO = new LopHocDAO();
 	}
 
 	private JPanel getHeader() {
@@ -74,19 +88,15 @@ public class SinhVienUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT",
-				"Mã khoa" };
+		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
-		TableColumnModel columnModel = table.getTableHeader().getColumnModel();
-		for (int i = 0; i < columnModel.getColumnCount(); i++) {
-			columnModel.getColumn(i).setHeaderRenderer(new CustomHeaderRenderer());
+		table = createCustomTable(tableModel);
+
+		for (SinhVien sinhVien : dssv) {
+			tableModel.addRow(sinhVien.getObjects());
 		}
-		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.gray);
-		table.getTableHeader().setForeground(Color.white);
+
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -103,23 +113,24 @@ public class SinhVienUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		container.setBorder(new EmptyBorder(50, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã sinh viên", ma = new JTextField()));
 		container.add(getInput("Họ", ho = new JTextField()));
 		container.add(getInput("Tên", ten = new JTextField()));
-		container.add(getInputComboBox("Mã lớp"));
+		container.add(getInputComboBox("Mã lớp", maLop = new JComboBox<String>(createOptionsLopHoc())));
 		container.add(getInput("Quê quán", queQuan = new JTextField()));
-		container.add(getInputComboBox("Giới tính"));
+		container.add(getInputComboBox("Giới tính", gioiTinh = new JComboBox<String>(new String[] { "Nam", "Nữ" })));
 		container.add(getInput("SĐT", sdt = new JTextField()));
-		container.add(getInputComboBox("Mã khoa"));
-		container.add(getInputCalender("Ngày sinh"));
+		container.add(getInputCalender("Ngày sinh", ngaySinh = new JDateChooser()));
 		wrapper.add(container);
 		return wrapper;
 	}
 
 	public JPanel getLayout() {
+		dssv = svDAO.findAll();
+		dslh = lopDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -127,46 +138,6 @@ public class SinhVienUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -197,26 +168,20 @@ public class SinhVienUI {
 		return btnContainer;
 	}
 
-	private JPanel getInputCalender(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel chooserContainer = new JPanel();
-		chooserContainer.setBackground(Color.WHITE);
-		JDateChooser chooser = new JDateChooser();
-		chooser.setLocale(Locale.US);
-		chooser.setPreferredSize(new Dimension(208, 30));
-		chooserContainer.add(chooser);
-		container.add(chooserContainer);
-		return container;
+	private String[] createOptionsLopHoc() {
+		String[] options = new String[dslh.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[0] = dslh.get(i).getMa();
+		}
+		return options;
 	}
 
 	private void themSinhVien() {
-		System.out.println(ma.getText() + ho.getText() + ten.getText());
+		int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
+		SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(), sdt.getText(),
+				ma.getText(), queQuan.getText(), (String) maLop.getSelectedItem());
+		tableModel.addRow(sinhVien.getObjects());
+		svDAO.insert(sinhVien);
 	}
 
 	private void xoaSinhVien() {
@@ -227,17 +192,4 @@ public class SinhVienUI {
 
 	}
 
-	static class CustomHeaderRenderer extends DefaultTableCellRenderer {
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			JPanel container = new JPanel();
-			container.setLayout(new BorderLayout());
-			JLabel label = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row,
-					column);
-			label.setFont(new Font("Arial", Font.BOLD, 15));
-			label.setPreferredSize(new Dimension(0, 30));
-			container.add(label);
-			return container;
-		}
-	}
 }

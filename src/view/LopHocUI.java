@@ -4,6 +4,7 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -71,7 +72,7 @@ public class LopHocUI {
 		String[] cols = { "Mã Lớp", "Tên lớp", "Tên GVCN", "Mã khoa" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
+		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -95,7 +96,7 @@ public class LopHocUI {
 		container.add(getInput("Mã lớp", ma = new JTextField()));
 		container.add(getInput("Tên lớp", ten = new JTextField()));
 		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));
-		container.add(getInputComboBox("Mã khoa"));
+		container.add(getInputComboBox("Mã khoa", new JComboBox<String>()));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -108,28 +109,6 @@ public class LopHocUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -158,24 +137,6 @@ public class LopHocUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
 	}
 
 	private void themLopHoc() {

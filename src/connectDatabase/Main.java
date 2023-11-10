@@ -14,7 +14,6 @@ public class Main {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println(con != null ? "success" : "fail");
 		return con;
 	}
 }

@@ -5,6 +5,7 @@ import static constant.Main.THEM;
 import static constant.Main.TIMKIEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,7 +29,7 @@ public class TimKiemPhongTroUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ho, ten, queQuan, sdt;
+	private JTextField ma, gia, diaChi, queQuan, sdt;
 
 	public TimKiemPhongTroUI() {
 		wrapper = new JPanel();
@@ -55,7 +56,7 @@ public class TimKiemPhongTroUI {
 		String[] cols = { "Mã phòng trọ", "Địa Chỉ", "Giá", "Mã chủ phòng", "Tình trạng phòng" };
 
 		tableModel = new DefaultTableModel(cols, 0);
-		table = new JTable(tableModel);
+		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -74,15 +75,15 @@ public class TimKiemPhongTroUI {
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
-		container.add(getInput("Mã sinh viên", ma = new JTextField()));
-		container.add(getInput("Họ", ho = new JTextField()));
-		container.add(getInput("Tên", ten = new JTextField()));
-		container.add(getInputComboBox("Mã lớp"));
-		container.add(getInput("Quê quán", queQuan = new JTextField()));
+		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
+		container.add(getInput("SĐT", sdt = new JTextField()));
+		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
+		container.add(getInputComboBox("Mã Chủ phòng", new JComboBox<String>()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(XR, "src//image//refresh.gif"));
+		wrapper.add(container);
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -95,46 +96,6 @@ public class TimKiemPhongTroUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
-	}
-
-	private JPanel getInput(String label, JTextField textField) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
-		textField.setPreferredSize(new Dimension(208, 30));
-		TextField.add(textField);
-		container.add(TextField);
-		return container;
-	}
-
-	private JPanel getInputComboBox(String label) {
-		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
-		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
-		Lable.add(createLabel(label));
-		container.add(Lable);
-		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
-		JComboBox<String> comboBox = new JComboBox<String>();
-		comboBox.setPreferredSize(new Dimension(208, 30));
-		comboBox.addItem("DHKHMT17B");
-		Combox.add(comboBox);
-		container.add(Combox);
-		return container;
-	}
-
-	private JLabel createLabel(String label) {
-		JLabel title = new JLabel(label);
-		title.setFont(new Font("Arial", Font.CENTER_BASELINE, 16));
-		return title;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -161,12 +122,11 @@ public class TimKiemPhongTroUI {
 		});
 
 		btnContainer.add(btn, BorderLayout.CENTER);
-		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
+		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width, 45));
 		return btnContainer;
 	}
 
 	private void themSinhVien() {
-		System.out.println(ma.getText() + ho.getText() + ten.getText());
 	}
 
 	private void xoaSinhVien() {

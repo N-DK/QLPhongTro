@@ -9,6 +9,15 @@ public class Person {
 	private Date ngaySinh;
 	private String sdt;
 
+	public Person(String ho, String ten, int gioiTinh, Date ngaySinh, String sdt) {
+		super();
+		this.ho = ho;
+		this.ten = ten;
+		this.gioiTinh = gioiTinh;
+		this.ngaySinh = ngaySinh;
+		this.sdt = sdt;
+	}
+
 	public String getHo() {
 		return ho;
 	}
