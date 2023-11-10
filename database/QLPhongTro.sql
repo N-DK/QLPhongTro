@@ -66,15 +66,21 @@ create table HopDong (
 
 
 insert into Khoa (MaKhoa, TenKhoa)
-values ('CNTT', N'Công nghệ thông tin'),
-	('CNSH', N'Công nghệ sinh học'),
-	('QTKD', N'Quản trị kinh doanh'),
-	('CNHH', N'Công nghệ hóa học')
+values	('CNTT', N'Công nghệ thông tin'),
+		('CNSH', N'Công nghệ sinh học'),
+		('QTKD', N'Quản trị kinh doanh'),
+		('CNHH', N'Công nghệ hóa học')
 
 insert into ChuyenNganh (MaChuyenNganh, TenChuyenNganh, MaKhoa)
-values ('KHMT', N'Khoa học máy tính', 'CNTT'),
-	('KTPM', N'Kĩ thuật phần mềm', 'CNTT'),
-	('QTKD', N'Quản trị kinh doanh', 'QTKD'),
-	('HPT', N'Hóa phân tích', 'CNHH')
+values	('KHMT', N'Khoa học máy tính', 'CNTT'),
+		('KTPM', N'Kĩ thuật phần mềm', 'CNTT'),
+		('QTKD', N'Quản trị kinh doanh', 'QTKD'),
+		('HPT', N'Hóa phân tích', 'CNHH')
 
+insert into Lop (MaLop, TenLop, TenGVCN, MaChuyenNganh)
+values	('DHKHMT17A', N'Đại học khoa học máy tính 17A', N'Cô Phúc', 'KHMT'),
+		('DHKHMT17B', N'Đại học khoa học máy tính 17B', N'Thầy Danh', 'KHMT'),
+		('DHKHMT17C', N'Đại học khoa học máy tính 17C', N'Cô Phượng', 'KHMT'),
+		('DHKHMT17D', N'Đại học khoa học máy tính 17D', N'Thầy Phúc', 'KHMT')
 
+SELECT * FROM SinhVien

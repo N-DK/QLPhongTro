@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,14 +26,25 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.ChuyenNganhDAO;
+import dao.LopHocDAO;
+import entity.ChuyenNganh;
+import entity.LopHoc;
+
 public class LopHocUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ten, tenCN;
+	private LopHocDAO lopDAO;
+	private ChuyenNganhDAO cnDAO;
+	private List<LopHoc> dslh;
+	private List<ChuyenNganh> dscn;
 
 	public LopHocUI() {
 		wrapper = new JPanel();
+		lopDAO = new LopHocDAO();
+		cnDAO = new ChuyenNganhDAO();
 	}
 
 	private JPanel getHeader() {
@@ -74,6 +86,10 @@ public class LopHocUI {
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
 
+		for (LopHoc lop : dslh) {
+			tableModel.addRow(lop.getObjects());
+		}
+
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -96,12 +112,14 @@ public class LopHocUI {
 		container.add(getInput("Mã lớp", ma = new JTextField()));
 		container.add(getInput("Tên lớp", ten = new JTextField()));
 		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));
-		container.add(getInputComboBox("Mã chuyên ngành", new JComboBox<String>()));
+		container.add(getInputComboBox("Mã chuyên ngành", new JComboBox<String>(createOptionsCN())));
 		wrapper.add(container);
 		return wrapper;
 	}
 
 	public JPanel getLayout() {
+		dslh = lopDAO.findAll();
+		dscn = cnDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -137,6 +155,14 @@ public class LopHocUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
+	}
+
+	private String[] createOptionsCN() {
+		String[] options = new String[dscn.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[i] = dscn.get(i).getMa();
+		}
+		return options;
 	}
 
 	private void themLopHoc() {

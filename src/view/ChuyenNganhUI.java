@@ -13,6 +13,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,14 +28,25 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.ChuyenNganhDAO;
+import dao.KhoaDAO;
+import entity.ChuyenNganh;
+import entity.Khoa;
+
 public class ChuyenNganhUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ten, tenCN;
+	private ChuyenNganhDAO cnDAO;
+	private KhoaDAO khoaDAO;
+	private List<ChuyenNganh> dscn;
+	private List<Khoa> dsKhoa;
 
 	public ChuyenNganhUI() {
 		wrapper = new JPanel();
+		cnDAO = new ChuyenNganhDAO();
+		khoaDAO = new KhoaDAO();
 	}
 
 	private JPanel getHeader() {
@@ -76,6 +88,10 @@ public class ChuyenNganhUI {
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
 
+		for (ChuyenNganh chuyenNganh : dscn) {
+			tableModel.addRow(chuyenNganh.getObjects());
+		}
+
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -97,12 +113,14 @@ public class ChuyenNganhUI {
 		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã chuyên ngành", ma = new JTextField()));
 		container.add(getInput("Tên chuyên ngành", ten = new JTextField()));
-		container.add(getInputComboBox("Mã khoa", new JComboBox<String>()));
+		container.add(getInputComboBox("Mã khoa", new JComboBox<String>(createOptionKhoa())));
 		wrapper.add(container);
 		return wrapper;
 	}
 
 	public JPanel getLayout() {
+		dscn = cnDAO.findAll();
+		dsKhoa = khoaDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -138,6 +156,15 @@ public class ChuyenNganhUI {
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
+	}
+
+	private String[] createOptionKhoa() {
+		String[] options = new String[dsKhoa.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[i] = dsKhoa.get(i).getMa();
+		}
+
+		return options;
 	}
 
 	private void themLopHoc() {
