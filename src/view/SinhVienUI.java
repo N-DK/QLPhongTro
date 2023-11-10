@@ -179,16 +179,17 @@ public class SinhVienUI implements MouseListener {
 	private String[] createOptionsLopHoc() {
 		String[] options = new String[dslh.size()];
 		for (int i = 0; i < options.length; i++) {
-			options[0] = dslh.get(i).getMa();
+			options[i] = dslh.get(i).getMa();
 		}
 		return options;
 	}
 
 	private void themSinhVien() {
 		if (isValid()) {
+			LopHoc lop = lopDAO.findOneById((String) maLop.getSelectedItem());
 			int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
 			SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(), sdt.getText(),
-					ma.getText(), queQuan.getText(), (String) maLop.getSelectedItem());
+					ma.getText(), queQuan.getText(), lop);
 			tableModel.addRow(sinhVien.getObjects());
 			if (svDAO.insert(sinhVien)) {
 				JOptionPane.showMessageDialog(wrapper, "Thêm sinh viên thành công");

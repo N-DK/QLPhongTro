@@ -7,14 +7,14 @@ import java.util.Objects;
 public class SinhVien extends Person {
 	private String maSinhVien;
 	private String queQuan;
-	private String maLop;
+	private LopHoc lopHoc;
 
 	public SinhVien(String ho, String ten, int gioiTinh, Date ngaySinh, String sdt, String maSinhVien, String queQuan,
-			String maLop) {
+			LopHoc lopHoc) {
 		super(ho, ten, gioiTinh, ngaySinh, sdt);
 		this.maSinhVien = maSinhVien;
 		this.queQuan = queQuan;
-		this.maLop = maLop;
+		this.lopHoc = lopHoc;
 	}
 
 	public String getMaSinhVien() {
@@ -33,12 +33,12 @@ public class SinhVien extends Person {
 		this.queQuan = queQuan;
 	}
 
-	public String getMaLop() {
-		return maLop;
+	public LopHoc getLopHoc() {
+		return lopHoc;
 	}
 
-	public void setMaLop(String maLop) {
-		this.maLop = maLop;
+	public void setLopHoc(LopHoc lopHoc) {
+		this.lopHoc = lopHoc;
 	}
 
 	public Object[] getObjects() {
@@ -46,7 +46,7 @@ public class SinhVien extends Person {
 		objects[0] = maSinhVien;
 		objects[1] = getHo();
 		objects[2] = getTen();
-		objects[3] = maLop;
+		objects[3] = lopHoc.getMa();
 		objects[4] = queQuan;
 		objects[5] = getGioiTinh() == 1 ? "Nam" : "Nữ";
 		objects[6] = new SimpleDateFormat("dd-MM-yyyy").format(getNgaySinh());
