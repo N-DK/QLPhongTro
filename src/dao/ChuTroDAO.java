@@ -15,10 +15,9 @@ import java.sql.Statement;
 import entity.ChuPhong;
 
 public class ChuTroDAO {
-	private ArrayList<ChuPhong> ds;
+	
 	ChuPhong cp;
 	public ChuTroDAO() {
-		ds = new ArrayList<ChuPhong>();
 		cp = new ChuPhong();
 	}
 	public boolean themList(ChuPhong cp) {
@@ -53,8 +52,9 @@ public class ChuTroDAO {
 		return true;
 	}
 	public ArrayList<ChuPhong> docTuDTB() {
-	try {
 		ArrayList< ChuPhong> ds = new ArrayList<ChuPhong>();
+	try {
+		
 		Connection con = Main.connect();
 		String sql ="{call layBangChuPhong}";
 		

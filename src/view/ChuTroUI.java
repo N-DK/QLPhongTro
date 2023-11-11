@@ -17,11 +17,13 @@ import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.security.spec.DSAGenParameterSpec;
+import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import connectDatabase.Main;
+import javax.management.loading.PrivateClassLoader;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -51,11 +53,15 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	private ChuTroDAO ctDAO;
 	private ArrayList<ChuPhong> cp;
 	private JComboBox< String> gioiTinh; 
+	
 	public ChuTroUI() {
 		setSize(1280,720);
 		setLocationRelativeTo(null);
+		Connection c = Main.connect();
+		
 		wrapper = new JPanel();
 		add(fgetLayout());
+		hienData();
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
@@ -102,7 +108,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		JScrollPane scrollPane = new JScrollPane(table);
 		table.addMouseListener(this);
 		tableContainer.add(scrollPane);
-
+		
 		container.add(getHeader());
 		container.add(Box.createVerticalStrut(15));
 		container.add(tableContainer);
@@ -115,7 +121,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-<<<<<<< HEAD
+
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
@@ -126,17 +132,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		container.add(getInput("Địa chỉ", queQuanCP = new JTextField()));
 		container.add(getInputCalender("Ngày sinh", ngaySinh= new JDateChooser()));
 		container.add(getInputComboBox("Giới tính",gioiTinh= new JComboBox<String>(new String[] { "","Nam", "Nữ" })));
-=======
-		container.setBorder(new EmptyBorder(30, 30, 0, 30));
-		wrapper.setBackground(new Color(181, 181, 181));
-		container.setBackground(new Color(181, 181, 181));
-		container.add(getInput("Mã chủ phòng", ma = new JTextField()));
-		container.add(getInput("Họ", ho = new JTextField()));
-		container.add(getInput("Tên", ten = new JTextField()));
-		container.add(getInput("SĐT", sdt = new JTextField()));
-		container.add(getInput("Địa chỉ", queQuan = new JTextField()));
-		container.add(getInputCalender("Ngày sinh", new JDateChooser()));
->>>>>>> 7dec6fc5f219c28b7de406250d9b4ebe5f4dc059
+
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -308,5 +304,15 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void hienData() {
+		ctDAO =new  ChuTroDAO();
+		ArrayList<ChuPhong> cp = ctDAO.docTuDTB();
+		for (ChuPhong c : cp) {
+			String d = c.getGioiTinh()== 1 ? "Nam":"Nu"  ;
+			String[] row = {c.getMaChuPhong(),c.getHo(),c.getTen(),c.getSdt(),c.getDiaChi(),c.getNgaySinh()+"",d};
+			tableModel.addRow(row);
+		}
+		table.setModel(tableModel);
 	}
 }
