@@ -105,7 +105,7 @@ public class ChuyenNganhUI implements MouseListener {
 		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());

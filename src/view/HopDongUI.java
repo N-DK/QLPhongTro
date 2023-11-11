@@ -22,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -32,6 +33,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import dao.SinhVienDAO;
+import entity.HopDong;
 import entity.SinhVien;
 
 public class HopDongUI {
@@ -90,7 +92,7 @@ public class HopDongUI {
 		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());
@@ -167,7 +169,9 @@ public class HopDongUI {
 	}
 
 	private void them() {
-		
+		if (isValid()) {
+			HopDong hopDong = new HopDong(ma.getText(), null, null, ngayKy.getDate(), ngayHet.getDate());
+		}
 	}
 
 	private void xoa() {
@@ -179,7 +183,30 @@ public class HopDongUI {
 	}
 
 	private void lamMoi() {
+		ma.setText("");
+		maSV.setSelectedIndex(0);
+		ngayHet.setDate(null);
+		ngayKy.setDate(null);
+		table.clearSelection();
+		ma.requestFocus();
+	}
 
+	private boolean isValid() {
+		if (ma.getText().equals("")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được rỗng");
+			return false;
+		} else if (ma.getText().matches("HD[0-9]{3}")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng có dạng là HD và đi theo sau là 3 số");
+			return false;
+		}
+		Object[][] objects = { { ngayKy.getDate(), "Ngày ký hợp đồng" }, { ngayHet.getDate(), "Ngày hết hợp đồng" } };
+		for (Object[] object : objects) {
+			if (object[0] == null) {
+				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private String[] createSVOptions() {
