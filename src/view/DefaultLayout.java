@@ -222,7 +222,7 @@ public class DefaultLayout {
 				// TODO Auto-generated method stub
 				Component component = super.prepareRenderer(renderer, row, column);
 				if (!isRowSelected(row)) {
-					component.setBackground(row % 2 != 0 ? Color.WHITE : Color.LIGHT_GRAY);
+					component.setBackground(row % 2 != 0 ? Color.WHITE : new Color(232, 232, 232));
 				} else {
 					component = super.prepareRenderer(renderer, row, column);
 				}
@@ -232,7 +232,7 @@ public class DefaultLayout {
 
 		table.getTableHeader().setOpaque(false);
 		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(Color.WHITE);
+		table.getTableHeader().setBackground(new Color(181, 181, 181));
 		table.getTableHeader().setForeground(Color.BLACK);
 		table.getTableHeader().setPreferredSize(new Dimension(table.getPreferredSize().width, 24));
 		table.setRowHeight(20);
@@ -242,16 +242,16 @@ public class DefaultLayout {
 
 	public static JPanel getInput(String label, JTextField textField) {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		
 		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
+		Lable.setBackground(new Color(181, 181, 181));
 		Lable.add(createLabel(label));
 		container.add(Lable);
 		
 		JPanel TextField = new JPanel();
-		TextField.setBackground(Color.WHITE);
+		TextField.setBackground(new Color(181, 181, 181));
 		textField.setFont(new Font("Arial", Font.PLAIN, 16));
 		textField.setPreferredSize(new Dimension(208, 30));
 		TextField.add(textField);
@@ -268,14 +268,14 @@ public class DefaultLayout {
 
 	public static JPanel getInputComboBox(String label, JComboBox<String> comboBox) {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
+		Lable.setBackground(new Color(181, 181, 181));
 		Lable.add(createLabel(label));
 		container.add(Lable);
 		JPanel Combox = new JPanel();
-		Combox.setBackground(Color.WHITE);
+		Combox.setBackground(new Color(181, 181, 181));
 		comboBox.setPreferredSize(new Dimension(208, 30));
 		Combox.add(comboBox);
 		container.add(Combox);
@@ -284,14 +284,14 @@ public class DefaultLayout {
 
 	public static JPanel getInputCalender(String label, JDateChooser chooser) {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		JPanel Lable = new JPanel();
-		Lable.setBackground(Color.WHITE);
+		Lable.setBackground(new Color(181, 181, 181));
 		Lable.add(createLabel(label));
 		container.add(Lable);
 		JPanel chooserContainer = new JPanel();
-		chooserContainer.setBackground(Color.WHITE);
+		chooserContainer.setBackground(new Color(181, 181, 181));
 		chooser.setLocale(Locale.US);
 		chooser.setPreferredSize(new Dimension(208, 30));
 		chooserContainer.add(chooser);

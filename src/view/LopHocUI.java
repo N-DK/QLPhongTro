@@ -55,7 +55,7 @@ public class LopHocUI implements MouseListener {
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("LỚP HỌC");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -65,7 +65,7 @@ public class LopHocUI implements MouseListener {
 
 	private JPanel getButtons() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(20, 0, 20, 0));
 		JPanel btnsContainer = new JPanel();
 		btnsContainer.setLayout(new GridLayout(1, 4));
@@ -114,8 +114,8 @@ public class LopHocUI implements MouseListener {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBorder(new EmptyBorder(30, 30, 0, 30));
-		wrapper.setBackground(Color.WHITE);
-		container.setBackground(Color.WHITE);
+		wrapper.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã lớp", ma = new JTextField()));
 		container.add(getInput("Tên lớp", ten = new JTextField()));
 		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));
@@ -139,7 +139,7 @@ public class LopHocUI implements MouseListener {
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(Color.WHITE);
+		btnContainer.setBackground(new Color(181, 181, 181));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);

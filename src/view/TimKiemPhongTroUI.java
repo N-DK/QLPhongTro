@@ -37,7 +37,7 @@ public class TimKiemPhongTroUI {
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("TÌM KIẾM PHÒNG TRỌ");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -73,8 +73,9 @@ public class TimKiemPhongTroUI {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBorder(new EmptyBorder(30, 30, 0, 30));
-		wrapper.setBackground(Color.WHITE);
-		container.setBackground(Color.WHITE);
+		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		wrapper.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
 		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
@@ -101,7 +102,7 @@ public class TimKiemPhongTroUI {
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(Color.WHITE);
+		btnContainer.setBackground(new Color(181, 181, 181));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);
