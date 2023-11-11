@@ -79,6 +79,7 @@ public class ChuyenNganhUI implements MouseListener {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -89,7 +90,13 @@ public class ChuyenNganhUI implements MouseListener {
 
 		String[] cols = { "Mã chuyên ngành", "Tên chuyên ngành", "Mã khoa" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
 
 		for (ChuyenNganh chuyenNganh : dscn) {
@@ -174,14 +181,16 @@ public class ChuyenNganhUI implements MouseListener {
 	}
 
 	private void them() {
-		Khoa khoa = khoaDAO.findOneById((String) maKhoa.getSelectedItem());
-		ChuyenNganh chuyenNganh = new ChuyenNganh(ma.getText(), ten.getText(), khoa);
-		if (cnDAO.save(chuyenNganh, "insert")) {
-			tableModel.addRow(chuyenNganh.getObjects());
-			JOptionPane.showMessageDialog(wrapper, "Thêm chuyên ngành thành công");
-			lamMoi();
-		} else {
-			JOptionPane.showMessageDialog(wrapper, "Mã chuyên ngành không được trùng");
+		if (isValid()) {
+			Khoa khoa = khoaDAO.findOneById((String) maKhoa.getSelectedItem());
+			ChuyenNganh chuyenNganh = new ChuyenNganh(ma.getText(), ten.getText(), khoa);
+			if (cnDAO.save(chuyenNganh, "insert")) {
+				tableModel.addRow(chuyenNganh.getObjects());
+				JOptionPane.showMessageDialog(wrapper, "Thêm chuyên ngành thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã chuyên ngành không được trùng");
+			}
 		}
 	}
 
@@ -231,6 +240,18 @@ public class ChuyenNganhUI implements MouseListener {
 		maKhoa.setSelectedIndex(0);
 		ma.requestFocus();
 		table.clearSelection();
+	}
+
+	private boolean isValid() {
+		Object[][] objects = { { ma.getText(), "Mã chuyên ngành" }, { ten.getText(), "Tên chuyên ngành" } };
+		for (Object[] object : objects) {
+			if (object[0].equals("")) {
+				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.Box;
@@ -28,14 +29,22 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.SinhVienDAO;
+import entity.SinhVien;
+
 public class HopDongUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ho, ten, queQuan, sdt;
+	private JTextField ma;
+	private JComboBox<String> maSV;
+	private JDateChooser ngayKy, ngayHet;
+	private List<SinhVien> dssv;
+	private SinhVienDAO svDAO;
 
 	public HopDongUI() {
 		wrapper = new JPanel();
+		svDAO = new SinhVienDAO();
 	}
 
 	private JPanel getHeader() {
@@ -98,18 +107,19 @@ public class HopDongUI {
 		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã hợp đồng", ma = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã sinh viên", new JComboBox<String>()));
+		container.add(getInputComboBox("Mã sinh viên", maSV = new JComboBox<String>(createSVOptions())));
 		container.add(Box.createVerticalStrut(15));
 		container.add(getInputComboBox("Mã phòng", new JComboBox<String>()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày ký hợp đồng", new JDateChooser()));
+		container.add(getInputCalender("Ngày ký hợp đồng", ngayKy = new JDateChooser()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày hết hợp đồng", new JDateChooser()));
+		container.add(getInputCalender("Ngày hết hợp đồng", ngayHet = new JDateChooser()));
 		wrapper.add(container);
 		return wrapper;
 	}
 
 	public JPanel getLayout() {
+		dssv = svDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -134,11 +144,13 @@ public class HopDongUI {
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
 			if (label.equals(THEM)) {
-				themSinhVien();
+				them();
 			} else if (label.equals(XOA)) {
-				xoaSinhVien();
+				xoa();
 			} else if (label.equals(SUA)) {
-				chinhSuaSinhVien();
+				chinhSua();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -147,15 +159,26 @@ public class HopDongUI {
 		return btnContainer;
 	}
 
-	private void themSinhVien() {
-		System.out.println(ma.getText() + ho.getText() + ten.getText());
+	private void them() {
 	}
 
-	private void xoaSinhVien() {
+	private void xoa() {
 
 	}
 
-	private void chinhSuaSinhVien() {
+	private void chinhSua() {
 
+	}
+
+	private void lamMoi() {
+
+	}
+
+	private String[] createSVOptions() {
+		String[] options = new String[dssv.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[i] = dssv.get(i).getMaSinhVien();
+		}
+		return options;
 	}
 }
