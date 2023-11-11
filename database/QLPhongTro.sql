@@ -83,4 +83,4 @@ values	('DHKHMT17A', N'Đại học khoa học máy tính 17A', N'Cô Phúc', 'K
 		('DHKHMT17C', N'Đại học khoa học máy tính 17C', N'Cô Phượng', 'KHMT'),
 		('DHKHMT17D', N'Đại học khoa học máy tính 17D', N'Thầy Phúc', 'KHMT')
 
-SELECT * FROM SinhVien
+SELECT * FROM Lop

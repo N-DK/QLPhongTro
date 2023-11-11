@@ -12,7 +12,7 @@ public class Main {
 			String password = "123";
 			con = DriverManager.getConnection(url, user, password);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		return con;
 	}

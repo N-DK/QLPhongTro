@@ -1,5 +1,5 @@
 ﻿/*Lấy danh sách của từng loại*/
-/*CREATE PROCEDURE findAll(@type nvarchar(255))
+CREATE PROCEDURE findAll(@type nvarchar(255))
 AS
 BEGIN
 	IF @type = 'khoa'
@@ -18,10 +18,10 @@ BEGIN
 	BEGIN
 		SELECT * FROM SinhVien
 	END
-END*/
+END
 
 /*Lấy một đối tượng dụa vào mã*/
-/*CREATE PROCEDURE findOneById(@type nvarchar(255), @ma nvarchar(255))
+CREATE PROCEDURE findOneById(@type nvarchar(255), @ma nvarchar(255))
 AS 
 BEGIN
 	IF @type = 'khoa'
@@ -36,7 +36,7 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuyenNganh WHERE MaChuyenNganh = @ma
 	END
-END*/
+END
 
 /*Xóa một đối tượng theo mã*/
 /*CREATE PROCEDURE deleteOneById(@type varchar(255), @ma varchar(255))
