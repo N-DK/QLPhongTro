@@ -57,6 +57,7 @@ public class TimKiemSVUI {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -67,7 +68,13 @@ public class TimKiemSVUI {
 
 		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
 
 		for (SinhVien sinhVien : dssv) {
@@ -152,20 +159,42 @@ public class TimKiemSVUI {
 	}
 
 	private void timKiem() {
-		String _ho = ho.getText().equals("") ? null : ho.getText();
-		dssv = svDAO.findBy(ma.getText(), _ho, ten.getText(), (String) maLop.getSelectedItem(), queQuan.getText());
+		dssv = svDAO.findBy(createText(ma.getText()), createText(ho.getText()), createText(ten.getText()),
+				createText((String) maLop.getSelectedItem()), createText(queQuan.getText()));
+		clearTable();
+		for (SinhVien sinhVien : dssv) {
+			tableModel.addRow(sinhVien.getObjects());
+		}
+		resetTexts();
+	}
+
+	private void lamMoi() {
+		resetTexts();
+		dssv = svDAO.findAll();
+		clearTable();
 		for (SinhVien sinhVien : dssv) {
 			tableModel.addRow(sinhVien.getObjects());
 		}
 	}
 
-	private void lamMoi() {
+	private void resetTexts() {
 		ma.setText("");
 		ho.setText("");
 		ten.setText("");
-		maLop.setSelectedItem(0);
+		maLop.setSelectedIndex(0);
 		queQuan.setText("");
 		ma.requestFocus();
 		table.clearSelection();
+	}
+
+	private String createText(String text) {
+		return text.equals("") ? null : text;
+	}
+
+	private void clearTable() {
+		int length = tableModel.getRowCount();
+		for (int i = 0; i < length; i++) {
+			tableModel.removeRow(0);
+		}
 	}
 }

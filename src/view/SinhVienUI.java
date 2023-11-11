@@ -113,6 +113,7 @@ public class SinhVienUI implements MouseListener {
 		container.add(tableContainer);
 		container.add(Box.createVerticalStrut(15));
 		container.add(getButtons());
+
 		return container;
 	}
 

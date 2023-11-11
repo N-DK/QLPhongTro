@@ -125,19 +125,21 @@ BEGIN
 	END
 	IF @ho is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE Ho = @ho
+		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
 	END
 	IF @ten is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE Ten = @ten
+		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
 	END
 	IF @maLop is not null
 	BEGIN
 		SELECT * FROM SinhVien WHERE MaLop = @maLop
 	END
-	IF @queQuan is not null
+	ELSE IF @queQuan is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE QueQuan = @queQuan
+		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
 	END
 END
+
+SELECT * FROM SinhVien WHERE Ho like '%Ngô%'
 

@@ -244,19 +244,19 @@ public class DefaultLayout {
 		JPanel container = new JPanel();
 		container.setBackground(new Color(181, 181, 181));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		
+
 		JPanel Lable = new JPanel();
 		Lable.setBackground(new Color(181, 181, 181));
 		Lable.add(createLabel(label));
 		container.add(Lable);
-		
+
 		JPanel TextField = new JPanel();
 		TextField.setBackground(new Color(181, 181, 181));
 		textField.setFont(new Font("Arial", Font.PLAIN, 16));
 		textField.setPreferredSize(new Dimension(208, 30));
 		TextField.add(textField);
 		container.add(TextField);
-		
+
 		return container;
 	}
 
