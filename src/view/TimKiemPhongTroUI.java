@@ -60,7 +60,7 @@ public class TimKiemPhongTroUI {
 		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());

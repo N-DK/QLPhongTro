@@ -78,6 +78,7 @@ public class ChuTroUI {
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.getViewport().setBackground(Color.WHITE);
 
 		tableContainer.add(scrollPane);
 
