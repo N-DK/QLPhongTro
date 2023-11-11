@@ -114,15 +114,12 @@ public class LopHocUI implements MouseListener {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-<<<<<<< HEAD
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(new Color(176, 226, 255));
 		container.setBackground(new Color(176, 226, 255));
-=======
 		container.setBorder(new EmptyBorder(30, 30, 0, 30));
-		wrapper.setBackground(new Color(181, 181, 181));
-		container.setBackground(new Color(181, 181, 181));
->>>>>>> 1efa92c4308e578dcbc44a3b39e92858465bfc10
+		wrapper.setBackground(new Color(176, 226, 255));
+		container.setBackground(new Color(176, 226, 255));
 		container.add(getInput("Mã lớp", ma = new JTextField()));
 		container.add(getInput("Tên lớp", ten = new JTextField()));
 		container.add(getInput("Tên giáo viên chủ nhiệm", tenCN = new JTextField()));

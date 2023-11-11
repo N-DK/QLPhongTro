@@ -94,15 +94,12 @@ public class HopDongUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-<<<<<<< HEAD
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(new Color(176, 226, 255));
 		container.setBackground(new Color(176, 226, 255));
-=======
 		container.setBorder(new EmptyBorder(30, 30, 0, 30));
-		wrapper.setBackground(new Color(181, 181, 181));
-		container.setBackground(new Color(181, 181, 181));
->>>>>>> 1efa92c4308e578dcbc44a3b39e92858465bfc10
+		wrapper.setBackground(new Color(176, 226, 255));
+		container.setBackground(new Color(176, 226, 255));
 		container.add(getInput("Mã hợp đồng", ma = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(getInputComboBox("Mã sinh viên", new JComboBox<String>()));

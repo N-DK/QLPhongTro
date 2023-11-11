@@ -83,7 +83,6 @@ values	('DHKHMT17A', N'Đại học khoa học máy tính 17A', N'Cô Phúc', 'K
 		('DHKHMT17C', N'Đại học khoa học máy tính 17C', N'Cô Phượng', 'KHMT'),
 		('DHKHMT17D', N'Đại học khoa học máy tính 17D', N'Thầy Phúc', 'KHMT')
 
-<<<<<<< HEAD
 SELECT * FROM Lop
 =======
 insert into SinhVien(MaSinhVien, Ho, Ten, MaLop, QueQuan, GioiTinh, NgaySinh, Sdt)
@@ -97,4 +96,4 @@ values	('21134361', N'Ngô Đăng', N'Khoa', 'DHKHMT17B', N'Quảng Nam', 1, '20
 		('21134368', N'Võ Ngọc Trung', N'Quân', 'DHKHMT17B', N'Nghệ An', 1, '2003-11-15', '0792798777'),
 		('21134369', N'Lê Đình', N'Nam', 'DHKHMT17A', N'Hà Tĩnh', 1, '2003-11-30', '0792798777')
 SELECT * FROM SinhVien
->>>>>>> 1efa92c4308e578dcbc44a3b39e92858465bfc10
+

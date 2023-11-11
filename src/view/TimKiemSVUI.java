@@ -113,12 +113,9 @@ public class TimKiemSVUI {
 	}
 
 	public JPanel getLayout() {
-<<<<<<< HEAD
 		wrapper.setBackground(Color.WHITE);
-=======
 		dssv = svDAO.findAll();
 		dslh = lopDAO.findAll();
->>>>>>> 1efa92c4308e578dcbc44a3b39e92858465bfc10
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
