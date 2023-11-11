@@ -16,7 +16,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -111,12 +110,14 @@ public class DefaultLayout {
 		JButton btn = createNavItem(tilte, iconPath);
 
 		JPopupMenu popupMenu = new JPopupMenu();
-		popupMenu.setOpaque(false);
-		popupMenu.setBackground(Color.YELLOW);
+		popupMenu.setOpaque(true);
+		popupMenu.setBackground(Color.WHITE);
+		popupMenu.setBorder(BorderFactory.createLineBorder(new Color(108, 166, 205)));
 
 		for (String[] option : options) {
 			JMenuItem item = new JMenuItem(option[0]);
-			item.setFont(new Font("Arial", Font.BOLD, 14));
+			item.setFont(new Font("Arial", Font.BOLD, 15));
+			item.setBackground(Color.WHITE);
 			item.setIcon(createImageIcon(option[1]));
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
