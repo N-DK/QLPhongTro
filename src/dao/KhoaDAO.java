@@ -96,24 +96,6 @@ public class KhoaDAO {
 		return true;
 	}
 
-//	public boolean updateOneById(Khoa khoa) {
-//		List<Khoa> list = findAll();
-//		if (!list.contains(khoa)) {
-//			return false;
-//		}
-//		String SQL = "{call updateKhoa(?,?)}";
-//		Connection con = connect();
-//		try {
-//			PreparedStatement pstms = con.prepareStatement(SQL);
-//			pstms.setString(1, khoa.getMa());
-//			pstms.setString(2, khoa.getTen());
-//			pstms.executeUpdate();
-//		} catch (Exception e) {
-//		}
-//
-//		return true;
-//	}
-
 	public boolean deleteOneById(String maKhoa) {
 		String SQL = "{call deleteOneById(khoa," + maKhoa + ")}";
 		Connection con = connect();

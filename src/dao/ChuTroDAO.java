@@ -1,5 +1,6 @@
 package dao;
 
+
 import connectDatabase.Main;
 
 
@@ -7,10 +8,10 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
+
+
 import java.util.ArrayList;
-import java.util.List;
+
 import java.sql.Statement;
 import entity.ChuPhong;
 
@@ -41,7 +42,7 @@ public class ChuTroDAO {
 			stmt.setString(4,cp.getSdt());
 			stmt.setString(5,cp.getDiaChi());
 			stmt.setDate(6,new java.sql.Date(cp.getNgaySinh().toInstant().toEpochMilli()));	
-			System.out.println(cp.getGioiTinh());
+			
 			stmt.setInt(7, cp.getGioiTinh());
 			
 			n = stmt.executeUpdate();
@@ -75,5 +76,41 @@ public class ChuTroDAO {
 		e.printStackTrace();
 	}
 		return ds; 
+	}
+	public boolean delete(String ma){
+		Connection con = Main.connect();
+		PreparedStatement stmt = null;
+		int n=0;
+		try {
+			stmt = con.prepareStatement("{call xoaChuPhong(?)}");
+			stmt.setString(1, ma);
+			n = stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return n>0;
+	}
+	public boolean updateChuPhong(ChuPhong cp){
+		Connection con = Main.connect();
+		PreparedStatement stmt = null;
+		int n=0;
+		try {
+			stmt = con.prepareStatement("update ChuPhong "+"set Ho =?,"+ "Ten = ?,"+"Sdt = ?,"+"DiaChi = ?,"+"NgaySinh=?,"+"GioiTinh = ?" +"where MaChuPhong=?");
+			
+			stmt.setString(1,cp.getHo());
+			stmt.setString(2,cp.getTen());
+			stmt.setString(3,cp.getSdt());
+			stmt.setString(4,cp.getDiaChi());
+			stmt.setDate(5,new java.sql.Date(cp.getNgaySinh().toInstant().toEpochMilli()));	
+			stmt.setInt(6, cp.getGioiTinh());
+			stmt.setString(7,cp.getMaChuPhong());
+			System.out.println("d");
+			n = stmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return n>0;
 	}
 }

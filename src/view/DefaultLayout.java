@@ -53,7 +53,7 @@ public class DefaultLayout {
 
 	private JPanel getSidebar() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.GRAY);
+		container.setBackground(new Color(108, 166, 205));
 		container.setBorder(new CompoundBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK),
 				new EmptyBorder(0, 15, 0, 700)));
 		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
@@ -76,6 +76,7 @@ public class DefaultLayout {
 		JPanel container = new JPanel();
 		container.setLayout(new BorderLayout());
 		container.setBorder(new EmptyBorder(12, 0, 0, 0));
+		container.setBackground(Color.WHITE);
 
 		container.add(children);
 		return container;
@@ -92,7 +93,7 @@ public class DefaultLayout {
 		JButton btn = new JButton(title);
 		ImageIcon icon = createImageIcon(iconPath);
 		btn.setBorder(new EmptyBorder(15, 0, 15, 0));
-		btn.setBackground(Color.GRAY);
+		btn.setBackground(new Color(108, 166, 205));
 		btn.setIcon(icon);
 		btn.setBorderPainted(false);
 		btn.setFocusPainted(false);
@@ -198,7 +199,8 @@ public class DefaultLayout {
 		}
 		case CT: {
 			ChuTroUI chuTroUI = new ChuTroUI();
-			children = chuTroUI.fgetLayout();
+			children = chuTroUI.getLayout();
+			chuTroUI.hienData();
 			break;
 		}
 		case CN: {
@@ -215,6 +217,7 @@ public class DefaultLayout {
 		jFrame.add(getLayout());
 	}
 
+	@SuppressWarnings("serial")
 	public static JTable createCustomTable(DefaultTableModel tableModel) {
 		JTable table = new JTable(tableModel) {
 			@Override
@@ -231,32 +234,32 @@ public class DefaultLayout {
 		};
 
 		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-		table.getTableHeader().setBackground(new Color(181, 181, 181));
+		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		table.getTableHeader().setBackground(new Color(176, 196, 222));
 		table.getTableHeader().setForeground(Color.BLACK);
 		table.getTableHeader().setPreferredSize(new Dimension(table.getPreferredSize().width, 24));
-		table.setRowHeight(20);
+		table.setRowHeight(24);
 
 		return table;
 	}
 
 	public static JPanel getInput(String label, JTextField textField) {
 		JPanel container = new JPanel();
-		container.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(176, 226, 255));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		
+
 		JPanel Lable = new JPanel();
-		Lable.setBackground(new Color(181, 181, 181));
+		Lable.setBackground(new Color(176, 226, 255));
 		Lable.add(createLabel(label));
 		container.add(Lable);
-		
+
 		JPanel TextField = new JPanel();
-		TextField.setBackground(new Color(181, 181, 181));
+		TextField.setBackground(new Color(176, 226, 255));
 		textField.setFont(new Font("Arial", Font.PLAIN, 16));
 		textField.setPreferredSize(new Dimension(208, 30));
 		TextField.add(textField);
 		container.add(TextField);
-		
+
 		return container;
 	}
 
@@ -268,14 +271,14 @@ public class DefaultLayout {
 
 	public static JPanel getInputComboBox(String label, JComboBox<String> comboBox) {
 		JPanel container = new JPanel();
-		container.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(176, 226, 255));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		JPanel Lable = new JPanel();
-		Lable.setBackground(new Color(181, 181, 181));
+		Lable.setBackground(new Color(176, 226, 255));
 		Lable.add(createLabel(label));
 		container.add(Lable);
 		JPanel Combox = new JPanel();
-		Combox.setBackground(new Color(181, 181, 181));
+		Combox.setBackground(new Color(176, 226, 255));
 		comboBox.setPreferredSize(new Dimension(208, 30));
 		Combox.add(comboBox);
 		container.add(Combox);
@@ -284,14 +287,14 @@ public class DefaultLayout {
 
 	public static JPanel getInputCalender(String label, JDateChooser chooser) {
 		JPanel container = new JPanel();
-		container.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(176, 226, 255));
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		JPanel Lable = new JPanel();
-		Lable.setBackground(new Color(181, 181, 181));
+		Lable.setBackground(new Color(176, 226, 255));
 		Lable.add(createLabel(label));
 		container.add(Lable);
 		JPanel chooserContainer = new JPanel();
-		chooserContainer.setBackground(new Color(181, 181, 181));
+		chooserContainer.setBackground(new Color(176, 226, 255));
 		chooser.setLocale(Locale.US);
 		chooser.setPreferredSize(new Dimension(208, 30));
 		chooserContainer.add(chooser);

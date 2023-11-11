@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 /view/
 /connectDatabase/
 /entity/
@@ -6,3 +7,9 @@
 =======
 /connectDatabase/
 >>>>>>> 7dec6fc5f219c28b7de406250d9b4ebe5f4dc059
+=======
+/dao/
+/entity/
+/view/
+>>>>>>> cbc8279a49a8b6344a0f6efd5ed693af8638f2c4
+/image/

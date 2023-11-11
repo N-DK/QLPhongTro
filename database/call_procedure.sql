@@ -1,5 +1,5 @@
 ﻿/*Lấy danh sách của từng loại*/
-/*CREATE PROCEDURE findAll(@type nvarchar(255))
+CREATE PROCEDURE findAll(@type nvarchar(255))
 AS
 BEGIN
 	IF @type = 'khoa'
@@ -18,10 +18,10 @@ BEGIN
 	BEGIN
 		SELECT * FROM SinhVien
 	END
-END*/
+END
 
 /*Lấy một đối tượng dụa vào mã*/
-/*CREATE PROCEDURE findOneById(@type nvarchar(255), @ma nvarchar(255))
+CREATE PROCEDURE findOneById(@type nvarchar(255), @ma nvarchar(255))
 AS 
 BEGIN
 	IF @type = 'khoa'
@@ -36,7 +36,7 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuyenNganh WHERE MaChuyenNganh = @ma
 	END
-END*/
+END
 
 /*Xóa một đối tượng theo mã*/
 /*CREATE PROCEDURE deleteOneById(@type varchar(255), @ma varchar(255))
@@ -125,19 +125,21 @@ BEGIN
 	END
 	IF @ho is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE Ho = @ho
+		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
 	END
 	IF @ten is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE Ten = @ten
+		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
 	END
 	IF @maLop is not null
 	BEGIN
 		SELECT * FROM SinhVien WHERE MaLop = @maLop
 	END
-	IF @queQuan is not null
+	ELSE IF @queQuan is not null
 	BEGIN
-		SELECT * FROM SinhVien WHERE QueQuan = @queQuan
+		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
 	END
 END
+
+SELECT * FROM SinhVien WHERE Ho like '%Ngô%'
 

@@ -22,6 +22,8 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import connectDatabase.Main;
 import javax.management.loading.PrivateClassLoader;
 import javax.swing.Box;
@@ -44,7 +46,7 @@ import com.toedter.calendar.JDateChooser;
 import dao.ChuTroDAO;
 import entity.ChuPhong;
 
-public class ChuTroUI extends JFrame implements MouseListener{
+public class ChuTroUI implements MouseListener{
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -54,22 +56,13 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	private ArrayList<ChuPhong> cp;
 	private JComboBox< String> gioiTinh; 
 	
-	public ChuTroUI() {
-		setSize(1280,720);
-		setLocationRelativeTo(null);
-		Connection c = Main.connect();
-		
-		wrapper = new JPanel();
-		add(fgetLayout());
-		hienData();
-		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
+	public ChuTroUI() {		
+		wrapper = new JPanel();	
 	}
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(176, 226, 255));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("QUẢN LÝ CHỦ TRỌ");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -79,7 +72,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 
 	private JPanel getButtons() {
 		JPanel container = new JPanel();
-		container.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(176, 226, 255));
 		container.setBorder(new EmptyBorder(20, 0, 20, 0));
 		JPanel btnsContainer = new JPanel();
 		btnsContainer.setLayout(new GridLayout(1, 4));
@@ -96,7 +89,8 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-
+		container.setBackground(Color.WHITE);
+		
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
@@ -122,6 +116,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 
+
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
@@ -133,16 +128,23 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		container.add(getInputCalender("Ngày sinh", ngaySinh= new JDateChooser()));
 		container.add(getInputComboBox("Giới tính",gioiTinh= new JComboBox<String>(new String[] { "","Nam", "Nữ" })));
 
+		
 		wrapper.add(container);
 		return wrapper;
 	}
 
-	public JPanel fgetLayout() {
+
+	public JPanel getLayout() {
+
+	
+		wrapper.setBackground(Color.WHITE);
+
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getForm());
 		wrapper.add(Box.createHorizontalStrut(15));
+		
 		wrapper.add(getBody());
 		return wrapper;
 	}
@@ -150,11 +152,11 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(new Color(181, 181, 181));
+		btnContainer.setBackground(new Color(176, 226, 255));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);
-		btn.setBackground(Color.GRAY);
+		btn.setBackground(new Color(162, 181, 205));
 		btn.setIcon(icon);
 		btn.setBorderPainted(false);
 		btn.setFocusPainted(false);
@@ -198,6 +200,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 			int gioitinh = gioiTinh.getSelectedItem().toString().equals("Nam") ? 1:0;
 			
 			ChuPhong cp =new ChuPhong(ma, ho, ten, sdt, diachi, ngaySinh.getDate(), gioitinh);
+			String sql = "{call themChuPhong(?,?,?,?,?,?,?)}";
 			ctDAO = new ChuTroDAO();
 			if(ctDAO.themList(cp)) {
 					
@@ -205,25 +208,60 @@ public class ChuTroUI extends JFrame implements MouseListener{
 					
 					String t[] = {ma,ho, ten,sdt,diachi,ngaySinh.getDate()+"",gioiTinh.getSelectedItem().toString()};
 					tableModel.addRow(t);
-					JOptionPane.showMessageDialog(this, "Thêm sinh viên thành công");
+					JOptionPane.showMessageDialog(wrapper, "Thêm sinh viên thành công");
 					XoaTrang();
 				}
 			}
 			else {
-				JOptionPane.showMessageDialog(this, "Mã chủ phòng trùng");
+				JOptionPane.showMessageDialog(wrapper, "Mã chủ phòng trùng");
 			}
 		}
 	}
 
 	private void xoaSinhVien() {
-
+		ctDAO = new ChuTroDAO();
+		int index = table.getSelectedRow();
+		String ma = table.getValueAt(index, 0).toString();
+		int hoi = JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc muốn xóa không ?","Lưu ý",JOptionPane.YES_NO_OPTION);
+		if(index>-1) {
+			if(hoi==JOptionPane.YES_OPTION) {
+				if(ctDAO.delete(ma)) {
+					JOptionPane.showMessageDialog(wrapper,"Xoa thành công");
+					tableModel.removeRow(index);
+					XoaTrang();
+				}
+			}
+		}
 	}
 
 	private void chinhSuaSinhVien() {
-
-	}
-	public static void main(String[] args) {
-		new ChuTroUI();
+		ctDAO = new ChuTroDAO();
+		int index = table.getSelectedRow();
+		String maTruoc = table.getValueAt(index, 0).toString();
+		String maThayDoi = maCP.getText();
+		if(!maTruoc.equals(maThayDoi)) {
+			JOptionPane.showMessageDialog(wrapper, "Không được thay đổi mã chủ phòng");
+		}else {
+			String ma = maCP.getText();
+			String ho = hoCP.getText();
+			String ten = tenCP.getText();
+			String sdt = sdtCP.getText();
+			String diachi = queQuanCP.getText();
+			int gioitinh = gioiTinh.getSelectedItem().toString().equals("Nam") ? 1:0;
+			
+			ChuPhong cp =new ChuPhong(ma, ho, ten, sdt, diachi, ngaySinh.getDate(), gioitinh);
+			
+			if(ctDAO.updateChuPhong(cp)) {
+				System.out.println(":");
+				table.setValueAt(cp, index, 1);
+				table.setValueAt(cp, index, 2);
+				table.setValueAt(cp, index, 3);
+				table.setValueAt(cp, index, 4);
+				table.setValueAt(cp, index, 5);
+				table.setValueAt(cp, index, 6);
+				
+			}
+		}
 	}
 	public boolean getRegex() {
 		String ma = maCP.getText();
@@ -234,31 +272,31 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	
 		String gioitinh = gioiTinh.getSelectedItem().toString();
 		if(!ma.matches("CP\\d+")) {
-			JOptionPane.showMessageDialog(this, "Nhập sai ma");
+			JOptionPane.showMessageDialog(wrapper, "Nhập sai ma");
 			return false;
 		}
 		if(!ho.matches("[a-zA-Z]+")) {
-			JOptionPane.showMessageDialog(this, "Họ phải là kí tự");
+			JOptionPane.showMessageDialog(wrapper, "Họ phải là kí tự");
 			return false;
 		}
 		if(!ten.matches("[a-zA-Z]+")) {
-			JOptionPane.showMessageDialog(this, "Tên phải là kí tự");
+			JOptionPane.showMessageDialog(wrapper, "Tên phải là kí tự");
 			return false;
 		}
 		if(!sdt.matches("[0-9]{10}")) {
-			JOptionPane.showMessageDialog(this, "Số điện thoại phải là chữ số và có 11 số");
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại phải là chữ số và có 10 số");
 			return false;
 		}
 		if(!diachi.matches("\\w+")) {
-			JOptionPane.showMessageDialog(this, "Địa chỉ không có kí tự đặc biệt");
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không có kí tự đặc biệt");
 			return false;
 		}
 		if(ngaySinh.getDate() == null) {
-			JOptionPane.showMessageDialog(this, "Chưa chọn ngày sinh");
+			JOptionPane.showMessageDialog(wrapper, "Chưa chọn ngày sinh");
 			return false;
 		}
 		if(gioitinh.equals("")) {
-			JOptionPane.showMessageDialog(this, "Chưa chọn nhân viên");
+			JOptionPane.showMessageDialog(wrapper, "Chưa chọn nhân viên");
 			return false;
 		}
 		return true;
@@ -279,6 +317,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		
 		gioiTinh.setSelectedItem(table.getValueAt(index, 6));
 	}
 
@@ -309,10 +348,11 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		ctDAO =new  ChuTroDAO();
 		ArrayList<ChuPhong> cp = ctDAO.docTuDTB();
 		for (ChuPhong c : cp) {
-			String d = c.getGioiTinh()== 1 ? "Nam":"Nu"  ;
+			String d = c.getGioiTinh()== 1 ? "Nam":"Nữ"  ;
 			String[] row = {c.getMaChuPhong(),c.getHo(),c.getTen(),c.getSdt(),c.getDiaChi(),c.getNgaySinh()+"",d};
 			tableModel.addRow(row);
 		}
 		table.setModel(tableModel);
 	}
+
 }
