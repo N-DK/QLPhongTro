@@ -63,7 +63,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("QUẢN LÝ CHỦ TRỌ");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -73,7 +73,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 
 	private JPanel getButtons() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(20, 0, 20, 0));
 		JPanel btnsContainer = new JPanel();
 		btnsContainer.setLayout(new GridLayout(1, 4));
@@ -115,6 +115,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+<<<<<<< HEAD
 		container.setBorder(new EmptyBorder(30, 30, 400, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
@@ -125,6 +126,17 @@ public class ChuTroUI extends JFrame implements MouseListener{
 		container.add(getInput("Địa chỉ", queQuanCP = new JTextField()));
 		container.add(getInputCalender("Ngày sinh", ngaySinh= new JDateChooser()));
 		container.add(getInputComboBox("Giới tính",gioiTinh= new JComboBox<String>(new String[] { "","Nam", "Nữ" })));
+=======
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
+		wrapper.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(181, 181, 181));
+		container.add(getInput("Mã chủ phòng", ma = new JTextField()));
+		container.add(getInput("Họ", ho = new JTextField()));
+		container.add(getInput("Tên", ten = new JTextField()));
+		container.add(getInput("SĐT", sdt = new JTextField()));
+		container.add(getInput("Địa chỉ", queQuan = new JTextField()));
+		container.add(getInputCalender("Ngày sinh", new JDateChooser()));
+>>>>>>> 7dec6fc5f219c28b7de406250d9b4ebe5f4dc059
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -142,7 +154,7 @@ public class ChuTroUI extends JFrame implements MouseListener{
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(Color.WHITE);
+		btnContainer.setBackground(new Color(181, 181, 181));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);

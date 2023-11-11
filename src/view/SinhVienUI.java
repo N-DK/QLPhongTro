@@ -18,7 +18,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.Box;
@@ -62,7 +61,7 @@ public class SinhVienUI implements MouseListener {
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("QUẢN LÝ SINH VIÊN");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -72,7 +71,7 @@ public class SinhVienUI implements MouseListener {
 
 	private JPanel getButtons() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(20, 0, 20, 0));
 		JPanel btnsContainer = new JPanel();
 		btnsContainer.setLayout(new GridLayout(1, 4));
@@ -121,9 +120,9 @@ public class SinhVienUI implements MouseListener {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(50, 30, 400, 30));
-		wrapper.setBackground(Color.WHITE);
-		container.setBackground(Color.WHITE);
+		container.setBorder(new EmptyBorder(50, 30, 0, 30));
+		wrapper.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã sinh viên", ma = new JTextField()));
 		container.add(getInput("Họ", ho = new JTextField()));
 		container.add(getInput("Tên", ten = new JTextField()));
@@ -151,7 +150,7 @@ public class SinhVienUI implements MouseListener {
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(Color.WHITE);
+		btnContainer.setBackground(new Color(181, 181, 181));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);
@@ -163,11 +162,13 @@ public class SinhVienUI implements MouseListener {
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
 			if (label.equals(THEM)) {
-				themSinhVien();
+				them();
 			} else if (label.equals(XOA)) {
-				xoaSinhVien();
+				xoa();
 			} else if (label.equals(SUA)) {
-				chinhSuaSinhVien();
+				chinhSua();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -179,32 +180,72 @@ public class SinhVienUI implements MouseListener {
 	private String[] createOptionsLopHoc() {
 		String[] options = new String[dslh.size()];
 		for (int i = 0; i < options.length; i++) {
-			options[0] = dslh.get(i).getMa();
+			options[i] = dslh.get(i).getMa();
 		}
 		return options;
 	}
 
-	private void themSinhVien() {
+	private void them() {
 		if (isValid()) {
+			LopHoc lop = lopDAO.findOneById((String) maLop.getSelectedItem());
 			int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
 			SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(), sdt.getText(),
-					ma.getText(), queQuan.getText(), (String) maLop.getSelectedItem());
-			tableModel.addRow(sinhVien.getObjects());
-			if (svDAO.insert(sinhVien)) {
+					ma.getText(), queQuan.getText(), lop);
+			if (svDAO.save(sinhVien, "insert")) {
+				tableModel.addRow(sinhVien.getObjects());
 				JOptionPane.showMessageDialog(wrapper, "Thêm sinh viên thành công");
+				lamMoi();
 			} else {
 				JOptionPane.showMessageDialog(wrapper, "Mã sinh viên không được trùng");
 			}
-			lamMoi();
 		}
 	}
 
-	private void xoaSinhVien() {
-
+	private void xoa() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần xóa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc xóa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				boolean isSuccess = svDAO.deleteOneById((String) table.getValueAt(row, 0));
+				if (isSuccess) {
+					tableModel.removeRow(row);
+					JOptionPane.showMessageDialog(wrapper, "Xóa sinh viên thành công");
+					lamMoi();
+				}
+			}
+		}
 	}
 
-	private void chinhSuaSinhVien() {
-
+	private void chinhSua() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần sửa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				LopHoc lop = lopDAO.findOneById((String) maLop.getSelectedItem());
+				int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
+				SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(),
+						sdt.getText(), ma.getText(), queQuan.getText(), lop);
+				boolean isSuccess = svDAO.save(sinhVien, "update");
+				if (isSuccess) {
+					table.setValueAt(sinhVien.getMaSinhVien(), row, 0);
+					table.setValueAt(sinhVien.getHo(), row, 1);
+					table.setValueAt(sinhVien.getTen(), row, 2);
+					table.setValueAt(sinhVien.getLopHoc().getMa(), row, 3);
+					table.setValueAt(sinhVien.getQueQuan(), row, 4);
+					table.setValueAt(sinhVien.getGioiTinh() == 1 ? "Nam" : "Nữ", row, 5);
+					table.setValueAt(new SimpleDateFormat("dd-MM-yyyy").format(sinhVien.getNgaySinh()), row, 6);
+					table.setValueAt(sinhVien.getSdt(), row, 7);
+					JOptionPane.showMessageDialog(wrapper, "Sửa sinh viên thành công");
+					lamMoi();
+				} else {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã sinh viên!");
+				}
+			}
+		}
 	}
 
 	private boolean isValid() {
@@ -251,6 +292,7 @@ public class SinhVienUI implements MouseListener {
 		sdt.setText("");
 		ngaySinh.setDate(null);
 		ma.requestFocus();
+		table.clearSelection();
 	}
 
 	@Override

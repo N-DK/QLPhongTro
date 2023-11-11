@@ -4,19 +4,24 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,19 +29,25 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class KhoaUI {
+import dao.KhoaDAO;
+import entity.Khoa;
+
+public class KhoaUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ten;
+	private KhoaDAO khoaDAO;
+	private List<Khoa> dsKhoa;
 
 	public KhoaUI() {
 		wrapper = new JPanel();
+		khoaDAO = new KhoaDAO();
 	}
 
 	private JPanel getHeader() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(15, 0, 15, 0));
 		JLabel title = new JLabel("KHOA");
 		title.setFont(new Font("Arial", Font.BOLD, 28));
@@ -46,7 +57,7 @@ public class KhoaUI {
 
 	private JPanel getButtons() {
 		JPanel container = new JPanel();
-		container.setBackground(Color.WHITE);
+		container.setBackground(new Color(181, 181, 181));
 		container.setBorder(new EmptyBorder(20, 0, 20, 0));
 		JPanel btnsContainer = new JPanel();
 		btnsContainer.setLayout(new GridLayout(1, 4));
@@ -60,6 +71,7 @@ public class KhoaUI {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -70,8 +82,19 @@ public class KhoaUI {
 
 		String[] cols = { "Mã khoa", "Tên khoa" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
+		table.addMouseListener(this);
+
+		for (Khoa khoa : dsKhoa) {
+			tableModel.addRow(khoa.getObjects());
+		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -89,9 +112,9 @@ public class KhoaUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
-		wrapper.setBackground(Color.WHITE);
-		container.setBackground(Color.WHITE);
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
+		wrapper.setBackground(new Color(181, 181, 181));
+		container.setBackground(new Color(181, 181, 181));
 		container.add(getInput("Mã khoa", ma = new JTextField()));
 		container.add(getInput("Tên khoa", ten = new JTextField()));
 		wrapper.add(container);
@@ -99,6 +122,7 @@ public class KhoaUI {
 	}
 
 	public JPanel getLayout() {
+		dsKhoa = khoaDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -111,7 +135,7 @@ public class KhoaUI {
 	private JPanel createBtn(String label, String path) {
 		ImageIcon icon = new ImageIcon(path);
 		JPanel btnContainer = new JPanel();
-		btnContainer.setBackground(Color.WHITE);
+		btnContainer.setBackground(new Color(181, 181, 181));
 		btnContainer.setBorder(new EmptyBorder(0, 40, 0, 40));
 		btnContainer.setLayout(new BorderLayout());
 		JButton btn = new JButton(label);
@@ -123,11 +147,13 @@ public class KhoaUI {
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
 			if (label.equals(THEM)) {
-				themLopHoc();
+				them();
 			} else if (label.equals(XOA)) {
-				xoaLopHoc();
+				xoa();
 			} else if (label.equals(SUA)) {
-				chinhSuaLopHoc();
+				chinhSua();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -136,14 +162,91 @@ public class KhoaUI {
 		return btnContainer;
 	}
 
-	private void themLopHoc() {
+	private void them() {
+		Khoa khoa = new Khoa(ma.getText(), ten.getText());
+		if (khoaDAO.save(khoa, "insert")) {
+			tableModel.addRow(khoa.getObjects());
+			JOptionPane.showMessageDialog(wrapper, "Thêm khoa thành công");
+			lamMoi();
+		} else {
+			JOptionPane.showMessageDialog(wrapper, "Mã khoa không được trùng");
+		}
 	}
 
-	private void xoaLopHoc() {
+	private void xoa() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần xóa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc xóa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				boolean isSuccess = khoaDAO.deleteOneById((String) table.getValueAt(row, 0));
+				if (isSuccess) {
+					tableModel.removeRow(row);
+					JOptionPane.showMessageDialog(wrapper, "Xóa khoa thành công");
+					lamMoi();
+				}
+			}
+		}
+	}
+
+	private void chinhSua() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần sửa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				Khoa khoa = new Khoa(ma.getText(), ten.getText());
+				boolean isSuccess = khoaDAO.save(khoa, "update");
+				if (isSuccess) {
+					table.setValueAt(khoa.getMa(), row, 0);
+					table.setValueAt(khoa.getTen(), row, 1);
+					JOptionPane.showMessageDialog(wrapper, "Sửa khoa thành công");
+					lamMoi();
+				} else {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã khoa!");
+				}
+			}
+		}
+	}
+
+	private void lamMoi() {
+		ma.setText("");
+		ten.setText("");
+		ma.requestFocus();
+		table.clearSelection();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		ten.setText(table.getValueAt(row, 1) + "");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
-	private void chinhSuaLopHoc() {
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 }
