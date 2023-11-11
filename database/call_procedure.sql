@@ -73,7 +73,7 @@ BEGIN
 	END
 END*/
 
-/*CREATE PROCEDURE saveLop(@type varchar(255), @ma varchar(255), @ten nvarchar(25), @gvcn nvarchar(255), @macn varchar(255))
+CREATE PROCEDURE saveLop(@type varchar(255), @ma varchar(255), @ten nvarchar(255), @gvcn nvarchar(255), @macn varchar(255))
 AS
 BEGIN
 	IF @type = 'insert'
@@ -84,7 +84,7 @@ BEGIN
 	BEGIN
 		UPDATE Lop SET TenLop = @ten, TenGVCN = @gvcn, MaChuyenNganh = @macn WHERE MaLop = @ma
 	END
-END*/
+END
 
 /*CREATE PROCEDURE updateKhoa(@ma varchar(255), @ten nvarchar(255))
 AS UPDATE Khoa SET TenKhoa = @ten WHERE MaKhoa = @ma*/
@@ -141,5 +141,5 @@ BEGIN
 	END
 END
 
-SELECT * FROM SinhVien WHERE Ho like '%Ngô%'
+SELECT * FROM Lop
 

@@ -16,6 +16,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +40,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 
 public class DefaultLayout {
 	private JPanel wrapper;
@@ -109,9 +111,12 @@ public class DefaultLayout {
 		JButton btn = createNavItem(tilte, iconPath);
 
 		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.setOpaque(false);
+		popupMenu.setBackground(Color.YELLOW);
 
 		for (String[] option : options) {
 			JMenuItem item = new JMenuItem(option[0]);
+			item.setFont(new Font("Arial", Font.BOLD, 14));
 			item.setIcon(createImageIcon(option[1]));
 			item.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -232,12 +237,13 @@ public class DefaultLayout {
 			}
 		};
 
+		table.setFont(new Font("Arial", Font.PLAIN, 16));
 		table.getTableHeader().setOpaque(false);
-		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
 		table.getTableHeader().setBackground(new Color(176, 196, 222));
 		table.getTableHeader().setForeground(Color.BLACK);
-		table.getTableHeader().setPreferredSize(new Dimension(table.getPreferredSize().width, 24));
-		table.setRowHeight(24);
+		table.getTableHeader().setPreferredSize(new Dimension(table.getPreferredSize().width, 30));
+		table.setRowHeight(30);
 
 		return table;
 	}
@@ -278,6 +284,8 @@ public class DefaultLayout {
 		container.add(Lable);
 		JPanel Combox = new JPanel();
 		Combox.setBackground(new Color(176, 226, 255));
+		comboBox.setFont(new Font("Arial", Font.PLAIN, 16));
+		comboBox.setBackground(Color.WHITE);
 		comboBox.setPreferredSize(new Dimension(208, 30));
 		Combox.add(comboBox);
 		container.add(Combox);
@@ -295,6 +303,12 @@ public class DefaultLayout {
 		JPanel chooserContainer = new JPanel();
 		chooserContainer.setBackground(new Color(176, 226, 255));
 		chooser.setLocale(Locale.US);
+		chooser.setFont(new Font("Arial", Font.PLAIN, 12));
+		chooser.getDateEditor().setEnabled(false);
+		JTextFieldDateEditor textFieldDateEditor = (JTextFieldDateEditor) chooser.getDateEditor();
+		textFieldDateEditor.setFont(new Font("Arial", Font.PLAIN, 16));
+		textFieldDateEditor.setBackground(Color.WHITE);
+		textFieldDateEditor.setDisabledTextColor(Color.BLACK);
 		chooser.setPreferredSize(new Dimension(208, 30));
 		chooserContainer.add(chooser);
 		container.add(chooserContainer);

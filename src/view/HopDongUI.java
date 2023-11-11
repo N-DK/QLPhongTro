@@ -183,7 +183,12 @@ public class HopDongUI {
 	}
 
 	private void lamMoi() {
-
+		ma.setText("");
+		maSV.setSelectedIndex(0);
+		ngayHet.setDate(null);
+		ngayKy.setDate(null);
+		table.clearSelection();
+		ma.requestFocus();
 	}
 
 	private boolean isValid() {
