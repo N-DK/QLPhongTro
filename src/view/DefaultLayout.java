@@ -198,7 +198,7 @@ public class DefaultLayout {
 		}
 		case CT: {
 			ChuTroUI chuTroUI = new ChuTroUI();
-			children = chuTroUI.getLayout();
+			children = chuTroUI.fgetLayout();
 			break;
 		}
 		case CN: {

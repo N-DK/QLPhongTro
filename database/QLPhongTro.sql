@@ -77,4 +77,38 @@ values ('KHMT', N'Khoa học máy tính', 'CNTT'),
 	('QTKD', N'Quản trị kinh doanh', 'QTKD'),
 	('HPT', N'Hóa phân tích', 'CNHH')
 
+select *from ChuPhong
+GO
+CREATE PROC themChuPhong (
+	@MaChuPhong nvarchar(30) ,
+	@Ho nvarchar(30),
+	@Ten nvarchar(30),
+	@Sdt nvarchar(10),
+	@DiaChi nvarchar(50),
+	@NgaySinh Date,
+	@GioiTinh int
+	)
+AS
+BEGIN
+	INSERT INTO ChuPhong(MaChuPhong,Ho,Ten,Sdt,DiaChi,NgaySinh,GioiTinh)	
+	values (@MaChuPhong,@Ho,@Ten,@Sdt,@DiaChi,@NgaySinh,@GioiTinh)
+end;
 
+go
+select *from ChuPhong
+go
+CREATE PROC xoaChuPhong 
+	@MaChuPhong nvarchar(30) 
+	
+AS
+BEGIN
+	delete from ChuPhong where MaChuPhong = @MaChuPhong
+end;
+go
+CREATE PROC layBangChuPhong
+AS
+BEGIN
+	select *from ChuPhong
+end;
+go
+layBangChuPhong
