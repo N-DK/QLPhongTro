@@ -3,7 +3,9 @@ package dao;
 import static connectDatabase.Main.connect;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,55 @@ public class ChuyenNganhDAO {
 		}
 
 		return resutls;
+	}
+
+	public boolean save(ChuyenNganh chuyenNganh, String type) {
+		List<ChuyenNganh> list = findAll();
+		if (type.equals("insert")) {
+			if (list.contains(chuyenNganh)) {
+				return false;
+			}
+		} else {
+			if (!list.contains(chuyenNganh)) {
+				System.out.println(type);
+				return false;
+			}
+		}
+		String SQL = "{call saveChuyenNganh(?,?,?,?)}}";
+		Connection con = connect();
+		try {
+			PreparedStatement pstms = con.prepareStatement(SQL);
+			pstms.setString(1, type);
+			pstms.setString(2, chuyenNganh.getMa());
+			pstms.setString(3, chuyenNganh.getTen());
+			pstms.setString(4, chuyenNganh.getKhoa().getMa());
+			pstms.executeUpdate();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean deleteOneById(String macn) {
+		String SQL = "{call deleteOneById(chuyenNganh," + macn + ")}";
+		Connection con = connect();
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return true;
 	}
 
 }
