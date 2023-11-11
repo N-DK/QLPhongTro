@@ -62,17 +62,24 @@ public class KhoaDAO {
 		return resutls;
 	}
 
-	public boolean insert(Khoa khoa) {
+	public boolean save(Khoa khoa, String type) {
 		List<Khoa> list = findAll();
-		if (list.contains(khoa)) {
-			return false;
+		if (type.equals("insert")) {
+			if (list.contains(khoa)) {
+				return false;
+			}
+		} else {
+			if (!list.contains(khoa)) {
+				return false;
+			}
 		}
-		String SQL = "{call insertKhoa(?,?)}";
+		String SQL = "{call saveKhoa(?,?,?)}";
 		Connection con = connect();
 		try {
 			PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-			pstmt.setString(1, khoa.getMa());
-			pstmt.setString(2, khoa.getTen());
+			pstmt.setString(1, type);
+			pstmt.setString(2, khoa.getMa());
+			pstmt.setString(3, khoa.getTen());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
@@ -89,23 +96,23 @@ public class KhoaDAO {
 		return true;
 	}
 
-	public boolean updateOneById(Khoa khoa) {
-		List<Khoa> list = findAll();
-		if (!list.contains(khoa)) {
-			return false;
-		}
-		String SQL = "{call updateKhoa(?,?)}";
-		Connection con = connect();
-		try {
-			PreparedStatement pstms = con.prepareStatement(SQL);
-			pstms.setString(1, khoa.getMa());
-			pstms.setString(2, khoa.getTen());
-			pstms.executeUpdate();
-		} catch (Exception e) {
-		}
-
-		return true;
-	}
+//	public boolean updateOneById(Khoa khoa) {
+//		List<Khoa> list = findAll();
+//		if (!list.contains(khoa)) {
+//			return false;
+//		}
+//		String SQL = "{call updateKhoa(?,?)}";
+//		Connection con = connect();
+//		try {
+//			PreparedStatement pstms = con.prepareStatement(SQL);
+//			pstms.setString(1, khoa.getMa());
+//			pstms.setString(2, khoa.getTen());
+//			pstms.executeUpdate();
+//		} catch (Exception e) {
+//		}
+//
+//		return true;
+//	}
 
 	public boolean deleteOneById(String maKhoa) {
 		String SQL = "{call deleteOneById(khoa," + maKhoa + ")}";

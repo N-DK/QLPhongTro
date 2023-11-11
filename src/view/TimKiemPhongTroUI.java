@@ -72,7 +72,7 @@ public class TimKiemPhongTroUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã phòng trọ", ma = new JTextField()));

@@ -13,6 +13,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -21,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -33,11 +36,12 @@ import dao.KhoaDAO;
 import entity.ChuyenNganh;
 import entity.Khoa;
 
-public class ChuyenNganhUI {
+public class ChuyenNganhUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ten, tenCN;
+	private JTextField ma, ten;
+	private JComboBox<String> maKhoa;
 	private ChuyenNganhDAO cnDAO;
 	private KhoaDAO khoaDAO;
 	private List<ChuyenNganh> dscn;
@@ -108,12 +112,12 @@ public class ChuyenNganhUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã chuyên ngành", ma = new JTextField()));
 		container.add(getInput("Tên chuyên ngành", ten = new JTextField()));
-		container.add(getInputComboBox("Mã khoa", new JComboBox<String>(createOptionKhoa())));
+		container.add(getInputComboBox("Mã khoa", maKhoa = new JComboBox<String>(createOptionKhoa())));
 		wrapper.add(container);
 		return wrapper;
 	}
@@ -145,11 +149,13 @@ public class ChuyenNganhUI {
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
 			if (label.equals(THEM)) {
-				themLopHoc();
+				them();
 			} else if (label.equals(XOA)) {
-				xoaLopHoc();
+				xoa();
 			} else if (label.equals(SUA)) {
-				chinhSuaLopHoc();
+				chinhSua();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -167,14 +173,96 @@ public class ChuyenNganhUI {
 		return options;
 	}
 
-	private void themLopHoc() {
+	private void them() {
+		Khoa khoa = khoaDAO.findOneById((String) maKhoa.getSelectedItem());
+		ChuyenNganh chuyenNganh = new ChuyenNganh(ma.getText(), ten.getText(), khoa);
+		if (cnDAO.save(chuyenNganh, "insert")) {
+			tableModel.addRow(chuyenNganh.getObjects());
+			JOptionPane.showMessageDialog(wrapper, "Thêm chuyên ngành thành công");
+			lamMoi();
+		} else {
+			JOptionPane.showMessageDialog(wrapper, "Mã chuyên ngành không được trùng");
+		}
 	}
 
-	private void xoaLopHoc() {
+	private void xoa() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần xóa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc xóa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				boolean isSuccess = cnDAO.deleteOneById((String) table.getValueAt(row, 0));
+				if (isSuccess) {
+					tableModel.removeRow(row);
+					JOptionPane.showMessageDialog(wrapper, "Xóa chuyên ngành thành công");
+					lamMoi();
+				}
+			}
+		}
+	}
+
+	private void chinhSua() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần sửa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				Khoa khoa = khoaDAO.findOneById((String) maKhoa.getSelectedItem());
+				ChuyenNganh chuyenNganh = new ChuyenNganh(ma.getText(), ten.getText(), khoa);
+				boolean isSuccess = cnDAO.save(chuyenNganh, "update");
+				if (isSuccess) {
+					table.setValueAt(chuyenNganh.getMa(), row, 0);
+					table.setValueAt(chuyenNganh.getTen(), row, 1);
+					table.setValueAt(chuyenNganh.getKhoa().getMa(), row, 2);
+					JOptionPane.showMessageDialog(wrapper, "Sửa chuyên ngành thành công");
+					lamMoi();
+				} else {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã chuyên ngành!");
+				}
+			}
+		}
+	}
+
+	private void lamMoi() {
+		ma.setText("");
+		ten.setText("");
+		maKhoa.setSelectedIndex(0);
+		ma.requestFocus();
+		table.clearSelection();
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		ten.setText(table.getValueAt(row, 1) + "");
+		maKhoa.setSelectedItem(table.getValueAt(row, 2));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
-	private void chinhSuaLopHoc() {
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 }

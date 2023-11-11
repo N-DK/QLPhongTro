@@ -71,6 +71,7 @@ public class KhoaUI implements MouseListener {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -111,7 +112,7 @@ public class KhoaUI implements MouseListener {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã khoa", ma = new JTextField()));
@@ -163,7 +164,7 @@ public class KhoaUI implements MouseListener {
 
 	private void them() {
 		Khoa khoa = new Khoa(ma.getText(), ten.getText());
-		if (khoaDAO.insert(khoa)) {
+		if (khoaDAO.save(khoa, "insert")) {
 			tableModel.addRow(khoa.getObjects());
 			JOptionPane.showMessageDialog(wrapper, "Thêm khoa thành công");
 			lamMoi();
@@ -197,7 +198,7 @@ public class KhoaUI implements MouseListener {
 			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				Khoa khoa = new Khoa(ma.getText(), ten.getText());
-				boolean isSuccess = khoaDAO.updateOneById(khoa);
+				boolean isSuccess = khoaDAO.save(khoa, "update");
 				if (isSuccess) {
 					table.setValueAt(khoa.getMa(), row, 0);
 					table.setValueAt(khoa.getTen(), row, 1);

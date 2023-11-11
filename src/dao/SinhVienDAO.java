@@ -5,6 +5,7 @@ import static connectDatabase.Main.connect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,40 +45,92 @@ public class SinhVienDAO {
 		return resutls;
 	}
 
-	public boolean insert(SinhVien sinhVien) {
-		// TODO Auto-generated method stub
-//		insertLopHoc(?,?,?) INSERT INTO ma, ten, gv values(?, ?, ?)
-//		String SQL = "{call insertLopHoc(?,?,?)}";
-//		Connection con = connect();
-//		try {
-//			PreparedStatement pstmt = con.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-//			pstmt.setString(1, clazz.getId());
-//			pstmt.setString(2, clazz.getClassName());
-//			pstmt.setString(3, clazz.getTeacher());
-//			int affectedRows = pstmt.executeUpdate();
-//			if (affectedRows > 0) {
-//				try (ResultSet rs = pstmt.getGeneratedKeys()) {
-//					if (rs.next()) {
-//						System.out.println(rs.getLong(1));
-//					}
-//				} catch (SQLException ex) {
-//					System.out.println(ex.getMessage());
-//				}
-//			}
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println(e.getMessage());
-//		}
-		
+	public boolean save(SinhVien sinhVien, String type) {
+		List<SinhVien> list = findAll();
+		if (type.equals("insert")) {
+			if (list.contains(sinhVien)) {
+				return false;
+			}
+		} else {
+			if (!list.contains(sinhVien)) {
+				return false;
+			}
+		}
+		String SQL = "{call saveSinhVien(?,?,?,?,?,?,?,?,?)}}";
+		Connection con = connect();
+		try {
+			PreparedStatement pstms = con.prepareStatement(SQL);
+			pstms.setString(1, type);
+			pstms.setString(2, sinhVien.getMaSinhVien());
+			pstms.setString(3, sinhVien.getHo());
+			pstms.setString(4, sinhVien.getTen());
+			pstms.setString(5, sinhVien.getLopHoc().getMa());
+			pstms.setString(6, sinhVien.getQueQuan());
+			pstms.setInt(7, sinhVien.getGioiTinh());
+			pstms.setDate(8, new java.sql.Date(sinhVien.getNgaySinh().toInstant().toEpochMilli()));
+			pstms.setString(9, sinhVien.getSdt());
+			pstms.executeUpdate();
+		} catch (Exception e) {
+			return false;
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+
 		return true;
 	}
 
-	public void update(SinhVien sinhVien) {
-
+	public boolean deleteOneById(String maSV) {
+		String SQL = "{call deleteOneById(sinhVien," + maSV + ")}";
+		Connection con = connect();
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+			return false;
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return true;
 	}
 
 	public List<SinhVien> findBy(String masv, String ho, String ten, String maLop, String queQuan) {
 		List<SinhVien> results = new ArrayList<SinhVien>();
+		Connection con = connect();
+		String SQL = "{call findSinhVien(" + masv + ", " + ho + ", " + ten + ", " + maLop + ", " + queQuan + ")}";
+		System.out.println(SQL);
+		try {
+			Statement myStmt = con.createStatement();
+			ResultSet myRs = myStmt.executeQuery(SQL);
+			while (myRs.next()) {
+				LopHoc lop = lopDAO.findOneById(myRs.getString("MaLop"));
+				SinhVien sinhVien = new SinhVien(myRs.getString("Ho"), myRs.getString("Ten"),
+						Integer.parseInt(myRs.getString("GioiTinh")), myRs.getDate("NgaySinh"), myRs.getString("Sdt"),
+						myRs.getString("MaSinhVien"), myRs.getString("QueQuan"), lop);
+				results.add(sinhVien);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
 		return results;
 	}
 }

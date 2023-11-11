@@ -1,9 +1,6 @@
 package view;
 
-import static constant.Main.SUA;
-import static constant.Main.THEM;
 import static constant.Main.TIMKIEM;
-import static constant.Main.XOA;
 import static constant.Main.XR;
 import static view.DefaultLayout.createCustomTable;
 import static view.DefaultLayout.getInput;
@@ -13,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,14 +25,26 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.LopHocDAO;
+import dao.SinhVienDAO;
+import entity.LopHoc;
+import entity.SinhVien;
+
 public class TimKiemSVUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ho, ten, queQuan, sdt;
+	private JTextField ma, ho, ten, queQuan;
+	private JComboBox<String> maLop;
+	private SinhVienDAO svDAO;
+	private LopHocDAO lopDAO;
+	private List<SinhVien> dssv;
+	private List<LopHoc> dslh;
 
 	public TimKiemSVUI() {
 		wrapper = new JPanel();
+		svDAO = new SinhVienDAO();
+		lopDAO = new LopHocDAO();
 	}
 
 	private JPanel getHeader() {
@@ -55,11 +65,14 @@ public class TimKiemSVUI {
 
 		tableContainer.setLayout(new BorderLayout());
 
-		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT",
-				"Mã khoa" };
+		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT" };
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
+
+		for (SinhVien sinhVien : dssv) {
+			tableModel.addRow(sinhVien.getObjects());
+		}
 		JScrollPane scrollPane = new JScrollPane(table);
 
 		tableContainer.add(scrollPane);
@@ -74,13 +87,13 @@ public class TimKiemSVUI {
 		JPanel wrapper = new JPanel();
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-		container.setBorder(new EmptyBorder(30, 30, 400, 30));
+		container.setBorder(new EmptyBorder(30, 30, 0, 30));
 		wrapper.setBackground(Color.WHITE);
 		container.setBackground(Color.WHITE);
 		container.add(getInput("Mã sinh viên", ma = new JTextField()));
 		container.add(getInput("Họ", ho = new JTextField()));
 		container.add(getInput("Tên", ten = new JTextField()));
-		container.add(getInputComboBox("Mã lớp", new JComboBox<String>()));
+		container.add(getInputComboBox("Mã lớp", maLop = new JComboBox<String>(createOptionsLopHoc())));
 		container.add(getInput("Quê quán", queQuan = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
@@ -91,6 +104,8 @@ public class TimKiemSVUI {
 	}
 
 	public JPanel getLayout() {
+		dssv = svDAO.findAll();
+		dslh = lopDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -114,12 +129,10 @@ public class TimKiemSVUI {
 		btn.setOpaque(true);
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
-			if (label.equals(THEM)) {
-				themSinhVien();
-			} else if (label.equals(XOA)) {
-				xoaSinhVien();
-			} else if (label.equals(SUA)) {
-				chinhSuaSinhVien();
+			if (label.equals(TIMKIEM)) {
+				timKiem();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -128,15 +141,29 @@ public class TimKiemSVUI {
 		return btnContainer;
 	}
 
-	private void themSinhVien() {
-		System.out.println(ma.getText() + ho.getText() + ten.getText());
+	private String[] createOptionsLopHoc() {
+		String[] options = new String[dslh.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[i] = dslh.get(i).getMa();
+		}
+		return options;
 	}
 
-	private void xoaSinhVien() {
-
+	private void timKiem() {
+		String _ho = ho.getText().equals("") ? null : ho.getText();
+		dssv = svDAO.findBy(ma.getText(), _ho, ten.getText(), (String) maLop.getSelectedItem(), queQuan.getText());
+		for (SinhVien sinhVien : dssv) {
+			tableModel.addRow(sinhVien.getObjects());
+		}
 	}
 
-	private void chinhSuaSinhVien() {
-
+	private void lamMoi() {
+		ma.setText("");
+		ho.setText("");
+		ten.setText("");
+		maLop.setSelectedItem(0);
+		queQuan.setText("");
+		ma.requestFocus();
+		table.clearSelection();
 	}
 }
