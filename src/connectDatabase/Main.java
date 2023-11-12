@@ -10,7 +10,7 @@ public class Main {
 
 			
 			String url = "jdbc:sqlserver://localhost:1433;databaseName=QLPhongTro;encrypt=false";
-			String user = "user";
+			String user = "sa";
 
 			String password = "123";
 			con = DriverManager.getConnection(url, user, password);

@@ -145,7 +145,7 @@ END*/
 --	END
 --	IF @type = 'update'
 --	BEGIN
---		UPDATE PhongTro SET MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
+--		UPDATE PhongTro SET MaPhong = @ma, MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
 --	END
 --END
 
