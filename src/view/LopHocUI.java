@@ -79,18 +79,24 @@ public class LopHocUI implements MouseListener {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
 
 		String[] cols = { "Mã Lớp", "Tên lớp", "Tên GVCN", "Mã chuyên ngành" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
 		table.addMouseListener(this);
 
@@ -99,7 +105,7 @@ public class LopHocUI implements MouseListener {
 		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());
@@ -180,14 +186,16 @@ public class LopHocUI implements MouseListener {
 	}
 
 	private void them() {
-		ChuyenNganh chuyenNganh = cnDAO.findOneById((String) macn.getSelectedItem());
-		LopHoc lop = new LopHoc(ma.getText(), ten.getText(), tenCN.getText(), chuyenNganh);
-		if (lopDAO.save(lop, "insert")) {
-			tableModel.addRow(lop.getObjects());
-			JOptionPane.showMessageDialog(wrapper, "Thêm lớp thành công");
-			lamMoi();
-		} else {
-			JOptionPane.showMessageDialog(wrapper, "Mã lớp không được trùng");
+		if (isValid()) {
+			ChuyenNganh chuyenNganh = cnDAO.findOneById((String) macn.getSelectedItem());
+			LopHoc lop = new LopHoc(ma.getText(), ten.getText(), tenCN.getText(), chuyenNganh);
+			if (lopDAO.save(lop, "insert")) {
+				tableModel.addRow(lop.getObjects());
+				JOptionPane.showMessageDialog(wrapper, "Thêm lớp thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã lớp không được trùng");
+			}
 		}
 	}
 
@@ -239,6 +247,20 @@ public class LopHocUI implements MouseListener {
 		macn.setSelectedIndex(0);
 		ma.requestFocus();
 		table.clearSelection();
+	}
+
+	private boolean isValid() {
+		Object[][] objects = { { ma.getText(), "Mã lớp" }, { ten.getText(), "Tên Lớp" },
+				{ tenCN.getText(), "Tên giáo viên chủ nhiệm" } };
+
+		for (Object[] object : objects) {
+			if (object[0].equals("")) {
+				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Override

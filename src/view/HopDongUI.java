@@ -4,14 +4,17 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputCalender;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Locale;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,14 +32,23 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.SinhVienDAO;
+import entity.HopDong;
+import entity.SinhVien;
+
 public class HopDongUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ho, ten, queQuan, sdt;
+	private JTextField ma;
+	private JComboBox<String> maSV;
+	private JDateChooser ngayKy, ngayHet;
+	private List<SinhVien> dssv;
+	private SinhVienDAO svDAO;
 
 	public HopDongUI() {
 		wrapper = new JPanel();
+		svDAO = new SinhVienDAO();
 	}
 
 	private JPanel getHeader() {
@@ -68,7 +81,7 @@ public class HopDongUI {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
@@ -79,7 +92,7 @@ public class HopDongUI {
 		table = createCustomTable(tableModel);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());
@@ -102,18 +115,19 @@ public class HopDongUI {
 		container.setBackground(new Color(176, 226, 255));
 		container.add(getInput("Mã hợp đồng", ma = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã sinh viên", new JComboBox<String>()));
+		container.add(getInputComboBox("Mã sinh viên", maSV = new JComboBox<String>(createSVOptions())));
 		container.add(Box.createVerticalStrut(15));
 		container.add(getInputComboBox("Mã phòng", new JComboBox<String>()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày ký hợp đồng", new JDateChooser()));
+		container.add(getInputCalender("Ngày ký hợp đồng", ngayKy = new JDateChooser()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputCalender("Ngày hết hợp đồng", new JDateChooser()));
+		container.add(getInputCalender("Ngày hết hợp đồng", ngayHet = new JDateChooser()));
 		wrapper.add(container);
 		return wrapper;
 	}
 
 	public JPanel getLayout() {
+		dssv = svDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
@@ -139,11 +153,13 @@ public class HopDongUI {
 		btn.setFont(new Font("Arial", Font.BOLD, 18));
 		btn.addActionListener(e -> {
 			if (label.equals(THEM)) {
-				themSinhVien();
+				them();
 			} else if (label.equals(XOA)) {
-				xoaSinhVien();
+				xoa();
 			} else if (label.equals(SUA)) {
-				chinhSuaSinhVien();
+				chinhSua();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -152,15 +168,52 @@ public class HopDongUI {
 		return btnContainer;
 	}
 
-	private void themSinhVien() {
-		System.out.println(ma.getText() + ho.getText() + ten.getText());
+	private void them() {
+		if (isValid()) {
+			HopDong hopDong = new HopDong(ma.getText(), null, null, ngayKy.getDate(), ngayHet.getDate());
+		}
 	}
 
-	private void xoaSinhVien() {
+	private void xoa() {
 
 	}
 
-	private void chinhSuaSinhVien() {
+	private void chinhSua() {
 
+	}
+
+	private void lamMoi() {
+		ma.setText("");
+		maSV.setSelectedIndex(0);
+		ngayHet.setDate(null);
+		ngayKy.setDate(null);
+		table.clearSelection();
+		ma.requestFocus();
+	}
+
+	private boolean isValid() {
+		if (ma.getText().equals("")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được rỗng");
+			return false;
+		} else if (ma.getText().matches("HD[0-9]{3}")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng có dạng là HD và đi theo sau là 3 số");
+			return false;
+		}
+		Object[][] objects = { { ngayKy.getDate(), "Ngày ký hợp đồng" }, { ngayHet.getDate(), "Ngày hết hợp đồng" } };
+		for (Object[] object : objects) {
+			if (object[0] == null) {
+				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private String[] createSVOptions() {
+		String[] options = new String[dssv.size()];
+		for (int i = 0; i < options.length; i++) {
+			options[i] = dssv.get(i).getMaSinhVien();
+		}
+		return options;
 	}
 }

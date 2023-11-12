@@ -85,18 +85,24 @@ public class SinhVienUI implements MouseListener {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
 
 		String[] cols = { "Mã sinh viên", "Họ", "Tên", "Mã lớp", "Quê quán", "Giới tính", "Ngày sinh", "SĐT" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 
 		table = createCustomTable(tableModel);
 		table.addMouseListener(this);
@@ -106,7 +112,7 @@ public class SinhVienUI implements MouseListener {
 		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());
@@ -114,7 +120,6 @@ public class SinhVienUI implements MouseListener {
 		container.add(tableContainer);
 		container.add(Box.createVerticalStrut(15));
 		container.add(getButtons());
-
 		return container;
 	}
 

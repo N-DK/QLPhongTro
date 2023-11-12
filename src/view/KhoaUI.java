@@ -98,7 +98,7 @@ public class KhoaUI implements MouseListener {
 		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
-
+		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
 
 		container.add(getHeader());
@@ -168,13 +168,15 @@ public class KhoaUI implements MouseListener {
 	}
 
 	private void them() {
-		Khoa khoa = new Khoa(ma.getText(), ten.getText());
-		if (khoaDAO.save(khoa, "insert")) {
-			tableModel.addRow(khoa.getObjects());
-			JOptionPane.showMessageDialog(wrapper, "Thêm khoa thành công");
-			lamMoi();
-		} else {
-			JOptionPane.showMessageDialog(wrapper, "Mã khoa không được trùng");
+		if (isValid()) {
+			Khoa khoa = new Khoa(ma.getText(), ten.getText());
+			if (khoaDAO.save(khoa, "insert")) {
+				tableModel.addRow(khoa.getObjects());
+				JOptionPane.showMessageDialog(wrapper, "Thêm khoa thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã khoa không được trùng");
+			}
 		}
 	}
 
@@ -221,6 +223,17 @@ public class KhoaUI implements MouseListener {
 		ten.setText("");
 		ma.requestFocus();
 		table.clearSelection();
+	}
+
+	private boolean isValid() {
+		Object[][] objects = { { ma.getText(), "Mã khoa" }, { ten.getText(), "Tên khoa" } };
+		for (Object[] object : objects) {
+			if (object[0].equals("")) {
+				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override

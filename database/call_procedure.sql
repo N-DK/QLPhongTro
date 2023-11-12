@@ -22,6 +22,10 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuPhong
 	END
+	ELSE IF @type = 'phongTro'
+	BEGIN
+		SELECT * FROM PhongTro
+	END
 END
 
 /*Lấy một đối tượng dụa vào mã*/
@@ -39,6 +43,14 @@ BEGIN
 	IF @type = 'chuyenNganh'
 	BEGIN
 		SELECT * FROM ChuyenNganh WHERE MaChuyenNganh = @ma
+	END
+	IF @type = 'chuPhong'
+	BEGIN
+		SELECT * FROM ChuPhong WHERE MaChuPhong = @ma
+	END
+	IF @type = 'phongTro'
+	BEGIN
+		SELECT * FROM PhongTro WHERE MaPhong = @ma
 	END
 END
 
@@ -62,6 +74,10 @@ BEGIN
 	BEGIN
 		DELETE FROM ChuyenNganh WHERE MaChuyenNganh = @ma
 	END
+	IF @type = 'phongTro'
+	BEGIN
+		DELETE FROM PhongTro WHERE MaPhong = @ma
+	END
 END*/
 
 /*CREATE PROCEDURE saveSinhVien(@type varchar(255), @ma varchar(8), @ho nvarchar(50), @ten nvarchar(30), @maLop varchar(10), @queQuan nvarchar(40), @gioiTinh int, @ngaySinh Date, @sdt varchar(12))
@@ -77,7 +93,7 @@ BEGIN
 	END
 END*/
 
-/*CREATE PROCEDURE saveLop(@type varchar(255), @ma varchar(255), @ten nvarchar(25), @gvcn nvarchar(255), @macn varchar(255))
+CREATE PROCEDURE saveLop(@type varchar(255), @ma varchar(255), @ten nvarchar(255), @gvcn nvarchar(255), @macn varchar(255))
 AS
 BEGIN
 	IF @type = 'insert'
@@ -88,7 +104,7 @@ BEGIN
 	BEGIN
 		UPDATE Lop SET TenLop = @ten, TenGVCN = @gvcn, MaChuyenNganh = @macn WHERE MaLop = @ma
 	END
-END*/
+END
 
 /*CREATE PROCEDURE updateKhoa(@ma varchar(255), @ten nvarchar(255))
 AS UPDATE Khoa SET TenKhoa = @ten WHERE MaKhoa = @ma*/
@@ -120,6 +136,20 @@ BEGIN
 	END
 END*/
 
+--CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
+--AS
+--BEGIN
+--	IF @type = 'insert'
+--	BEGIN
+--		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
+--	END
+--	IF @type = 'update'
+--	BEGIN
+--		UPDATE PhongTro SET MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
+--	END
+--END
+
+
 CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
 AS
 BEGIN
@@ -145,5 +175,5 @@ BEGIN
 	END
 END
 
-SELECT * FROM SinhVien WHERE Ho like '%Ngô%'
+SELECT * FROM Lop
 

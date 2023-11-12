@@ -77,6 +77,43 @@ values	('KHMT', N'Khoa học máy tính', 'CNTT'),
 		('QTKD', N'Quản trị kinh doanh', 'QTKD'),
 		('HPT', N'Hóa phân tích', 'CNHH')
 
+<<<<<<< HEAD
+select *from ChuPhong
+GO
+CREATE PROC themChuPhong (
+	@MaChuPhong nvarchar(30) ,
+	@Ho nvarchar(30),
+	@Ten nvarchar(30),
+	@Sdt nvarchar(10),
+	@DiaChi nvarchar(50),
+	@NgaySinh Date,
+	@GioiTinh int
+	)
+AS
+BEGIN
+	INSERT INTO ChuPhong(MaChuPhong,Ho,Ten,Sdt,DiaChi,NgaySinh,GioiTinh)	
+	values (@MaChuPhong,@Ho,@Ten,@Sdt,@DiaChi,@NgaySinh,@GioiTinh)
+end;
+
+go
+select *from ChuPhong
+go
+CREATE PROC xoaChuPhong 
+	@MaChuPhong nvarchar(30) 
+	
+AS
+BEGIN
+	delete from ChuPhong where MaChuPhong = @MaChuPhong
+end;
+go
+CREATE PROC layBangChuPhong
+AS
+BEGIN
+	select *from ChuPhong
+end;
+go
+layBangChuPhong
+=======
 insert into Lop (MaLop, TenLop, TenGVCN, MaChuyenNganh)
 values	('DHKHMT17A', N'Đại học khoa học máy tính 17A', N'Cô Phúc', 'KHMT'),
 		('DHKHMT17B', N'Đại học khoa học máy tính 17B', N'Thầy Danh', 'KHMT'),
@@ -96,4 +133,8 @@ values	('21134361', N'Ngô Đăng', N'Khoa', 'DHKHMT17B', N'Quảng Nam', 1, '20
 		('21134368', N'Võ Ngọc Trung', N'Quân', 'DHKHMT17B', N'Nghệ An', 1, '2003-11-15', '0792798777'),
 		('21134369', N'Lê Đình', N'Nam', 'DHKHMT17A', N'Hà Tĩnh', 1, '2003-11-30', '0792798777')
 SELECT * FROM SinhVien
+<<<<<<< HEAD
+>>>>>>> 7dec6fc5f219c28b7de406250d9b4ebe5f4dc059
+=======
 
+>>>>>>> cbc8279a49a8b6344a0f6efd5ed693af8638f2c4
