@@ -186,6 +186,7 @@ public class ChuTroUI implements MouseListener {
 		sdtCP.setText("");
 		gioiTinh.setSelectedIndex(0);
 		maCP.requestFocus();
+		table.clearSelection();
 	}
 
 	private void them() {
@@ -263,33 +264,28 @@ public class ChuTroUI implements MouseListener {
 		String sdt = sdtCP.getText();
 		String diachi = queQuanCP.getText();
 
-		String gioitinh = gioiTinh.getSelectedItem().toString();
-		if (!ma.matches("CP\\d+")) {
+		if (!ma.matches("CP[0-9]{3}")) {
 			JOptionPane.showMessageDialog(wrapper, "Nhập sai ma");
 			return false;
 		}
-		if (!ho.matches("[a-zA-Z]+")) {
-			JOptionPane.showMessageDialog(wrapper, "Họ phải là kí tự");
+		if (ho.equals("")) {
+			JOptionPane.showMessageDialog(wrapper, "Họ không được rỗng");
 			return false;
 		}
-		if (!ten.matches("[a-zA-Z]+")) {
-			JOptionPane.showMessageDialog(wrapper, "Tên phải là kí tự");
+		if (ten.equals("")) {
+			JOptionPane.showMessageDialog(wrapper, "Tên Không được rỗng");
 			return false;
 		}
 		if (!sdt.matches("[0-9]{10}")) {
 			JOptionPane.showMessageDialog(wrapper, "Số điện thoại phải là chữ số và có 10 số");
 			return false;
 		}
-		if (!diachi.matches("[A-z0-9 ]+")) {
-			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không có kí tự đặc biệt");
+		if (diachi.equals("")) {
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;
 		}
 		if (ngaySinh.getDate() == null) {
 			JOptionPane.showMessageDialog(wrapper, "Chưa chọn ngày sinh");
-			return false;
-		}
-		if (gioitinh.equals("")) {
-			JOptionPane.showMessageDialog(wrapper, "Chưa chọn nhân viên");
 			return false;
 		}
 		return true;

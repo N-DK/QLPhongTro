@@ -7,20 +7,22 @@ import static constant.Main.XR;
 import static view.DefaultLayout.createCustomTable;
 import static view.DefaultLayout.getInput;
 import static view.DefaultLayout.getInputCalender;
-import static view.DefaultLayout.getInputComboBox;
+import static view.DefaultLayout.getInputSelect;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,23 +34,29 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import dao.HopDongDAO;
+import dao.PhongTroDAO;
 import dao.SinhVienDAO;
 import entity.HopDong;
+import entity.PhongTro;
 import entity.SinhVien;
 
-public class HopDongUI {
+public class HopDongUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma;
-	private JComboBox<String> maSV;
+	private JTextField ma, maSV, maPhong;
 	private JDateChooser ngayKy, ngayHet;
-	private List<SinhVien> dssv;
 	private SinhVienDAO svDAO;
+	private PhongTroDAO phongTroDAO;
+	private HopDongDAO hdDAO;
+	private List<HopDong> dshd;
 
 	public HopDongUI() {
 		wrapper = new JPanel();
 		svDAO = new SinhVienDAO();
+		phongTroDAO = new PhongTroDAO();
+		hdDAO = new HopDongDAO();
 	}
 
 	private JPanel getHeader() {
@@ -77,6 +85,7 @@ public class HopDongUI {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -88,8 +97,18 @@ public class HopDongUI {
 
 		String[] cols = { "Mã hợp đồng", "Mã sinh viên", "Mã phòng", "Ngày ký hợp đồng", "Ngày hết hợp đồng" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
+		table.addMouseListener(this);
+
+		for (HopDong hopDong : dshd) {
+			tableModel.addRow(hopDong.getObjects());
+		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -115,9 +134,9 @@ public class HopDongUI {
 		container.setBackground(new Color(176, 226, 255));
 		container.add(getInput("Mã hợp đồng", ma = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã sinh viên", maSV = new JComboBox<String>(createSVOptions())));
+		container.add(getInputSelect("Mã sinh viên", maSV = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
-		container.add(getInputComboBox("Mã phòng", new JComboBox<String>()));
+		container.add(getInputSelect("Mã phòng", maPhong = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(getInputCalender("Ngày ký hợp đồng", ngayKy = new JDateChooser()));
 		container.add(Box.createVerticalStrut(15));
@@ -127,7 +146,7 @@ public class HopDongUI {
 	}
 
 	public JPanel getLayout() {
-		dssv = svDAO.findAll();
+		dshd = hdDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
@@ -162,7 +181,6 @@ public class HopDongUI {
 				lamMoi();
 			}
 		});
-
 		btnContainer.add(btn, BorderLayout.CENTER);
 		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 30, 45));
 		return btnContainer;
@@ -170,21 +188,67 @@ public class HopDongUI {
 
 	private void them() {
 		if (isValid()) {
-			HopDong hopDong = new HopDong(ma.getText(), null, null, ngayKy.getDate(), ngayHet.getDate());
+			PhongTro phongTro = phongTroDAO.findOneById(maPhong.getText());
+			SinhVien sinhVien = svDAO.findBy(maSV.getText(), null, null, null, null).get(0);
+			HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
+			if (hdDAO.save(hopDong, "insert")) {
+				tableModel.addRow(hopDong.getObjects());
+				JOptionPane.showMessageDialog(wrapper, "Thêm hợp đồng thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được trùngF");
+			}
 		}
 	}
 
 	private void xoa() {
-
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần xóa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc xóa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				boolean isSuccess = hdDAO.deleteOneById((String) table.getValueAt(row, 0),
+						(String) table.getValueAt(row, 2));
+				if (isSuccess) {
+					tableModel.removeRow(row);
+					JOptionPane.showMessageDialog(wrapper, "Xóa hợp đồng thành công");
+					lamMoi();
+				}
+			}
+		}
 	}
 
 	private void chinhSua() {
-
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn dòng cần sửa");
+		} else {
+			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
+					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+				PhongTro phongTro = phongTroDAO.findOneById(maPhong.getText());
+				SinhVien sinhVien = svDAO.findBy(maSV.getText(), null, null, null, null).get(0);
+				HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
+				boolean isSuccess = hdDAO.save(hopDong, "update");
+				if (isSuccess) {
+					table.setValueAt(hopDong.getMa(), row, 0);
+					table.setValueAt(hopDong.getSinhVien().getMaSinhVien(), row, 1);
+					table.setValueAt(hopDong.getPhongTro().getMaPhong(), row, 2);
+					table.setValueAt(new SimpleDateFormat("dd-MM-yyyy").format(hopDong.getNgayKiHopDong()), row, 3);
+					table.setValueAt(new SimpleDateFormat("dd-MM-yyyy").format(hopDong.getNgayHetHopDong()), row, 4);
+					JOptionPane.showMessageDialog(wrapper, "Sửa hợp đồng thành công");
+					lamMoi();
+				} else {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã hợp đồng!");
+				}
+			}
+		}
 	}
 
 	private void lamMoi() {
 		ma.setText("");
-		maSV.setSelectedIndex(0);
+		maSV.setText("");
+		maPhong.setText("");
 		ngayHet.setDate(null);
 		ngayKy.setDate(null);
 		table.clearSelection();
@@ -195,7 +259,7 @@ public class HopDongUI {
 		if (ma.getText().equals("")) {
 			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được rỗng");
 			return false;
-		} else if (ma.getText().matches("HD[0-9]{3}")) {
+		} else if (!ma.getText().matches("HD[0-9]{3}")) {
 			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng có dạng là HD và đi theo sau là 3 số");
 			return false;
 		}
@@ -209,11 +273,42 @@ public class HopDongUI {
 		return true;
 	}
 
-	private String[] createSVOptions() {
-		String[] options = new String[dssv.size()];
-		for (int i = 0; i < options.length; i++) {
-			options[i] = dssv.get(i).getMaSinhVien();
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		maSV.setText(table.getValueAt(row, 1) + "");
+		maPhong.setText(table.getValueAt(row, 2) + "");
+		try {
+			ngayKy.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(row, 3)));
+			ngayHet.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(row, 4)));
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
-		return options;
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

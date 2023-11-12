@@ -22,6 +22,10 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuPhong
 	END
+	IF @type = 'hopDong'
+	BEGIN
+		SELECT * FROM HopDong
+	END
 	ELSE IF @type = 'phongTro'
 	BEGIN
 		SELECT * FROM PhongTro
@@ -84,18 +88,18 @@ BEGIN
 	END
 END
 
-/*CREATE PROCEDURE saveSinhVien(@type varchar(255), @ma varchar(8), @ho nvarchar(50), @ten nvarchar(30), @maLop varchar(10), @queQuan nvarchar(40), @gioiTinh int, @ngaySinh Date, @sdt varchar(12))
+CREATE PROCEDURE saveSinhVien(@type varchar(255), @ma varchar(8), @ho nvarchar(50), @ten nvarchar(30), @maLop varchar(10), @queQuan nvarchar(40), @gioiTinh int, @ngaySinh Date, @sdt varchar(12))
 AS 
 BEGIN
 	IF @type = 'insert'
 	BEGIN
 		insert into SinhVien(MaSinhVien, Ho, Ten, MaLop, QueQuan, GioiTinh, NgaySinh, Sdt) values (@ma, @ho, @ten, @maLop, @queQuan, @gioiTinh, @ngaySinh, @sdt)
 	END
-	ELSE IF @type = 'udpate'
+	ELSE IF @type = 'update'
 	BEGIN
 		UPDATE SinhVien SET Ho = @ho, Ten = @ten, MaLop = @maLop, QueQuan = @queQuan, GioiTinh = @gioiTinh, NgaySinh = @ngaySinh, Sdt = @sdt WHERE MaSinhVien = @ma
 	END
-END*/
+END
 
 CREATE PROCEDURE saveLop(@type varchar(255), @ma varchar(255), @ten nvarchar(255), @gvcn nvarchar(255), @macn varchar(255))
 AS
@@ -110,10 +114,6 @@ BEGIN
 	END
 END
 
-/*CREATE PROCEDURE updateKhoa(@ma varchar(255), @ten nvarchar(255))
-AS UPDATE Khoa SET TenKhoa = @ten WHERE MaKhoa = @ma*/
-
-/*
 CREATE PROCEDURE saveKhoa(@type varchar(255), @ma varchar(255), @ten nvarchar(255))
 AS
 BEGIN
@@ -125,9 +125,9 @@ BEGIN
 	BEGIN
 		UPDATE Khoa SET TenKhoa = @ten WHERE MaKhoa = @ma
 	END
-END*/
+END
 
-/*CREATE PROCEDURE saveChuyenNganh(@type varchar(255), @ma varchar(255), @ten nvarchar(255), @maKhoa varchar(255))
+CREATE PROCEDURE saveChuyenNganh(@type varchar(255), @ma varchar(255), @ten nvarchar(255), @maKhoa varchar(255))
 AS
 BEGIN
 	IF @type = 'insert'
@@ -138,24 +138,9 @@ BEGIN
 	BEGIN
 		UPDATE ChuyenNganh SET TenChuyenNganh = @ten, MaKhoa = @maKhoa WHERE MaChuyenNganh = @ma
 	END
-END*/
+END
 
-
---CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
---AS
---BEGIN
---	IF @type = 'insert'
---	BEGIN
---		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
---	END
---	IF @type = 'update'
---	BEGIN
---		UPDATE PhongTro SET Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang, MaChuPhong = @machuphong WHERE MaPhong = @ma
---	END
---END
-
-
-CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
+CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi nvarchar(255), @tinhtrang varchar(255))
 AS
 BEGIN
 	IF @type = 'insert'
@@ -183,15 +168,12 @@ BEGIN
 		AND (@maChuPhong is null or MaChuPhong = @maChuPhong)
 END
 
-SELECT * FROM Lop
-
-
---CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
---AS
+CREATE PROCEDURE findSinhVien(@ma varchar(255),@ho nvarchar(255),@ten nvarchar(255),@maLop varchar(255),@queQuan nvarchar(255))
+AS
 --BEGIN
 --	IF @ma is not null
 --	BEGIN
---		SELECT * FROM SinhVien WHERE MaSinhVien = @ma
+--		SELECT * FROM PhongTro WHERE MaPhong = @ma
 --	END
 --	IF @ho is not null
 --	BEGIN
@@ -205,19 +187,11 @@ SELECT * FROM Lop
 --	BEGIN
 --		SELECT * FROM SinhVien WHERE MaLop = @maLop
 --	END
---	ELSE IF @queQuan is not null
+--	IF @queQuan is not null
 --	BEGIN
 --		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
 --	END
 --END
-
-CREATE PROCEDURE findSinhVien
-    @ma varchar(255),
-    @ho nvarchar(255),
-    @ten nvarchar(255),
-    @maLop varchar(255),
-    @queQuan nvarchar(255)
-AS
 BEGIN
     SELECT * 
     FROM SinhVien 
@@ -233,7 +207,7 @@ END
 SELECT * FROM ChuPhong
 
 
-CREATE PROCEDURE saveChuPhong(@type varchar(255), @ma varchar(255),@ho nvarchar(255),@ten nvarchar(255), @sdt varchar(15), @diaChi varchar(255), @ngaySinh date, @gioiTinh int)
+CREATE PROCEDURE saveChuPhong(@type varchar(255), @ma varchar(255),@ho nvarchar(255),@ten nvarchar(255), @sdt varchar(15), @diaChi nvarchar(255), @ngaySinh date, @gioiTinh int)
 AS
 BEGIN
 	IF @type = 'insert'
@@ -246,4 +220,38 @@ BEGIN
 	END
 END
 
-SELECT * FROM PhongTro
+CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi nvarchar(255), @tinhtrang int)
+AS
+BEGIN
+	IF @type = 'insert'
+	BEGIN
+		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
+	END
+	IF @type = 'update'
+	BEGIN
+		UPDATE PhongTro SET MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang WHERE MaPhong = @ma
+	END
+END
+
+CREATE PROCEDURE saveHopDong(@type varchar(255), @ma varchar(255), @maSV varchar(255), @maPhong varchar(255), @ngayKy date, @ngayHet date)
+AS
+BEGIN
+	IF @type = 'insert'
+	BEGIN
+		insert into HopDong(MaHopDong, MaSinhVien, MaPhong, NgayKyHopDong, NgayHetHopDong) values (@ma, @maSV, @maPhong, @ngayKy, @ngayHet)
+		UPDATE PhongTro SET TinhTrang = 0 WHERE MaPhong = @maPhong
+	END
+	IF @type = 'update'
+	BEGIN
+		UPDATE HopDong SET MaSinhVien = @maSV, MaPhong = @maPhong, NgayKyHopDong = @ngayKy, NgayHetHopDong = @ngayHet WHERE MaHopDong = @ma
+	END
+END
+
+
+CREATE PROCEDURE deleteHopDong(@ma varchar(255), @maPhong varchar(255))
+AS
+BEGIN
+	DELETE FROM HopDong WHERE MaHopDong = @ma
+	UPDATE PhongTro SET TinhTrang = 1 WHERE MaPhong = @maPhong
+END
+

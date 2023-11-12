@@ -29,14 +29,14 @@ public class PhongTroDAO {
 				results.add(phongTro);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (con != null) {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return results;
@@ -49,19 +49,19 @@ public class PhongTroDAO {
 			Statement myStmt = con.createStatement();
 			ResultSet myRs = myStmt.executeQuery("{call findOneById(phongTro," + maPhong + ")}");
 			while (myRs.next()) {
-				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString(4));
-				results = new PhongTro(myRs.getString(1), myRs.getString(2), Float.parseFloat(myRs.getString(3)),
-						chuPhong, Integer.parseInt(myRs.getString(5)));
+				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString(2));
+				results = new PhongTro(myRs.getString(1), myRs.getString(4), myRs.getFloat(3), chuPhong,
+						myRs.getInt(5));
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (con != null) {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return results;
@@ -76,24 +76,22 @@ public class PhongTroDAO {
 			pstmt.setString(1, maPhong);
 			pstmt.setString(2, diaChi);
 			pstmt.setString(3, maChuPhong);
-
 			ResultSet myRs = pstmt.executeQuery();
 			while (myRs.next()) {
 				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString("MaChuPhong"));
 				PhongTro phongTro = new PhongTro(myRs.getString("MaPhong"), myRs.getString("DiaChi"),
-						Float.parseFloat(myRs.getString("Gia")), chuPhong,
-						Integer.parseInt(myRs.getString("TinhTrang")));
+						myRs.getFloat("Gia"), chuPhong, myRs.getInt("TinhTrang"));
 				results.add(phongTro);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (con != null) {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return results;
@@ -123,7 +121,7 @@ public class PhongTroDAO {
 			pstms.setInt(6, phongTro.getTinhTrang());
 			pstms.executeUpdate();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 			return false;
 		}
 
@@ -144,7 +142,7 @@ public class PhongTroDAO {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return true;
