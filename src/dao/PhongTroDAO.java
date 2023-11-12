@@ -69,6 +69,38 @@ public class PhongTroDAO {
 		return results;
 	}
 
+	public List<PhongTro> findBy(String maPhong, String diaChi, String maChuPhong) {
+		List<PhongTro> results = new ArrayList<PhongTro>();
+		Connection con = connect();
+		String SQL = "{call findPhongTro(?,?,?)}";
+		try {
+			PreparedStatement pstmt = con.prepareStatement(SQL);
+			pstmt.setString(1, maPhong);
+			pstmt.setString(2, diaChi);
+			pstmt.setString(3, maChuPhong);
+
+			ResultSet myRs = pstmt.executeQuery();
+			while (myRs.next()) {
+				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString("MaChuPhong"));
+				PhongTro phongTro = new PhongTro(myRs.getString("MaPhong"), myRs.getString("DiaChi"),
+						Float.parseFloat(myRs.getString("Gia")), chuPhong,
+						Integer.parseInt(myRs.getString("TinhTrang")));
+				results.add(phongTro);
+			}
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		} finally {
+			try {
+				if (con != null) {
+					con.close();
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return results;
+	}
+
 	public boolean save(PhongTro phongTro, String type) {
 		List<PhongTro> list = findAll();
 		if (type.equals("insert")) {

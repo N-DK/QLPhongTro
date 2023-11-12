@@ -145,7 +145,7 @@ END*/
 --	END
 --	IF @type = 'update'
 --	BEGIN
---		UPDATE PhongTro SET MaPhong = @ma, MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
+--		UPDATE PhongTro SET Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang, MaChuPhong = @machuphong WHERE MaPhong = @ma
 --	END
 --END
 
@@ -174,6 +174,23 @@ BEGIN
 		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
 	END
 END
+
+--CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
+--AS
+--BEGIN
+--	IF @ma is not null
+--	BEGIN
+--		SELECT * FROM PhongTro WHERE MaPhong = @ma
+--	END
+--		IF @diachi is not null
+--	BEGIN
+--		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
+--	END
+--	IF @maChuPhong is not null
+--	BEGIN
+--		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
+--	END
+--END
 
 SELECT * FROM Lop
 
