@@ -140,9 +140,7 @@ BEGIN
 	END
 END*/
 
-<<<<<<< HEAD
-CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
-=======
+
 --CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
 --AS
 --BEGIN
@@ -158,7 +156,6 @@ CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong 
 
 
 CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
->>>>>>> 286b2ddc66ae03d0ec5bc3950e2ed5edd4a4310f
 AS
 BEGIN
 	IF @type = 'insert'
@@ -171,27 +168,26 @@ BEGIN
 	END
 END
 
-<<<<<<< HEAD
-=======
---CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
---AS
---BEGIN
---	IF @ma is not null
---	BEGIN
---		SELECT * FROM PhongTro WHERE MaPhong = @ma
---	END
---		IF @diachi is not null
---	BEGIN
---		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
---	END
---	IF @maChuPhong is not null
---	BEGIN
---		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
---	END
---END
+
+CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
+AS
+BEGIN
+	IF @ma is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE MaPhong = @ma
+	END
+		IF @diachi is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
+	END
+	IF @maChuPhong is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
+	END
+END
 
 SELECT * FROM Lop
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
+
 
 --CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
 --AS

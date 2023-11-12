@@ -265,10 +265,15 @@ public class PhongTroUI implements MouseListener {
 			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P[0-9]{3}");
 			return false;
 		}
-		if (gia.getText().isEmpty() && Float.parseFloat(gia.getText()) < 0) {
-			JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
-			return false;
+		try {
+			if (!gia.getText().isEmpty() && Float.parseFloat(gia.getText()) < 0) {
+				JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
 		if (diaChi.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;
@@ -281,8 +286,8 @@ public class PhongTroUI implements MouseListener {
 
 		int row = table.getSelectedRow();
 		ma.setText(table.getValueAt(row, 0) + "");
-		gia.setText(table.getValueAt(row, 1) + "");
-		diaChi.setText(table.getValueAt(row, 2) + "");
+		diaChi.setText(table.getValueAt(row, 1) + "");
+		gia.setText(table.getValueAt(row, 2) + "");
 		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
 		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
 	}

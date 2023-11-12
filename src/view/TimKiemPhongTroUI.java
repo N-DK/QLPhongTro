@@ -26,30 +26,17 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-<<<<<<< HEAD
-import dao.PhongTroDAO;
-import entity.PhongTro;
-=======
 import dao.ChuTroDAO;
 import dao.PhongTroDAO;
 import entity.ChuPhong;
 import entity.PhongTro;
 import entity.SinhVien;
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
 
 public class TimKiemPhongTroUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, gia, diaChi, queQuan, sdt;
-<<<<<<< HEAD
-	private List<PhongTro> dspt;
-	private PhongTroDAO ptDAO;
-
-	public TimKiemPhongTroUI() {
-		wrapper = new JPanel();
-		ptDAO = new PhongTroDAO();
-=======
 	private JComboBox<String> maChuPhong, tinhTrang;
 	private PhongTroDAO phongTroDAO;
 	private ChuTroDAO chuTroDAO;
@@ -60,7 +47,6 @@ public class TimKiemPhongTroUI {
 		wrapper = new JPanel();
 		phongTroDAO = new PhongTroDAO();
 		chuTroDAO = new ChuTroDAO();
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
 	}
 
 	private JPanel getHeader() {
@@ -94,16 +80,10 @@ public class TimKiemPhongTroUI {
 		};
 		table = createCustomTable(tableModel);
 
-<<<<<<< HEAD
-		for (PhongTro phongTro : dspt) {
-			tableModel.addRow(phongTro.getObject());
-		}
-
-=======
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addRow(phongTro.getObject());
 		}
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
@@ -125,7 +105,7 @@ public class TimKiemPhongTroUI {
 		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
 //		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
-		container.add(getInputComboBox("Mã Chủ phòng", new JComboBox<String>(createOptionChutro())));
+		container.add(getInputComboBox("Mã Chủ phòng",maChuPhong = new JComboBox<String>(createOptionChutro())));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
 		container.add(Box.createVerticalStrut(15));
@@ -136,7 +116,6 @@ public class TimKiemPhongTroUI {
 	}
 
 	public JPanel getLayout() {
-		dspt = ptDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		dsChuPhong = chuTroDAO.findAll();
 		dsPhongTro = phongTroDAO.findAll();
@@ -188,7 +167,7 @@ public class TimKiemPhongTroUI {
 		dsPhongTro = phongTroDAO.findBy(createText(ma.getText()), createText(diaChi.getText()), createText((String) maChuPhong.getSelectedItem()));
 		clearTable();
 		for (PhongTro phongTro : dsPhongTro) {
-			tableModel.addColumn(phongTro.getObject());
+			tableModel.addRow(phongTro.getObject());
 		}
 		resetTexts();
 	}
