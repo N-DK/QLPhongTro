@@ -211,6 +211,13 @@ public class TimKiemSVUI {
 	private void timKiem() {
 		dssv = svDAO.findBy(createText(ma.getText()), createText(ho.getText()), createText(ten.getText()),
 				createText((String) maLop.getSelectedItem()), createText(queQuan.getText()));
+		if (isSupportBtn) {
+			for (HopDong hopDong : hdDAO.findAll()) {
+				if (dssv.contains(hopDong.getSinhVien())) {
+					dssv.remove(hopDong.getSinhVien());
+				}
+			}
+		}
 		clearTable();
 		for (SinhVien sinhVien : dssv) {
 			tableModel.addRow(sinhVien.getObjects());

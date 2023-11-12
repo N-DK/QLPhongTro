@@ -261,14 +261,27 @@ public class PhongTroUI implements MouseListener {
 	}
 
 	private boolean isValid() {
-		if (ma.getText().isEmpty() || !ma.getText().matches("P[0-9]{3}")) {
+		if (ma.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Mã phòng không được rỗng");
+			return false;
+		} else if (!ma.getText().matches("P[0-9]{3}")) {
 			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P[0-9]{3}");
 			return false;
 		}
-		if (gia.getText().isEmpty() || Float.parseFloat(gia.getText()) < 0) {
-			JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
+		try {
+			if (gia.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(wrapper, "Giá không được rỗng");
+				return false;
+			}
+			if (Float.parseFloat(gia.getText()) < 0) {
+				JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
+				return false;
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(wrapper, "Giá không được là chữ");
 			return false;
 		}
+
 		if (diaChi.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;

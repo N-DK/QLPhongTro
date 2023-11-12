@@ -282,8 +282,8 @@ public class SinhVienUI implements MouseListener {
 		if (sdt.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Số điện thoại sinh viên không được rỗng");
 			return false;
-		} else if (!sdt.getText().matches("[0-9]{10,11}")) {
-			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không được chứa chữ và không quá 11 số");
+		} else if (!sdt.getText().matches("[0-9]{10}")) {
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không được chứa chữ và không quá 10 số");
 			return false;
 		}
 		if (ngaySinh.getDate() == null) {

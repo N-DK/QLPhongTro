@@ -153,31 +153,47 @@ BEGIN
 	END
 END
 
---CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
---AS
+CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
+AS
+BEGIN
+	IF @ma is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE MaPhong = @ma
+	END
+		IF @diachi is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
+	END
+	IF @maChuPhong is not null
+	BEGIN
+		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
+	END
+END
+
+CREATE PROCEDURE findSinhVien(@ma varchar(255),@ho nvarchar(255),@ten nvarchar(255),@maLop varchar(255),@queQuan nvarchar(255))
+AS
 --BEGIN
 --	IF @ma is not null
 --	BEGIN
 --		SELECT * FROM PhongTro WHERE MaPhong = @ma
 --	END
---		IF @diachi is not null
+--	IF @ho is not null
 --	BEGIN
---		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
+--		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
 --	END
---	IF @maChuPhong is not null
+--	IF @ten is not null
 --	BEGIN
---		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
+--		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
+--	END
+--	IF @maLop is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE MaLop = @maLop
+--	END
+--	IF @queQuan is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
 --	END
 --END
-
-CREATE PROCEDURE findSinhVien (
-    @ma varchar(255),
-    @ho nvarchar(255),
-    @ten nvarchar(255),
-    @maLop varchar(255),
-    @queQuan nvarchar(255)
-)
-AS
 BEGIN
     SELECT * 
     FROM SinhVien 

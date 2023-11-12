@@ -147,6 +147,7 @@ public class TimKiemPhongTroUI {
 
 	public JPanel getLayout() {
 		dsPhongTro = isSupportBtn ? getListDisable() : phongTroDAO.findAll();
+		wrapper.setBackground(Color.WHITE);
 		dsChuPhong = chuTroDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
@@ -208,9 +209,16 @@ public class TimKiemPhongTroUI {
 	private void timPhong() {
 		dsPhongTro = phongTroDAO.findBy(createText(ma.getText()), createText(diaChi.getText()),
 				createText((String) maChuPhong.getSelectedItem()));
+		if (isSupportBtn) {
+			for (PhongTro phongTro : phongTroDAO.findAll()) {
+				if (phongTro.getTinhTrang() == 0) {
+					dsPhongTro.remove(phongTro);
+				}
+			}
+		}
 		clearTable();
 		for (PhongTro phongTro : dsPhongTro) {
-			tableModel.addColumn(phongTro.getObject());
+			tableModel.addRow(phongTro.getObject());
 		}
 		resetTexts();
 	}
