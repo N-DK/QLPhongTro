@@ -4,6 +4,7 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
+import static view.DefaultLayout.*;
 import static view.DefaultLayout.createCustomTable;
 import static view.DefaultLayout.getInput;
 import static view.DefaultLayout.getInputComboBox;
@@ -168,7 +169,6 @@ public class PhongTroUI implements MouseListener {
 				themPhong();
 			} else if (label.equals(XOA)) {
 				xoaPhong();
-				;
 			} else if (label.equals(SUA)) {
 				chinhSuaPhong();
 			} else if (label.equals(XR)) {
@@ -278,14 +278,13 @@ public class PhongTroUI implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		int row = table.getSelectedRow();
 		ma.setText(table.getValueAt(row, 0) + "");
 		gia.setText(table.getValueAt(row, 1) + "");
 		diaChi.setText(table.getValueAt(row, 2) + "");
 		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
 		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
-
 	}
 
 	@Override
