@@ -155,9 +155,10 @@ public class TimKiemPhongTroUI {
 	}
 
 	private String[] createOptionChutro() {
-		String[] options = new String[dsChuPhong.size()];
-		for (int i = 0; i < options.length; i++) {
-			options[i] = dsChuPhong.get(i).getMaChuPhong();
+		String[] options = new String[dsChuPhong.size() + 1];
+		options[0] = "";
+		for (int i = 1; i < options.length; i++) {
+			options[i] = dsChuPhong.get(i - 1).getMaChuPhong();
 		}
 
 		return options;

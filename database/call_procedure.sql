@@ -169,21 +169,18 @@ BEGIN
 END
 
 
-CREATE PROCEDURE findPhongTro(@ma varchar(255), @diachi nvarchar(255), @maChuPhong nvarchar(255))
+CREATE PROCEDURE findPhongTro
+	@ma varchar(255),
+	@diachi nvarchar(255), 
+	@maChuPhong nvarchar(255)
 AS
 BEGIN
-	IF @ma is not null
-	BEGIN
-		SELECT * FROM PhongTro WHERE MaPhong = @ma
-	END
-		IF @diachi is not null
-	BEGIN
-		SELECT * FROM PhongTro WHERE DiaChi like '%' + @diachi + '%'
-	END
-	IF @maChuPhong is not null
-	BEGIN
-		SELECT * FROM PhongTro WHERE MaChuPhong = @maChuPhong
-	END
+	SELECT *
+	FROM PhongTro
+	WHERE
+		(@ma is null or MaPhong = @ma)
+		AND (@diachi is null or DiaChi like '%' + @diachi + '%')
+		AND (@maChuPhong is null or MaChuPhong = @maChuPhong)
 END
 
 SELECT * FROM Lop
