@@ -316,12 +316,9 @@ public class ChuTroUI implements MouseListener{
 		tenCP.setText(table.getValueAt(index, 2).toString());
 		sdtCP.setText(table.getValueAt(index, 3).toString());
 		queQuanCP.setText(table.getValueAt(index, 4).toString());
-		try {
-			ngaySinh.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(index, 5)));
-		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
+		ngaySinh.setDate(java.sql.Date.valueOf(table.getValueAt(index, 5).toString()));
+		
 		
 		gioiTinh.setSelectedItem(table.getValueAt(index, 6));
 	}

@@ -156,8 +156,7 @@ public class ChuTroDAO {
 		PreparedStatement stmt = null;
 		int n = 0;
 		try {
-			stmt = con.prepareStatement("update ChuPhong " + "set Ho =?," + "Ten = ?," + "Sdt = ?," + "DiaChi = ?,"
-					+ "NgaySinh=?," + "GioiTinh = ?" + "where MaChuPhong=?");
+			stmt = con.prepareStatement("{call updateChuPhong(?,?,?,?,?,?,?)}");
 
 			stmt.setString(1, cp.getHo());
 			stmt.setString(2, cp.getTen());
