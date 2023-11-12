@@ -17,4 +17,5 @@ public class Main {
 	public final static String TKPT = "Tìm kiếm phòng trọ";
 	public final static String XR = "Làm mới";
 	public final static String TIMKIEM = "Tìm kiếm";
+	public final static String CHON = "CHỌN";
 }

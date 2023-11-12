@@ -1,16 +1,18 @@
 package view;
 
-import static constant.Main.SUA;
-import static constant.Main.THEM;
+import static constant.Main.CHON;
 import static constant.Main.TIMKIEM;
-import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -18,7 +20,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,41 +30,37 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-<<<<<<< HEAD
-import dao.PhongTroDAO;
-import entity.PhongTro;
-=======
 import dao.ChuTroDAO;
 import dao.PhongTroDAO;
 import entity.ChuPhong;
 import entity.PhongTro;
-import entity.SinhVien;
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
 
 public class TimKiemPhongTroUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, gia, diaChi, queQuan, sdt;
-<<<<<<< HEAD
-	private List<PhongTro> dspt;
-	private PhongTroDAO ptDAO;
-
-	public TimKiemPhongTroUI() {
-		wrapper = new JPanel();
-		ptDAO = new PhongTroDAO();
-=======
-	private JComboBox<String> maChuPhong, tinhTrang;
+	private JTextField ma, diaChi, maPhong_HopDong;
+	private JComboBox<String> maChuPhong;
 	private PhongTroDAO phongTroDAO;
 	private ChuTroDAO chuTroDAO;
 	private List<PhongTro> dsPhongTro;
 	private List<ChuPhong> dsChuPhong;
+	private boolean isSupportBtn;
+	private JFrame jFrame;
 
 	public TimKiemPhongTroUI() {
 		wrapper = new JPanel();
 		phongTroDAO = new PhongTroDAO();
 		chuTroDAO = new ChuTroDAO();
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
+	}
+
+	public TimKiemPhongTroUI(Boolean isSupportBtn, JTextField maPhong, JFrame jFrame) {
+		wrapper = new JPanel();
+		phongTroDAO = new PhongTroDAO();
+		chuTroDAO = new ChuTroDAO();
+		this.maPhong_HopDong = maPhong;
+		this.isSupportBtn = isSupportBtn;
+		this.jFrame = jFrame;
 	}
 
 	private JPanel getHeader() {
@@ -94,16 +94,9 @@ public class TimKiemPhongTroUI {
 		};
 		table = createCustomTable(tableModel);
 
-<<<<<<< HEAD
-		for (PhongTro phongTro : dspt) {
-			tableModel.addRow(phongTro.getObject());
-		}
-
-=======
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addRow(phongTro.getObject());
 		}
->>>>>>> 7c0dc3078a0ed3a8199e84f2c58de8edc26431fb
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
@@ -111,6 +104,23 @@ public class TimKiemPhongTroUI {
 		container.add(getHeader());
 		container.add(Box.createVerticalStrut(15));
 		container.add(tableContainer);
+		if (isSupportBtn) {
+			container.add(Box.createVerticalStrut(15));
+			container.add(getButtons());
+		}
+		return container;
+	}
+
+	private JPanel getButtons() {
+		JPanel container = new JPanel();
+		container.setBackground(new Color(176, 226, 255));
+		container.setBorder(new EmptyBorder(20, 0, 20, 0));
+		JPanel btnsContainer = new JPanel();
+		btnsContainer.setLayout(new GridLayout(1, 4));
+
+		btnsContainer.add(createBtn(CHON, "src//image//check.gif"));
+
+		container.add(btnsContainer);
 		return container;
 	}
 
@@ -125,7 +135,7 @@ public class TimKiemPhongTroUI {
 		container.add(getInput("Mã phòng trọ", ma = new JTextField()));
 //		container.add(getInput("SĐT", sdt = new JTextField()));
 		container.add(getInput("Địa chỉ", diaChi = new JTextField()));
-		container.add(getInputComboBox("Mã Chủ phòng", new JComboBox<String>(createOptionChutro())));
+		container.add(getInputComboBox("Mã Chủ phòng", maChuPhong = new JComboBox<String>(createOptionChutro())));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
 		container.add(Box.createVerticalStrut(15));
@@ -136,10 +146,9 @@ public class TimKiemPhongTroUI {
 	}
 
 	public JPanel getLayout() {
-		dspt = ptDAO.findAll();
-		wrapper.setBackground(Color.WHITE);
+		dsPhongTro = isSupportBtn ? getListDisable() : phongTroDAO.findAll();
 		dsChuPhong = chuTroDAO.findAll();
-		dsPhongTro = phongTroDAO.findAll();
+		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -167,12 +176,24 @@ public class TimKiemPhongTroUI {
 				timPhong();
 			} else if (label.equals(XR)) {
 				lamMoi();
+			} else if (label.equals(CHON)) {
+				chon();
 			}
 		});
 
 		btnContainer.add(btn, BorderLayout.CENTER);
-		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width, 45));
+		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 10, 45));
 		return btnContainer;
+	}
+
+	private void chon() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn phòng");
+			return;
+		}
+		maPhong_HopDong.setText(table.getValueAt(row, 0) + "");
+		jFrame.dispose();
 	}
 
 	private String[] createOptionChutro() {
@@ -183,9 +204,10 @@ public class TimKiemPhongTroUI {
 
 		return options;
 	}
-	
+
 	private void timPhong() {
-		dsPhongTro = phongTroDAO.findBy(createText(ma.getText()), createText(diaChi.getText()), createText((String) maChuPhong.getSelectedItem()));
+		dsPhongTro = phongTroDAO.findBy(createText(ma.getText()), createText(diaChi.getText()),
+				createText((String) maChuPhong.getSelectedItem()));
 		clearTable();
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addColumn(phongTro.getObject());
@@ -195,32 +217,38 @@ public class TimKiemPhongTroUI {
 
 	private void lamMoi() {
 		resetTexts();
-		dsPhongTro = phongTroDAO.findAll();
+		dsPhongTro = isSupportBtn ? getListDisable() : phongTroDAO.findAll();
 		clearTable();
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addRow(phongTro.getObject());
 		}
 	}
-	
+
 	private void resetTexts() {
 		ma.setText("");
 		diaChi.setText("");
 		maChuPhong.setSelectedItem(0);
 		table.clearSelection();
 	}
-	
+
 	private String createText(String text) {
 		return text.equals("") ? null : text;
 	}
-	
+
 	private void clearTable() {
 		int length = tableModel.getRowCount();
 		for (int i = 0; i < length; i++) {
 			tableModel.removeRow(0);
 		}
 	}
+
+	private List<PhongTro> getListDisable() {
+		List<PhongTro> results = new ArrayList<PhongTro>();
+		for (PhongTro phongTro : phongTroDAO.findAll()) {
+			if (phongTro.getTinhTrang() == 1) {
+				results.add(phongTro);
+			}
+		}
+		return results;
+	}
 }
-
-
-
-
