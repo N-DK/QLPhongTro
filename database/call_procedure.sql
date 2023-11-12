@@ -18,6 +18,10 @@ BEGIN
 	BEGIN
 		SELECT * FROM SinhVien
 	END
+	ELSE IF @type = 'chuPhong'
+	BEGIN
+		SELECT * FROM ChuPhong
+	END
 END
 
 /*Lấy một đối tượng dụa vào mã*/
