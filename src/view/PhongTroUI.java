@@ -295,7 +295,7 @@ public class PhongTroUI implements MouseListener {
 		int row = table.getSelectedRow();
 		ma.setText(table.getValueAt(row, 0) + "");
 		diaChi.setText(table.getValueAt(row, 1) + "");
-		gia.setText(table.getValueAt(row, 2) + "");
+		gia.setText(((String) table.getValueAt(row, 2)).replace(",", ""));
 		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
 		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
 	}

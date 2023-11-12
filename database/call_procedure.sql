@@ -170,28 +170,6 @@ END
 
 CREATE PROCEDURE findSinhVien(@ma varchar(255),@ho nvarchar(255),@ten nvarchar(255),@maLop varchar(255),@queQuan nvarchar(255))
 AS
---BEGIN
---	IF @ma is not null
---	BEGIN
---		SELECT * FROM PhongTro WHERE MaPhong = @ma
---	END
---	IF @ho is not null
---	BEGIN
---		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
---	END
---	IF @ten is not null
---	BEGIN
---		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
---	END
---	IF @maLop is not null
---	BEGIN
---		SELECT * FROM SinhVien WHERE MaLop = @maLop
---	END
---	IF @queQuan is not null
---	BEGIN
---		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
---	END
---END
 BEGIN
     SELECT * 
     FROM SinhVien 
@@ -202,10 +180,6 @@ BEGIN
         AND (@maLop IS NULL OR MaLop = @maLop)
         AND (@queQuan IS NULL OR QueQuan like '%' + @queQuan + '%')
 END
-
-
-SELECT * FROM ChuPhong
-
 
 CREATE PROCEDURE saveChuPhong(@type varchar(255), @ma varchar(255),@ho nvarchar(255),@ten nvarchar(255), @sdt varchar(15), @diaChi nvarchar(255), @ngaySinh date, @gioiTinh int)
 AS
