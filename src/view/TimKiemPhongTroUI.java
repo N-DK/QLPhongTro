@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -25,14 +26,20 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.PhongTroDAO;
+import entity.PhongTro;
+
 public class TimKiemPhongTroUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, gia, diaChi, queQuan, sdt;
+	private List<PhongTro> dspt;
+	private PhongTroDAO ptDAO;
 
 	public TimKiemPhongTroUI() {
 		wrapper = new JPanel();
+		ptDAO = new PhongTroDAO();
 	}
 
 	private JPanel getHeader() {
@@ -49,7 +56,7 @@ public class TimKiemPhongTroUI {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
@@ -58,6 +65,10 @@ public class TimKiemPhongTroUI {
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
+
+		for (PhongTro phongTro : dspt) {
+			tableModel.addRow(phongTro.getObject());
+		}
 
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
@@ -91,6 +102,7 @@ public class TimKiemPhongTroUI {
 	}
 
 	public JPanel getLayout() {
+		dspt = ptDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));

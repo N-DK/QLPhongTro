@@ -57,15 +57,15 @@ public class PhongTro {
 	public void setChuPhong(ChuPhong chuPhong) {
 		this.chuPhong = chuPhong;
 	}
-	
+
 	public Object[] getObject() {
 		Object[] objects = new Object[5];
 		objects[0] = maPhong;
 		objects[1] = diaChi;
 		objects[2] = gia;
 		objects[3] = chuPhong.getMaChuPhong();
-		objects[4] = tinhTrang;
-	
+		objects[4] = tinhTrang == 1 ? "Disable" : "Enable";
+
 		return objects;
 	}
 

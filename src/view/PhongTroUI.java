@@ -4,13 +4,17 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 import javax.swing.Box;
@@ -30,11 +34,9 @@ import javax.swing.table.DefaultTableModel;
 import dao.ChuTroDAO;
 import dao.PhongTroDAO;
 import entity.ChuPhong;
-import entity.ChuyenNganh;
-import entity.Khoa;
 import entity.PhongTro;
 
-public class PhongTroUI {
+public class PhongTroUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -90,11 +92,13 @@ public class PhongTroUI {
 
 		tableModel = new DefaultTableModel(cols, 0);
 		table = createCustomTable(tableModel);
-		
+
+		table.addMouseListener(this);
+
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addRow(phongTro.getObject());
 		}
-		
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
@@ -128,6 +132,8 @@ public class PhongTroUI {
 	}
 
 	public JPanel getLayout() {
+		dsPhongTro = phongTroDAO.findAll();
+		dsChuPhong = chuTroDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
@@ -195,7 +201,7 @@ public class PhongTroUI {
 		gia.setText("");
 		diaChi.setText("");
 		maChuPhong.setSelectedIndex(0);
-		tinhTrang.setSelectedItem(0);
+		tinhTrang.setSelectedIndex(0);
 		ma.requestFocus();
 		table.clearSelection();
 	}
@@ -234,12 +240,47 @@ public class PhongTroUI {
 					table.setValueAt(phongTro.getDiaChi(), row, 1);
 					table.setValueAt(phongTro.getGia(), row, 2);
 					table.setValueAt(phongTro.getTinhTrang() == 1 ? "Disable" : "Enable", row, 4);
+					JOptionPane.showMessageDialog(wrapper, "Sửa phòng thành công");
 					lamMoi();
-
 				} else {
 					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã phòng!");
 				}
 			}
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		gia.setText(table.getValueAt(row, 1) + "");
+		diaChi.setText(table.getValueAt(row, 2) + "");
+		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
+		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }

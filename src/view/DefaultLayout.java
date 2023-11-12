@@ -206,7 +206,6 @@ public class DefaultLayout {
 		case CT: {
 			ChuTroUI chuTroUI = new ChuTroUI();
 			children = chuTroUI.getLayout();
-			chuTroUI.hienData();
 			break;
 		}
 		case CN: {

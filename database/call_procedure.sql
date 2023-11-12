@@ -14,11 +14,11 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuyenNganh
 	END
-	ELSE IF @type = 'sinhVien'
+	IF @type = 'sinhVien'
 	BEGIN
 		SELECT * FROM SinhVien
 	END
-	ELSE IF @type = 'chuPhong'
+	IF @type = 'chuPhong'
 	BEGIN
 		SELECT * FROM ChuPhong
 	END
@@ -48,14 +48,14 @@ BEGIN
 	BEGIN
 		SELECT * FROM ChuPhong WHERE MaChuPhong = @ma
 	END
-	IF @type = 'phongTro'
+	ElSE IF @type = 'phongTro'
 	BEGIN
 		SELECT * FROM PhongTro WHERE MaPhong = @ma
 	END
 END
 
 /*Xóa một đối tượng theo mã*/
-/*CREATE PROCEDURE deleteOneById(@type varchar(255), @ma varchar(255))
+CREATE PROCEDURE deleteOneById(@type varchar(255), @ma varchar(255))
 AS
 BEGIN
 	IF @type = 'khoa'
@@ -78,7 +78,11 @@ BEGIN
 	BEGIN
 		DELETE FROM PhongTro WHERE MaPhong = @ma
 	END
-END*/
+	IF @type = 'chuPhong'
+	BEGIN
+		DELETE FROM ChuPhong WHERE MaChuPhong = @ma
+	END
+END
 
 /*CREATE PROCEDURE saveSinhVien(@type varchar(255), @ma varchar(8), @ho nvarchar(50), @ten nvarchar(30), @maLop varchar(10), @queQuan nvarchar(40), @gioiTinh int, @ngaySinh Date, @sdt varchar(12))
 AS 
@@ -136,44 +140,78 @@ BEGIN
 	END
 END*/
 
---CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
---AS
---BEGIN
---	IF @type = 'insert'
---	BEGIN
---		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
---	END
---	IF @type = 'update'
---	BEGIN
---		UPDATE PhongTro SET MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
---	END
---END
-
-
-CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
+CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
 AS
 BEGIN
-	IF @ma is not null
+	IF @type = 'insert'
 	BEGIN
-		SELECT * FROM SinhVien WHERE MaSinhVien = @ma
+		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
 	END
-	IF @ho is not null
+	IF @type = 'update'
 	BEGIN
-		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
-	END
-	IF @ten is not null
-	BEGIN
-		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
-	END
-	IF @maLop is not null
-	BEGIN
-		SELECT * FROM SinhVien WHERE MaLop = @maLop
-	END
-	ELSE IF @queQuan is not null
-	BEGIN
-		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
+		UPDATE PhongTro SET MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang WHERE MaPhong = @ma
 	END
 END
 
-SELECT * FROM Lop
 
+--CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
+--AS
+--BEGIN
+--	IF @ma is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE MaSinhVien = @ma
+--	END
+--	IF @ho is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE Ho like '%' + @ho + '%'
+--	END
+--	IF @ten is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE Ten like '%' + @ten + '%'
+--	END
+--	IF @maLop is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE MaLop = @maLop
+--	END
+--	ELSE IF @queQuan is not null
+--	BEGIN
+--		SELECT * FROM SinhVien WHERE QueQuan like '%' + @queQuan + '%'
+--	END
+--END
+
+CREATE PROCEDURE findSinhVien
+    @ma varchar(255),
+    @ho nvarchar(255),
+    @ten nvarchar(255),
+    @maLop varchar(255),
+    @queQuan nvarchar(255)
+AS
+BEGIN
+    SELECT * 
+    FROM SinhVien 
+    WHERE 
+        (@ma IS NULL OR MaSinhVien = @ma)
+        AND (@ho IS NULL OR Ho like '%' + @ho + '%')
+        AND (@ten IS NULL OR Ten like '%' + @ten + '%')
+        AND (@maLop IS NULL OR MaLop = @maLop)
+        AND (@queQuan IS NULL OR QueQuan like '%' + @queQuan + '%')
+END
+
+
+SELECT * FROM ChuPhong
+
+
+CREATE PROCEDURE saveChuPhong(@type varchar(255), @ma varchar(255),@ho nvarchar(255),@ten nvarchar(255), @sdt varchar(15), @diaChi varchar(255), @ngaySinh date, @gioiTinh int)
+AS
+BEGIN
+	IF @type = 'insert'
+	BEGIN
+		INSERT INTO ChuPhong(MaChuPhong,Ho,Ten,Sdt,DiaChi,NgaySinh,GioiTinh) values (@ma,@ho,@ten,@sdt,@diaChi,@ngaySinh,@gioiTinh)
+	END
+	IF @type = 'update'
+	BEGIN
+		update ChuPhong set Ho = @ho, Ten = @ten, Sdt = @sdt, DiaChi = @diaChi, NgaySinh=@ngaySinh, GioiTinh = @gioiTinh WHERE MaChuPhong = @ma
+	END
+END
+
+SELECT * FROM PhongTro
