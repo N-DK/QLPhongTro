@@ -140,7 +140,25 @@ BEGIN
 	END
 END*/
 
+<<<<<<< HEAD
 CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
+=======
+--CREATE PROCEDURE savePhongTro(@type varchar(255), @ma varchar(255), @machuphong varchar(255), @gia varchar(255), @diachi varchar(255), @tinhtrang varchar(255))
+--AS
+--BEGIN
+--	IF @type = 'insert'
+--	BEGIN
+--		insert into PhongTro (MaPhong, MaChuPhong, Gia, DiaChi, TinhTrang) values (@ma, @machuphong, @gia, @diachi, @tinhtrang)
+--	END
+--	IF @type = 'update'
+--	BEGIN
+--		UPDATE PhongTro SET MaPhong = @ma, MaChuPhong = @machuphong, Gia = @gia, DiaChi = @diachi, TinhTrang = @tinhtrang
+--	END
+--END
+
+
+CREATE PROCEDURE findSinhVien(@ma varchar(255), @ho nvarchar(255), @ten nvarchar(255), @maLop varchar(255), @queQuan nvarchar(255))
+>>>>>>> 286b2ddc66ae03d0ec5bc3950e2ed5edd4a4310f
 AS
 BEGIN
 	IF @type = 'insert'

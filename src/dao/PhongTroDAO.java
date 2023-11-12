@@ -14,7 +14,7 @@ import entity.ChuPhong;
 import entity.PhongTro;
 
 public class PhongTroDAO {
-	private ChuTroDAO ctDAO = new ChuTroDAO();
+	private ChuTroDAO chuTroDAO = new ChuTroDAO();
 
 	public List<PhongTro> findAll() {
 		List<PhongTro> results = new ArrayList<PhongTro>();
@@ -23,8 +23,7 @@ public class PhongTroDAO {
 			Statement myStmt = con.createStatement();
 			ResultSet myRs = myStmt.executeQuery("{call findAll(phongTro)}");
 			while (myRs.next()) {
-				System.out.println(myRs.getString(4));
-				ChuPhong chuPhong = ctDAO.findOneById(myRs.getString(2));
+				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString(2));
 				PhongTro phongTro = new PhongTro(myRs.getString(1), myRs.getString(4), myRs.getFloat(3), chuPhong,
 						myRs.getInt(5));
 				results.add(phongTro);
@@ -50,13 +49,12 @@ public class PhongTroDAO {
 			Statement myStmt = con.createStatement();
 			ResultSet myRs = myStmt.executeQuery("{call findOneById(phongTro," + maPhong + ")}");
 			while (myRs.next()) {
-				ChuPhong chuPhong = ctDAO.findOneById(myRs.getString(4));
+				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString(4));
 				results = new PhongTro(myRs.getString(1), myRs.getString(2), Float.parseFloat(myRs.getString(3)),
 						chuPhong, Integer.parseInt(myRs.getString(5)));
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-
 		} finally {
 			try {
 				if (con != null) {
@@ -77,6 +75,7 @@ public class PhongTroDAO {
 			}
 		} else {
 			if (!list.contains(phongTro)) {
+				System.out.println(type);
 				return false;
 			}
 		}

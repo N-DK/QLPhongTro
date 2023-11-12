@@ -79,6 +79,7 @@ public class PhongTroUI implements MouseListener {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -90,9 +91,14 @@ public class PhongTroUI implements MouseListener {
 
 		String[] cols = { "Mã phòng trọ", "Địa Chỉ", "Giá", "Mã chủ phòng", "Tình trạng phòng" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
-
 		table.addMouseListener(this);
 
 		for (PhongTro phongTro : dsPhongTro) {
@@ -165,6 +171,8 @@ public class PhongTroUI implements MouseListener {
 				;
 			} else if (label.equals(SUA)) {
 				chinhSuaPhong();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -183,16 +191,18 @@ public class PhongTroUI implements MouseListener {
 	}
 
 	private void themPhong() {
-		ChuPhong chuPhong = chuTroDAO.findOneById((String) maChuPhong.getSelectedItem());
-		int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
-		PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()), chuPhong,
-				tinhTrang);
-		if (phongTroDAO.save(phongTro, "insert")) {
-			tableModel.addRow(phongTro.getObject());
-			JOptionPane.showMessageDialog(wrapper, "Thêm phòng thành công");
-			lamMoi();
-		} else {
-			JOptionPane.showMessageDialog(wrapper, "Mã phòng không được trùng");
+		if (isValid()) {
+			ChuPhong chuPhong = chuTroDAO.findOneById((String) maChuPhong.getSelectedItem());
+			int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
+			PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()), chuPhong,
+					tinhTrang);
+			if (phongTroDAO.save(phongTro, "insert")) {
+				tableModel.addRow(phongTro.getObject());
+				JOptionPane.showMessageDialog(wrapper, "Thêm phòng thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã phòng không được trùng");
+			}
 		}
 	}
 
@@ -239,6 +249,7 @@ public class PhongTroUI implements MouseListener {
 					table.setValueAt(phongTro.getMaPhong(), row, 0);
 					table.setValueAt(phongTro.getDiaChi(), row, 1);
 					table.setValueAt(phongTro.getGia(), row, 2);
+					table.setValueAt(phongTro.getChuPhong().getMaChuPhong(), row, 3);
 					table.setValueAt(phongTro.getTinhTrang() == 1 ? "Disable" : "Enable", row, 4);
 					JOptionPane.showMessageDialog(wrapper, "Sửa phòng thành công");
 					lamMoi();
@@ -247,6 +258,22 @@ public class PhongTroUI implements MouseListener {
 				}
 			}
 		}
+	}
+
+	private boolean isValid() {
+		if (ma.getText().isEmpty() && !ma.getText().matches("P[0-9]{3}")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P[0-9]{3}");
+			return false;
+		}
+		if (gia.getText().isEmpty() && Float.parseFloat(gia.getText()) < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
+			return false;
+		}
+		if (diaChi.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -258,29 +285,26 @@ public class PhongTroUI implements MouseListener {
 		diaChi.setText(table.getValueAt(row, 2) + "");
 		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
 		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-
 	}
 }
