@@ -152,4 +152,3 @@ SELECT * FROM SinhVien
 
 update ChuPhong set Ho ='nAM',Ten = 'cAO',Sdt = '1',DiaChi = '1',NgaySinh='2023-06-12',GioiTinh ='1' WHERE MaChuPhong= 'CP12'
 go
-updateChuPhong(CP12,Nam,'Cao','Van')

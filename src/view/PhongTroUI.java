@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Box;
@@ -168,6 +169,7 @@ public class PhongTroUI {
 	}
 
 	private String[] createOptionChutro() {
+		dsChuPhong = new ArrayList<ChuPhong>();
 		String[] options = new String[dsChuPhong.size()];
 		for (int i = 0; i < options.length; i++) {
 			options[i] = dsChuPhong.get(i).getMaChuPhong();

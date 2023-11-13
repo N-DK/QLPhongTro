@@ -280,15 +280,15 @@ public class ChuTroUI implements MouseListener{
 			JOptionPane.showMessageDialog(wrapper, "Nhập sai ma");
 			return false;
 		}
-		if(!ho.matches("[a-zA-Z]+")) {
+		if(!ho.matches("[^-\\].!@#$%^&*()_+=[{}\\d;'\"\"':,/~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Họ phải là kí tự");
 			return false;
 		}
-		if(!ten.matches("[a-zA-Z]+")) {
+		if(!ten.matches("[^-\\].!@#$%^&*()_+=[{}\\d;'\"\"':,/~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Tên phải là kí tự");
 			return false;
 		}
-		if(!sdt.matches("[0-9]{10}")) {
+		if(!sdt.matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
 			JOptionPane.showMessageDialog(wrapper, "Số điện thoại phải là chữ số và có 10 số");
 			return false;
 		}
