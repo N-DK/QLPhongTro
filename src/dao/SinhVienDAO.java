@@ -31,14 +31,14 @@ public class SinhVienDAO {
 				resutls.add(sinhVien);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} finally {
 			try {
 				if (con != null) {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 
@@ -78,7 +78,7 @@ public class SinhVienDAO {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 
@@ -99,7 +99,7 @@ public class SinhVienDAO {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return true;
@@ -132,7 +132,7 @@ public class SinhVienDAO {
 					con.close();
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return results;

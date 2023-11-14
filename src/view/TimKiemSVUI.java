@@ -1,5 +1,6 @@
 package view;
 
+import static constant.Main.CHON;
 import static constant.Main.TIMKIEM;
 import static constant.Main.XR;
 import static view.DefaultLayout.createCustomTable;
@@ -10,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.List;
 
 import javax.swing.Box;
@@ -17,7 +19,9 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,8 +29,10 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.HopDongDAO;
 import dao.LopHocDAO;
 import dao.SinhVienDAO;
+import entity.HopDong;
 import entity.LopHoc;
 import entity.SinhVien;
 
@@ -34,17 +40,30 @@ public class TimKiemSVUI {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
-	private JTextField ma, ho, ten, queQuan;
+	private JTextField ma, ho, ten, queQuan, maSV_PhongTro;
 	private JComboBox<String> maLop;
 	private SinhVienDAO svDAO;
 	private LopHocDAO lopDAO;
+	private HopDongDAO hdDAO;
 	private List<SinhVien> dssv;
 	private List<LopHoc> dslh;
+	private boolean isSupportBtn;
+	private JFrame jFrame;
 
 	public TimKiemSVUI() {
 		wrapper = new JPanel();
 		svDAO = new SinhVienDAO();
 		lopDAO = new LopHocDAO();
+	}
+
+	public TimKiemSVUI(boolean isSupportBtn, JTextField maSV, JFrame jFrame) {
+		wrapper = new JPanel();
+		svDAO = new SinhVienDAO();
+		lopDAO = new LopHocDAO();
+		hdDAO = new HopDongDAO();
+		this.isSupportBtn = isSupportBtn;
+		this.maSV_PhongTro = maSV;
+		this.jFrame = jFrame;
 	}
 
 	private JPanel getHeader() {
@@ -88,6 +107,10 @@ public class TimKiemSVUI {
 		container.add(getHeader());
 		container.add(Box.createVerticalStrut(15));
 		container.add(tableContainer);
+		if (isSupportBtn) {
+			container.add(Box.createVerticalStrut(15));
+			container.add(getButtons());
+		}
 		return container;
 	}
 
@@ -114,7 +137,7 @@ public class TimKiemSVUI {
 
 	public JPanel getLayout() {
 		wrapper.setBackground(Color.WHITE);
-		dssv = svDAO.findAll();
+		dssv = isSupportBtn ? getListNotInHopDong() : svDAO.findAll();
 		dslh = lopDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
@@ -123,6 +146,19 @@ public class TimKiemSVUI {
 		wrapper.add(Box.createHorizontalStrut(15));
 		wrapper.add(getBody());
 		return wrapper;
+	}
+
+	private JPanel getButtons() {
+		JPanel container = new JPanel();
+		container.setBackground(new Color(176, 226, 255));
+		container.setBorder(new EmptyBorder(20, 0, 20, 0));
+		JPanel btnsContainer = new JPanel();
+		btnsContainer.setLayout(new GridLayout(1, 4));
+
+		btnsContainer.add(createBtn(CHON, "src//image//check.gif"));
+
+		container.add(btnsContainer);
+		return container;
 	}
 
 	private JPanel createBtn(String label, String path) {
@@ -143,12 +179,24 @@ public class TimKiemSVUI {
 				timKiem();
 			} else if (label.equals(XR)) {
 				lamMoi();
+			} else if (label.equals(CHON)) {
+				chon();
 			}
 		});
 
 		btnContainer.add(btn, BorderLayout.CENTER);
-		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width, 45));
+		btn.setPreferredSize(new Dimension(btn.getPreferredSize().width + 10, 45));
 		return btnContainer;
+	}
+
+	private void chon() {
+		int row = table.getSelectedRow();
+		if (row < 0) {
+			JOptionPane.showMessageDialog(wrapper, "Vui lòng chọn sinh viên");
+			return;
+		}
+		maSV_PhongTro.setText(table.getValueAt(row, 0) + "");
+		jFrame.dispose();
 	}
 
 	private String[] createOptionsLopHoc() {
@@ -163,6 +211,13 @@ public class TimKiemSVUI {
 	private void timKiem() {
 		dssv = svDAO.findBy(createText(ma.getText()), createText(ho.getText()), createText(ten.getText()),
 				createText((String) maLop.getSelectedItem()), createText(queQuan.getText()));
+		if (isSupportBtn) {
+			for (HopDong hopDong : hdDAO.findAll()) {
+				if (dssv.contains(hopDong.getSinhVien())) {
+					dssv.remove(hopDong.getSinhVien());
+				}
+			}
+		}
 		clearTable();
 		for (SinhVien sinhVien : dssv) {
 			tableModel.addRow(sinhVien.getObjects());
@@ -172,7 +227,7 @@ public class TimKiemSVUI {
 
 	private void lamMoi() {
 		resetTexts();
-		dssv = svDAO.findAll();
+		dssv = isSupportBtn ? getListNotInHopDong() : svDAO.findAll();
 		clearTable();
 		for (SinhVien sinhVien : dssv) {
 			tableModel.addRow(sinhVien.getObjects());
@@ -198,5 +253,15 @@ public class TimKiemSVUI {
 		for (int i = 0; i < length; i++) {
 			tableModel.removeRow(0);
 		}
+	}
+
+	private List<SinhVien> getListNotInHopDong() {
+		List<SinhVien> resutls = svDAO.findAll();
+		for (HopDong hopDong : hdDAO.findAll()) {
+			if (resutls.contains(hopDong.getSinhVien())) {
+				resutls.remove(hopDong.getSinhVien());
+			}
+		}
+		return resutls;
 	}
 }

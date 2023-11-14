@@ -81,7 +81,7 @@ public class HopDong {
 		Object[] objects = new Object[5];
 		objects[0] = ma;
 		objects[1] = sinhVien.getMaSinhVien();
-		objects[2] = phongTro;
+		objects[2] = phongTro.getMaPhong();
 		objects[3] = new SimpleDateFormat(("dd-MM-yyyy")).format(ngayKiHopDong);
 		objects[4] = new SimpleDateFormat(("dd-MM-yyyy")).format(ngayHetHopDong);
 		return objects;

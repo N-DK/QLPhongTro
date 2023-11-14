@@ -77,66 +77,11 @@ values	('KHMT', N'Khoa học máy tính', 'CNTT'),
 		('QTKD', N'Quản trị kinh doanh', 'QTKD'),
 		('HPT', N'Hóa phân tích', 'CNHH')
 
-
-select *from ChuPhong
-GO
-CREATE PROC themChuPhong (
-	@MaChuPhong nvarchar(30) ,
-	@Ho nvarchar(30),
-	@Ten nvarchar(30),
-	@Sdt nvarchar(10),
-	@DiaChi nvarchar(50),
-	@NgaySinh Date,
-	@GioiTinh int
-	)
-AS
-BEGIN
-	INSERT INTO ChuPhong(MaChuPhong,Ho,Ten,Sdt,DiaChi,NgaySinh,GioiTinh)	
-	values (@MaChuPhong,@Ho,@Ten,@Sdt,@DiaChi,@NgaySinh,@GioiTinh)
-end;
-
-go
-select *from ChuPhong
-go
-CREATE PROC xoaChuPhong 
-	@MaChuPhong nvarchar(30) 
-	
-AS
-BEGIN
-	delete from ChuPhong where MaChuPhong = @MaChuPhong
-end;
-go
-CREATE PROC layBangChuPhong
-AS
-BEGIN
-	select *from ChuPhong
-end;
-go
-layBangChuPhong
-go
-create proc updateChuPhong(
-	@MaChuPhong nvarchar(30) ,
-	@Ho nvarchar(30),
-	@Ten nvarchar(30),
-	@Sdt nvarchar(10),
-	@DiaChi nvarchar(50),
-	@NgaySinh Date,
-	@GioiTinh int
-)AS
-BEGIN
-	update ChuPhong
-	set Ho = @Ho, Ten = @Ten,Sdt = @Sdt,DiaChi = @DiaChi,NgaySinh=@NgaySinh,GioiTinh = @GioiTinh
-	WHERE MaChuPhong = @MaChuPhong
-end;
-
-go
 insert into Lop (MaLop, TenLop, TenGVCN, MaChuyenNganh)
 values	('DHKHMT17A', N'Đại học khoa học máy tính 17A', N'Cô Phúc', 'KHMT'),
 		('DHKHMT17B', N'Đại học khoa học máy tính 17B', N'Thầy Danh', 'KHMT'),
 		('DHKHMT17C', N'Đại học khoa học máy tính 17C', N'Cô Phượng', 'KHMT'),
 		('DHKHMT17D', N'Đại học khoa học máy tính 17D', N'Thầy Phúc', 'KHMT')
-
-SELECT * FROM Lop
 
 insert into SinhVien(MaSinhVien, Ho, Ten, MaLop, QueQuan, GioiTinh, NgaySinh, Sdt)
 values	('21134361', N'Ngô Đăng', N'Khoa', 'DHKHMT17B', N'Quảng Nam', 1, '2003-11-27', '0792798777'),
@@ -148,7 +93,9 @@ values	('21134361', N'Ngô Đăng', N'Khoa', 'DHKHMT17B', N'Quảng Nam', 1, '20
 		('21134367', N'Nguyễn Đức', N'Cường', 'DHKHMT17B', N'Hội An', 1, '2003-9-16', '0792798777'),
 		('21134368', N'Võ Ngọc Trung', N'Quân', 'DHKHMT17B', N'Nghệ An', 1, '2003-11-15', '0792798777'),
 		('21134369', N'Lê Đình', N'Nam', 'DHKHMT17A', N'Hà Tĩnh', 1, '2003-11-30', '0792798777')
-SELECT * FROM SinhVien
 
-update ChuPhong set Ho ='nAM',Ten = 'cAO',Sdt = '1',DiaChi = '1',NgaySinh='2023-06-12',GioiTinh ='1' WHERE MaChuPhong= 'CP12'
-go
+
+DELETE FROM HopDong WHERE MaHopDong = 'HD001'
+	UPDATE PhongTro SET TinhTrang = 1 WHERE MaPhong = 'P001'
+SELECT * FROM HopDong
+

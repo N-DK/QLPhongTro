@@ -5,6 +5,9 @@ import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
 import static view.DefaultLayout.*;
+import static view.DefaultLayout.createCustomTable;
+import static view.DefaultLayout.getInput;
+import static view.DefaultLayout.getInputComboBox;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,6 +15,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.util.ArrayList;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import java.util.List;
 
 import javax.swing.Box;
@@ -31,11 +37,9 @@ import javax.swing.table.DefaultTableModel;
 import dao.ChuTroDAO;
 import dao.PhongTroDAO;
 import entity.ChuPhong;
-import entity.ChuyenNganh;
-import entity.Khoa;
 import entity.PhongTro;
 
-public class PhongTroUI {
+public class PhongTroUI implements MouseListener {
 	private JPanel wrapper;
 	private JTable table;
 	private DefaultTableModel tableModel;
@@ -78,6 +82,7 @@ public class PhongTroUI {
 		return container;
 	}
 
+	@SuppressWarnings("serial")
 	private JPanel getBody() {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
@@ -89,13 +94,20 @@ public class PhongTroUI {
 
 		String[] cols = { "Mã phòng trọ", "Địa Chỉ", "Giá", "Mã chủ phòng", "Tình trạng phòng" };
 
-		tableModel = new DefaultTableModel(cols, 0);
+		tableModel = new DefaultTableModel(cols, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		};
 		table = createCustomTable(tableModel);
-		
+		table.addMouseListener(this);
+
 		for (PhongTro phongTro : dsPhongTro) {
 			tableModel.addRow(phongTro.getObject());
 		}
-		
+
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.getViewport().setBackground(Color.WHITE);
 		tableContainer.add(scrollPane);
@@ -129,6 +141,8 @@ public class PhongTroUI {
 	}
 
 	public JPanel getLayout() {
+		dsPhongTro = phongTroDAO.findAll();
+		dsChuPhong = chuTroDAO.findAll();
 		wrapper.setBackground(Color.WHITE);
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
@@ -157,9 +171,10 @@ public class PhongTroUI {
 				themPhong();
 			} else if (label.equals(XOA)) {
 				xoaPhong();
-				;
 			} else if (label.equals(SUA)) {
 				chinhSuaPhong();
+			} else if (label.equals(XR)) {
+				lamMoi();
 			}
 		});
 
@@ -179,16 +194,18 @@ public class PhongTroUI {
 	}
 
 	private void themPhong() {
-		ChuPhong chuPhong = chuTroDAO.findOneById((String) maChuPhong.getSelectedItem());
-		int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
-		PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()), chuPhong,
-				tinhTrang);
-		if (phongTroDAO.save(phongTro, "insert")) {
-			tableModel.addRow(phongTro.getObject());
-			JOptionPane.showMessageDialog(wrapper, "Thêm phòng thành công");
-			lamMoi();
-		} else {
-			JOptionPane.showMessageDialog(wrapper, "Mã phòng không được trùng");
+		if (isValid()) {
+			ChuPhong chuPhong = chuTroDAO.findOneById((String) maChuPhong.getSelectedItem());
+			int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
+			PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()), chuPhong,
+					tinhTrang);
+			if (phongTroDAO.save(phongTro, "insert")) {
+				tableModel.addRow(phongTro.getObject());
+				JOptionPane.showMessageDialog(wrapper, "Thêm phòng thành công");
+				lamMoi();
+			} else {
+				JOptionPane.showMessageDialog(wrapper, "Mã phòng không được trùng");
+			}
 		}
 	}
 
@@ -197,7 +214,7 @@ public class PhongTroUI {
 		gia.setText("");
 		diaChi.setText("");
 		maChuPhong.setSelectedIndex(0);
-		tinhTrang.setSelectedItem(0);
+		tinhTrang.setSelectedIndex(0);
 		ma.requestFocus();
 		table.clearSelection();
 	}
@@ -235,13 +252,74 @@ public class PhongTroUI {
 					table.setValueAt(phongTro.getMaPhong(), row, 0);
 					table.setValueAt(phongTro.getDiaChi(), row, 1);
 					table.setValueAt(phongTro.getGia(), row, 2);
+					table.setValueAt(phongTro.getChuPhong().getMaChuPhong(), row, 3);
 					table.setValueAt(phongTro.getTinhTrang() == 1 ? "Disable" : "Enable", row, 4);
+					JOptionPane.showMessageDialog(wrapper, "Sửa phòng thành công");
 					lamMoi();
-
 				} else {
 					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã phòng!");
 				}
 			}
 		}
+	}
+
+	private boolean isValid() {
+		if (ma.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Mã phòng không được rỗng");
+			return false;
+		} else if (!ma.getText().matches("P[0-9]{3}")) {
+			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P[0-9]{3}");
+			return false;
+		}
+		try {
+			if (gia.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(wrapper, "Giá không được rỗng");
+				return false;
+			}
+			if (Float.parseFloat(gia.getText()) < 0) {
+				JOptionPane.showMessageDialog(wrapper, "Giá phải lớn hơn 0");
+				return false;
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(wrapper, "Giá không được là chữ");
+			return false;
+		}
+
+		if (diaChi.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+		int row = table.getSelectedRow();
+		ma.setText(table.getValueAt(row, 0) + "");
+		diaChi.setText(table.getValueAt(row, 1) + "");
+		gia.setText(((String) table.getValueAt(row, 2)).replace(",", ""));
+		maChuPhong.setSelectedItem(table.getValueAt(row, 3));
+		tinhTrang.setSelectedItem(table.getValueAt(row, 4));
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 	}
 }

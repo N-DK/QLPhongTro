@@ -1,5 +1,6 @@
 package entity;
 
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 public class PhongTro {
@@ -57,15 +58,15 @@ public class PhongTro {
 	public void setChuPhong(ChuPhong chuPhong) {
 		this.chuPhong = chuPhong;
 	}
-	
+
 	public Object[] getObject() {
+		DecimalFormat decimalFormat = new DecimalFormat("#,###");
 		Object[] objects = new Object[5];
 		objects[0] = maPhong;
 		objects[1] = diaChi;
-		objects[2] = gia;
+		objects[2] = decimalFormat.format(gia);
 		objects[3] = chuPhong.getMaChuPhong();
-		objects[4] = tinhTrang;
-	
+		objects[4] = tinhTrang == 1 ? "Disable" : "Enable";
 		return objects;
 	}
 

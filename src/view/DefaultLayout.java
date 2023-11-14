@@ -206,7 +206,6 @@ public class DefaultLayout {
 		case CT: {
 			ChuTroUI chuTroUI = new ChuTroUI();
 			children = chuTroUI.getLayout();
-			chuTroUI.hienData();
 			break;
 		}
 		case CN: {
@@ -314,6 +313,58 @@ public class DefaultLayout {
 		chooser.setPreferredSize(new Dimension(208, 30));
 		chooserContainer.add(chooser);
 		container.add(chooserContainer);
+		return container;
+	}
+
+	public static JPanel getInputSelect(String label, JTextField textField) {
+		JPanel container = new JPanel();
+		container.setLayout(new BoxLayout(container, BoxLayout.X_AXIS));
+		container.setBackground(new Color(176, 226, 255));
+		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+
+		JPanel Lable = new JPanel();
+		Lable.setBackground(new Color(176, 226, 255));
+		Lable.add(createLabel(label));
+		container.add(Lable);
+
+		JPanel selection = new JPanel();
+		selection.setLayout(new BorderLayout());
+		selection.setBackground(new Color(176, 226, 255));
+		selection.setFont(new Font("Arial", Font.PLAIN, 16));
+		selection.setBackground(Color.WHITE);
+		selection.setPreferredSize(new Dimension(208, 30));
+		selection.add(textField, BorderLayout.CENTER);
+
+		textField.setFont(new Font("Arial", Font.PLAIN, 16));
+		textField.setPreferredSize(new Dimension(208, 30));
+		textField.setEnabled(false);
+		textField.setDisabledTextColor(Color.BLACK);
+
+		JButton btn = new JButton("+");
+		btn.setBackground(new Color(162, 181, 205));
+		btn.setBorderPainted(false);
+		btn.setFocusPainted(false);
+		btn.setOpaque(true);
+		btn.setFont(new Font("Arial", Font.BOLD, 16));
+		btn.addActionListener(e -> {
+			JFrame jFrame = new JFrame();
+			JPanel timKiemUI = null;
+			if (label.equals("Mã sinh viên")) {
+				timKiemUI = new TimKiemSVUI(true, textField, jFrame).getLayout();
+			} else {
+				timKiemUI = new TimKiemPhongTroUI(true, textField, jFrame).getLayout();
+			}
+			jFrame.add(timKiemUI);
+			jFrame.setSize(1200, 800);
+			jFrame.setVisible(true);
+			jFrame.setLocationRelativeTo(null);
+			jFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			jFrame.setResizable(false);
+
+		});
+		selection.add(btn, BorderLayout.EAST);
+		container.add(selection);
+
 		return container;
 	}
 }
