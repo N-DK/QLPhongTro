@@ -260,6 +260,11 @@ public class LopHocUI implements MouseListener {
 			}
 		}
 
+		if (!tenCN.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Tên giáo viên không được chứa số và các kí tự đặt biệt");
+			return false;
+		}
+
 		return true;
 	}
 

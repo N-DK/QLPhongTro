@@ -47,7 +47,7 @@ public class PhongTroDAO {
 		Connection con = connect();
 		try {
 			Statement myStmt = con.createStatement();
-			ResultSet myRs = myStmt.executeQuery("{call findOneById(phongTro," + maPhong + ")}");
+			ResultSet myRs = myStmt.executeQuery("{call findOneById(phongTro, " + maPhong + ")}");
 			while (myRs.next()) {
 				ChuPhong chuPhong = chuTroDAO.findOneById(myRs.getString(2));
 				results = new PhongTro(myRs.getString(1), myRs.getString(4), myRs.getFloat(3), chuPhong,

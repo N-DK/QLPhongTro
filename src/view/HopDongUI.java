@@ -226,8 +226,10 @@ public class HopDongUI implements MouseListener {
 		} else {
 			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-				PhongTro phongTro = phongTroDAO.findOneById(maPhong.getText());
-				SinhVien sinhVien = svDAO.findBy(maSV.getText(), null, null, null, null).get(0);
+				String maSv = table.getValueAt(row, 1) + "";
+				String maPhong = table.getValueAt(row, 2) + "";
+				SinhVien sinhVien = svDAO.findBy(maSv, null, null, null, null).get(0);
+				PhongTro phongTro = phongTroDAO.findOneById(maPhong);
 				HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
 				boolean isSuccess = hdDAO.save(hopDong, "update");
 				if (isSuccess) {
@@ -270,6 +272,10 @@ public class HopDongUI implements MouseListener {
 				return false;
 			}
 		}
+		if (ngayHet.getDate().before(ngayKy.getDate())) {
+			JOptionPane.showMessageDialog(wrapper, "Ngày hết phải sau ngày ký hợp đồng");
+			return false;
+		}
 		return true;
 	}
 
@@ -277,8 +283,6 @@ public class HopDongUI implements MouseListener {
 	public void mouseClicked(MouseEvent e) {
 		int row = table.getSelectedRow();
 		ma.setText(table.getValueAt(row, 0) + "");
-		maSV.setText(table.getValueAt(row, 1) + "");
-		maPhong.setText(table.getValueAt(row, 2) + "");
 		try {
 			ngayKy.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(row, 3)));
 			ngayHet.setDate(new SimpleDateFormat("dd-MM-yyyy").parse((String) table.getValueAt(row, 4)));

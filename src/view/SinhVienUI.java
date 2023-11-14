@@ -270,20 +270,29 @@ public class SinhVienUI implements MouseListener {
 		if (ho.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Họ sinh viên không được rỗng");
 			return false;
+		} else if (ho.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Họ sinh viên không được chứa số và các kí tự đặt biệt");
+			return false;
 		}
 		if (ten.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Tên sinh viên không được rỗng");
+			return false;
+		} else if (ten.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Tên sinh viên không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
 		if (queQuan.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Quê quán sinh viên không được rỗng");
 			return false;
+		} else if (queQuan.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Quên quán sinh viên không được chứa số và các kí tự đặt biệt");
+			return false;
 		}
 		if (sdt.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Số điện thoại sinh viên không được rỗng");
 			return false;
-		} else if (!sdt.getText().matches("[0-9]{10}")) {
-			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không được chứa chữ và không quá 10 số");
+		} else if (!sdt.getText().matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không hợp lệ");
 			return false;
 		}
 		if (ngaySinh.getDate() == null) {

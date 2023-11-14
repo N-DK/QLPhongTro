@@ -4,7 +4,6 @@ import static constant.Main.SUA;
 import static constant.Main.THEM;
 import static constant.Main.XOA;
 import static constant.Main.XR;
-import static view.DefaultLayout.*;
 import static view.DefaultLayout.createCustomTable;
 import static view.DefaultLayout.getInput;
 import static view.DefaultLayout.getInputComboBox;
@@ -14,10 +13,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import java.util.List;
 
 import javax.swing.Box;
@@ -184,7 +181,6 @@ public class PhongTroUI implements MouseListener {
 	}
 
 	private String[] createOptionChutro() {
-		dsChuPhong = new ArrayList<ChuPhong>();
 		String[] options = new String[dsChuPhong.size()];
 		for (int i = 0; i < options.length; i++) {
 			options[i] = dsChuPhong.get(i).getMaChuPhong();
@@ -268,7 +264,7 @@ public class PhongTroUI implements MouseListener {
 			JOptionPane.showMessageDialog(wrapper, "Mã phòng không được rỗng");
 			return false;
 		} else if (!ma.getText().matches("P[0-9]{3}")) {
-			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P[0-9]{3}");
+			JOptionPane.showMessageDialog(wrapper, "Mã phòng phải có dạng P đi theo sau là 3 chữ số");
 			return false;
 		}
 		try {
@@ -287,6 +283,9 @@ public class PhongTroUI implements MouseListener {
 
 		if (diaChi.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
+			return false;
+		} else if (diaChi.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
 		return true;

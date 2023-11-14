@@ -269,21 +269,23 @@ public class ChuTroUI implements MouseListener {
 			return false;
 		}
 
-		if(!ho.matches("\\w+")) {
-			JOptionPane.showMessageDialog(wrapper, "Họ phải là kí tự");
+		if (!ho.matches("[^-.!@#$%^&*()_+=\\[\\]{<>}\\d;\\\"':,/~`|]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Họ phải không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
-		if(!ten.matches("\\w+")) {
-			JOptionPane.showMessageDialog(wrapper, "Tên phải là kí tự");
+		if (!ten.matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Tên phải không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
-		if(!sdt.matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
-
-			JOptionPane.showMessageDialog(wrapper, "Số điện thoại phải là chữ số và có 10 số");
+		if (!sdt.matches("(84|0[3|5|7|8|9])+([0-9]{8})")) {
+			JOptionPane.showMessageDialog(wrapper, "Số điện thoại không hợp lệ");
 			return false;
 		}
 		if (diachi.equals("")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
+			return false;
+		} else if(diachi.matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
 		if (ngaySinh.getDate() == null) {
