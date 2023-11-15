@@ -26,7 +26,7 @@ public class HopDongDAO {
 			ResultSet myRs = myStmt.executeQuery("{call findAll(hopDong)}");
 			while (myRs.next()) {
 				PhongTro phongTro = phongTroDAO.findOneById(myRs.getString(4));
-				SinhVien sinhVien = svDAO.findBy(myRs.getString(3), null, null, null, null).get(0);
+				SinhVien sinhVien = svDAO.findBy(myRs.getString(3), null, null, null, null, null, null).get(0);
 				HopDong hopDong = new HopDong(myRs.getString(1), sinhVien, phongTro, myRs.getDate(2), myRs.getDate(5));
 				resutls.add(hopDong);
 			}
@@ -40,7 +40,7 @@ public class HopDongDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}		
+		}
 		return resutls;
 	}
 

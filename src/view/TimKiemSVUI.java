@@ -29,10 +29,14 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import dao.ChuyenNganhDAO;
 import dao.HopDongDAO;
+import dao.KhoaDAO;
 import dao.LopHocDAO;
 import dao.SinhVienDAO;
+import entity.ChuyenNganh;
 import entity.HopDong;
+import entity.Khoa;
 import entity.LopHoc;
 import entity.SinhVien;
 
@@ -41,12 +45,16 @@ public class TimKiemSVUI {
 	private JTable table;
 	private DefaultTableModel tableModel;
 	private JTextField ma, ho, ten, queQuan, maSV_PhongTro;
-	private JComboBox<String> maLop;
+	private JComboBox<String> maLop, maKhoa, maCN;
 	private SinhVienDAO svDAO;
 	private LopHocDAO lopDAO;
 	private HopDongDAO hdDAO;
+	private KhoaDAO khoaDAO;
+	private ChuyenNganhDAO cnDAO;
 	private List<SinhVien> dssv;
 	private List<LopHoc> dslh;
+	private List<Khoa> dsKhoa;
+	private List<ChuyenNganh> dscn;
 	private boolean isSupportBtn;
 	private JFrame jFrame;
 
@@ -54,14 +62,19 @@ public class TimKiemSVUI {
 		wrapper = new JPanel();
 		svDAO = new SinhVienDAO();
 		lopDAO = new LopHocDAO();
+		khoaDAO = new KhoaDAO();
+		cnDAO = new ChuyenNganhDAO();
+		hdDAO = new HopDongDAO();
 	}
 
-	public TimKiemSVUI(boolean isSupportBtn, JTextField maSV, JFrame jFrame) {
+	public TimKiemSVUI(JTextField maSV, JFrame jFrame) {
 		wrapper = new JPanel();
 		svDAO = new SinhVienDAO();
 		lopDAO = new LopHocDAO();
+		khoaDAO = new KhoaDAO();
+		cnDAO = new ChuyenNganhDAO();
 		hdDAO = new HopDongDAO();
-		this.isSupportBtn = isSupportBtn;
+		this.isSupportBtn = true;
 		this.maSV_PhongTro = maSV;
 		this.jFrame = jFrame;
 	}
@@ -126,6 +139,8 @@ public class TimKiemSVUI {
 		container.add(getInput("Họ", ho = new JTextField()));
 		container.add(getInput("Tên", ten = new JTextField()));
 		container.add(getInputComboBox("Mã lớp", maLop = new JComboBox<String>(createOptionsLopHoc())));
+		container.add(getInputComboBox("Mã khoa", maKhoa = new JComboBox<String>(createOptionsKhoa())));
+		container.add(getInputComboBox("Mã chuyên ngành", maCN = new JComboBox<String>(createOptionsChuyenNganh())));
 		container.add(getInput("Quê quán", queQuan = new JTextField()));
 		container.add(Box.createVerticalStrut(15));
 		container.add(createBtn(TIMKIEM, "src//image//search.gif"));
@@ -139,6 +154,8 @@ public class TimKiemSVUI {
 		wrapper.setBackground(Color.WHITE);
 		dssv = isSupportBtn ? getListNotInHopDong() : svDAO.findAll();
 		dslh = lopDAO.findAll();
+		dsKhoa = khoaDAO.findAll();
+		dscn = cnDAO.findAll();
 		wrapper.setBorder(new EmptyBorder(0, 0, 15, 0));
 		wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
 		wrapper.add(Box.createHorizontalStrut(15));
@@ -208,9 +225,28 @@ public class TimKiemSVUI {
 		return options;
 	}
 
+	private String[] createOptionsKhoa() {
+		String[] options = new String[dsKhoa.size() + 1];
+		options[0] = "";
+		for (int i = 1; i < options.length; i++) {
+			options[i] = dsKhoa.get(i - 1).getMa();
+		}
+		return options;
+	}
+
+	private String[] createOptionsChuyenNganh() {
+		String[] options = new String[dscn.size() + 1];
+		options[0] = "";
+		for (int i = 1; i < options.length; i++) {
+			options[i] = dscn.get(i - 1).getMa();
+		}
+		return options;
+	}
+
 	private void timKiem() {
 		dssv = svDAO.findBy(createText(ma.getText()), createText(ho.getText()), createText(ten.getText()),
-				createText((String) maLop.getSelectedItem()), createText(queQuan.getText()));
+				createText((String) maLop.getSelectedItem()), createText(queQuan.getText()),
+				createText((String) maKhoa.getSelectedItem()), createText((String) maCN.getSelectedItem()));
 		if (isSupportBtn) {
 			for (HopDong hopDong : hdDAO.findAll()) {
 				if (dssv.contains(hopDong.getSinhVien())) {
@@ -239,6 +275,8 @@ public class TimKiemSVUI {
 		ho.setText("");
 		ten.setText("");
 		maLop.setSelectedIndex(0);
+		maKhoa.setSelectedIndex(0);
+		maCN.setSelectedIndex(0);
 		queQuan.setText("");
 		ma.requestFocus();
 		table.clearSelection();

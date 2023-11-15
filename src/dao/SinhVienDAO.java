@@ -101,10 +101,11 @@ public class SinhVienDAO {
 		return true;
 	}
 
-	public List<SinhVien> findBy(String masv, String ho, String ten, String maLop, String queQuan) {
+	public List<SinhVien> findBy(String masv, String ho, String ten, String maLop, String queQuan, String maKhoa,
+			String maCN) {
 		List<SinhVien> results = new ArrayList<SinhVien>();
 		Connection con = connect();
-		String SQL = "{call findSinhVien(?,?,?,?,?)}";
+		String SQL = "{call findSinhVien(?,?,?,?,?,?,?)}";
 		try {
 			PreparedStatement pstmt = con.prepareStatement(SQL);
 			pstmt.setString(1, masv);
@@ -112,6 +113,8 @@ public class SinhVienDAO {
 			pstmt.setString(3, ten);
 			pstmt.setString(4, maLop);
 			pstmt.setString(5, queQuan);
+			pstmt.setString(6, maKhoa);
+			pstmt.setString(7, maCN);
 			ResultSet myRs = pstmt.executeQuery();
 			while (myRs.next()) {
 				LopHoc lop = lopDAO.findOneById(myRs.getString("MaLop"));

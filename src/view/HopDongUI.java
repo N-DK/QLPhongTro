@@ -189,7 +189,7 @@ public class HopDongUI implements MouseListener {
 	private void them() {
 		if (isValid()) {
 			PhongTro phongTro = phongTroDAO.findOneById(maPhong.getText());
-			SinhVien sinhVien = svDAO.findBy(maSV.getText(), null, null, null, null).get(0);
+			SinhVien sinhVien = svDAO.findBy(maSV.getText(), null, null, null, null, null, null).get(0);
 			HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
 			if (hdDAO.save(hopDong, "insert")) {
 				tableModel.addRow(hopDong.getObjects());
@@ -228,7 +228,7 @@ public class HopDongUI implements MouseListener {
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				String maSv = table.getValueAt(row, 1) + "";
 				String maPhong = table.getValueAt(row, 2) + "";
-				SinhVien sinhVien = svDAO.findBy(maSv, null, null, null, null).get(0);
+				SinhVien sinhVien = svDAO.findBy(maSv, null, null, null, null, null, null).get(0);
 				PhongTro phongTro = phongTroDAO.findOneById(maPhong);
 				HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
 				hdDAO.save(hopDong, "update");

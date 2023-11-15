@@ -350,9 +350,9 @@ public class DefaultLayout {
 			JFrame jFrame = new JFrame();
 			JPanel timKiemUI = null;
 			if (label.equals("Mã sinh viên")) {
-				timKiemUI = new TimKiemSVUI(true, textField, jFrame).getLayout();
+				timKiemUI = new TimKiemSVUI(textField, jFrame).getLayout();
 			} else {
-				timKiemUI = new TimKiemPhongTroUI(true, textField, jFrame).getLayout();
+				timKiemUI = new TimKiemPhongTroUI(textField, jFrame).getLayout();
 			}
 			jFrame.add(timKiemUI);
 			jFrame.setSize(1200, 800);

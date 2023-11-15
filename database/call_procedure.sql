@@ -169,17 +169,19 @@ BEGIN
 		AND (@maChuPhong is null or MaChuPhong = @maChuPhong)
 END
 
-CREATE PROCEDURE findSinhVien(@ma varchar(255),@ho nvarchar(255),@ten nvarchar(255),@maLop varchar(255),@queQuan nvarchar(255))
+CREATE PROCEDURE findSinhVien(@ma varchar(255),@ho nvarchar(255),@ten nvarchar(255),@maLop varchar(255),@queQuan nvarchar(255),@maKhoa varchar(255), @maCN varchar(255))
 AS
 BEGIN
-    SELECT * 
-    FROM SinhVien 
+    SELECT MaSinhVien, Ho, Ten,GioiTinh,NgaySinh,Sdt ,SinhVien.MaLop, QueQuan, ChuyenNganh.MaKhoa, ChuyenNganh.MaChuyenNganh
+	FROM SinhVien JOIN Lop ON SinhVien.MaLop = Lop.MaLop JOIN ChuyenNganh ON Lop.MaChuyenNganh = ChuyenNganh.MaChuyenNganh 
     WHERE 
         (@ma IS NULL OR MaSinhVien = @ma)
         AND (@ho IS NULL OR Ho like '%' + @ho + '%')
         AND (@ten IS NULL OR Ten like '%' + @ten + '%')
-        AND (@maLop IS NULL OR MaLop = @maLop)
+        AND (@maLop IS NULL OR SinhVien.MaLop = @maLop)
         AND (@queQuan IS NULL OR QueQuan like '%' + @queQuan + '%')
+		AND (@maKhoa IS NULL OR ChuyenNganh.MaKhoa like '%' + @maKhoa + '%')
+		AND (@maCN IS NULL OR ChuyenNganh.MaChuyenNganh like '%' + @maCN + '%')
 END
 
 CREATE PROCEDURE saveChuPhong(@type varchar(255), @ma varchar(255),@ho nvarchar(255),@ten nvarchar(255), @sdt varchar(15), @diaChi nvarchar(255), @ngaySinh date, @gioiTinh int)
@@ -228,4 +230,5 @@ AS
 BEGIN
 	DELETE FROM HopDong WHERE MaHopDong = @ma
 	UPDATE PhongTro SET TinhTrang = 1 WHERE MaPhong = @maPhong
+
 END

@@ -54,12 +54,12 @@ public class TimKiemPhongTroUI {
 		chuTroDAO = new ChuTroDAO();
 	}
 
-	public TimKiemPhongTroUI(Boolean isSupportBtn, JTextField maPhong, JFrame jFrame) {
+	public TimKiemPhongTroUI(JTextField maPhong, JFrame jFrame) {
 		wrapper = new JPanel();
 		phongTroDAO = new PhongTroDAO();
 		chuTroDAO = new ChuTroDAO();
 		this.maPhong_HopDong = maPhong;
-		this.isSupportBtn = isSupportBtn;
+		this.isSupportBtn = true;
 		this.jFrame = jFrame;
 	}
 
