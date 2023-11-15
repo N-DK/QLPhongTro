@@ -73,11 +73,6 @@ public class LopHocDAO {
 			if (list.contains(lop)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(lop)) {
-				System.out.println(type);
-				return false;
-			}
 		}
 		String SQL = "{call saveLop(?,?,?,?,?)}}";
 		Connection con = connect();

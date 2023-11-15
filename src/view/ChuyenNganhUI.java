@@ -84,7 +84,7 @@ public class ChuyenNganhUI implements MouseListener {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
@@ -99,6 +99,7 @@ public class ChuyenNganhUI implements MouseListener {
 			}
 		};
 		table = createCustomTable(tableModel);
+		table.addMouseListener(this);
 
 		for (ChuyenNganh chuyenNganh : dscn) {
 			tableModel.addRow(chuyenNganh.getObjects());
@@ -225,8 +226,8 @@ public class ChuyenNganhUI implements MouseListener {
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				Khoa khoa = khoaDAO.findOneById((String) maKhoa.getSelectedItem());
 				ChuyenNganh chuyenNganh = new ChuyenNganh(ma.getText(), ten.getText(), khoa);
-				boolean isSuccess = cnDAO.save(chuyenNganh, "update");
-				if (isSuccess) {
+				cnDAO.save(chuyenNganh, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
 					table.setValueAt(chuyenNganh.getMa(), row, 0);
 					table.setValueAt(chuyenNganh.getTen(), row, 1);
 					table.setValueAt(chuyenNganh.getKhoa().getMa(), row, 2);

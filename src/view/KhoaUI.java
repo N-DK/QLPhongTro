@@ -76,7 +76,7 @@ public class KhoaUI implements MouseListener {
 		JPanel container = new JPanel();
 		container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
 		container.setBackground(Color.WHITE);
-		
+
 		JPanel tableContainer = new JPanel();
 
 		tableContainer.setLayout(new BorderLayout());
@@ -205,8 +205,8 @@ public class KhoaUI implements MouseListener {
 			if (JOptionPane.showConfirmDialog(wrapper, "Bạn có chắc sửa dòng này không", "Cảnh báo",
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				Khoa khoa = new Khoa(ma.getText(), ten.getText());
-				boolean isSuccess = khoaDAO.save(khoa, "update");
-				if (isSuccess) {
+				khoaDAO.save(khoa, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
 					table.setValueAt(khoa.getMa(), row, 0);
 					table.setValueAt(khoa.getTen(), row, 1);
 					JOptionPane.showMessageDialog(wrapper, "Sửa khoa thành công");

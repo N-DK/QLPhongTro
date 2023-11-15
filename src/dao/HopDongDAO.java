@@ -51,10 +51,6 @@ public class HopDongDAO {
 			if (list.contains(hopDong)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(hopDong)) {
-				return false;
-			}
 		}
 		String SQL = "{call saveHopDong(?,?,?,?,?,?)}";
 		Connection con = connect();

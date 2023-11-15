@@ -71,12 +71,7 @@ public class ChuTroDAO {
 			if (list.contains(chuPhong)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(chuPhong)) {
-				return false;
-			}
 		}
-
 		String SQL = "{call saveChuPhong(?,?,?,?,?,?,?,?)}}";
 		Connection con = connect();
 		try {

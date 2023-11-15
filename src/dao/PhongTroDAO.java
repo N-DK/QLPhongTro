@@ -103,11 +103,6 @@ public class PhongTroDAO {
 			if (list.contains(phongTro)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(phongTro)) {
-				System.out.println(type);
-				return false;
-			}
 		}
 		String SQL = "{call savePhongTro(?,?,?,?,?,?)}}";
 		Connection con = connect();

@@ -225,8 +225,8 @@ public class LopHocUI implements MouseListener {
 					JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 				ChuyenNganh chuyenNganh = cnDAO.findOneById((String) macn.getSelectedItem());
 				LopHoc lop = new LopHoc(ma.getText(), ten.getText(), tenCN.getText(), chuyenNganh);
-				boolean isSuccess = lopDAO.save(lop, "update");
-				if (isSuccess) {
+				lopDAO.save(lop, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
 					table.setValueAt(lop.getMa(), row, 0);
 					table.setValueAt(lop.getTen(), row, 1);
 					table.setValueAt(lop.getGvcn(), row, 2);

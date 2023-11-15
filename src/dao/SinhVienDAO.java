@@ -51,10 +51,6 @@ public class SinhVienDAO {
 			if (list.contains(sinhVien)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(sinhVien)) {
-				return false;
-			}
 		}
 		String SQL = "{call saveSinhVien(?,?,?,?,?,?,?,?,?)}}";
 		Connection con = connect();

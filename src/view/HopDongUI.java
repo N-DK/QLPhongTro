@@ -231,8 +231,8 @@ public class HopDongUI implements MouseListener {
 				SinhVien sinhVien = svDAO.findBy(maSv, null, null, null, null).get(0);
 				PhongTro phongTro = phongTroDAO.findOneById(maPhong);
 				HopDong hopDong = new HopDong(ma.getText(), sinhVien, phongTro, ngayKy.getDate(), ngayHet.getDate());
-				boolean isSuccess = hdDAO.save(hopDong, "update");
-				if (isSuccess) {
+				hdDAO.save(hopDong, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
 					table.setValueAt(hopDong.getMa(), row, 0);
 					table.setValueAt(hopDong.getSinhVien().getMaSinhVien(), row, 1);
 					table.setValueAt(hopDong.getPhongTro().getMaPhong(), row, 2);

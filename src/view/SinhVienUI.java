@@ -240,8 +240,8 @@ public class SinhVienUI implements MouseListener {
 				int gioiTinh = ((String) this.gioiTinh.getSelectedItem()).equals("Nam") ? 1 : 0;
 				SinhVien sinhVien = new SinhVien(ho.getText(), ten.getText(), gioiTinh, ngaySinh.getDate(),
 						sdt.getText(), ma.getText(), queQuan.getText(), lop);
-				boolean isSuccess = svDAO.save(sinhVien, "update");
-				if (isSuccess) {
+				svDAO.save(sinhVien, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
 					table.setValueAt(sinhVien.getMaSinhVien(), row, 0);
 					table.setValueAt(sinhVien.getHo(), row, 1);
 					table.setValueAt(sinhVien.getTen(), row, 2);

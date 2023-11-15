@@ -73,11 +73,6 @@ public class ChuyenNganhDAO {
 			if (list.contains(chuyenNganh)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(chuyenNganh)) {
-				System.out.println(type);
-				return false;
-			}
 		}
 		String SQL = "{call saveChuyenNganh(?,?,?,?)}}";
 		Connection con = connect();

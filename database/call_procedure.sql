@@ -1,4 +1,5 @@
 ﻿/*Lấy danh sách của từng loại*/
+use QLPhongTro;
 CREATE PROCEDURE findAll(@type nvarchar(255))
 AS
 BEGIN

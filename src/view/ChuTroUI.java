@@ -238,9 +238,11 @@ public class ChuTroUI implements MouseListener {
 				String sdt = sdtCP.getText();
 				String diachi = queQuanCP.getText();
 				int gioitinh = gioiTinh.getSelectedItem().toString().equals("Nam") ? 1 : 0;
-				ChuPhong cp = new ChuPhong(ma, ho, ten, sdt, diachi, ngaySinh.getDate(), gioitinh);
-				boolean isSuccess = ctDAO.save(cp, "update");
-				if (isSuccess) {
+				if (!ma.equals((String) table.getValueAt(index, 0))) {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã chủ phòng!");
+				} else {
+					ChuPhong cp = new ChuPhong(ma, ho, ten, sdt, diachi, ngaySinh.getDate(), gioitinh);
+					ctDAO.save(cp, "update");
 					table.setValueAt(cp.getMaChuPhong(), index, 0);
 					table.setValueAt(cp.getHo(), index, 1);
 					table.setValueAt(cp.getTen(), index, 2);
@@ -250,8 +252,6 @@ public class ChuTroUI implements MouseListener {
 					table.setValueAt(cp.getGioiTinh() == 1 ? "Nam" : "Nữ", index, 6);
 					JOptionPane.showMessageDialog(wrapper, "Sửa chủ phòng thành công");
 					XoaTrang();
-				} else {
-					JOptionPane.showMessageDialog(wrapper, "Không được sửa mã chủ phòng!");
 				}
 			}
 		}
@@ -284,7 +284,7 @@ public class ChuTroUI implements MouseListener {
 		if (diachi.equals("")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;
-		} else if(diachi.matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (diachi.matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được chứa số và các kí tự đặt biệt");
 			return false;
 		}

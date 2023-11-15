@@ -68,10 +68,6 @@ public class KhoaDAO {
 			if (list.contains(khoa)) {
 				return false;
 			}
-		} else {
-			if (!list.contains(khoa)) {
-				return false;
-			}
 		}
 		String SQL = "{call saveKhoa(?,?,?)}";
 		Connection con = connect();

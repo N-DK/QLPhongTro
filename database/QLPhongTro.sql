@@ -95,7 +95,3 @@ values	('21134361', N'Ngô Đăng', N'Khoa', 'DHKHMT17B', N'Quảng Nam', 1, '20
 		('21134369', N'Lê Đình', N'Nam', 'DHKHMT17A', N'Hà Tĩnh', 1, '2003-11-30', '0792798777')
 
 
-DELETE FROM HopDong WHERE MaHopDong = 'HD001'
-	UPDATE PhongTro SET TinhTrang = 1 WHERE MaPhong = 'P001'
-SELECT * FROM HopDong
-

@@ -15,6 +15,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.swing.Box;
@@ -243,11 +244,12 @@ public class PhongTroUI implements MouseListener {
 				int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
 				PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()),
 						chuPhong, tinhTrang);
-				boolean isSuccess = phongTroDAO.save(phongTro, "update");
-				if (isSuccess) {
+				phongTroDAO.save(phongTro, "update");
+				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
+					DecimalFormat decimalFormat = new DecimalFormat("#,###");
 					table.setValueAt(phongTro.getMaPhong(), row, 0);
 					table.setValueAt(phongTro.getDiaChi(), row, 1);
-					table.setValueAt(phongTro.getGia(), row, 2);
+					table.setValueAt(decimalFormat.format(phongTro.getGia()), row, 2);
 					table.setValueAt(phongTro.getChuPhong().getMaChuPhong(), row, 3);
 					table.setValueAt(phongTro.getTinhTrang() == 1 ? "Disable" : "Enable", row, 4);
 					JOptionPane.showMessageDialog(wrapper, "Sửa phòng thành công");
