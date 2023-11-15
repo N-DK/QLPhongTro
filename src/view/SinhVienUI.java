@@ -270,21 +270,21 @@ public class SinhVienUI implements MouseListener {
 		if (ho.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Họ sinh viên không được rỗng");
 			return false;
-		} else if (ho.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (!ho.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Họ sinh viên không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
 		if (ten.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Tên sinh viên không được rỗng");
 			return false;
-		} else if (ten.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (!ten.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Tên sinh viên không được chứa số và các kí tự đặt biệt");
 			return false;
 		}
 		if (queQuan.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Quê quán sinh viên không được rỗng");
 			return false;
-		} else if (queQuan.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (!queQuan.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Quên quán sinh viên không được chứa số và các kí tự đặt biệt");
 			return false;
 		}

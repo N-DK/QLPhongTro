@@ -286,7 +286,7 @@ public class PhongTroUI implements MouseListener {
 		if (diaChi.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;
-		} else if (diaChi.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (!diaChi.getText().matches("[^-.!@#$%^&*()_+=\\[\\]{};'\"\"':,~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được chứa số và các kí tự đặt biệt");
 			return false;
 		}

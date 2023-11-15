@@ -201,7 +201,7 @@ public class ChuTroUI implements MouseListener {
 			ChuPhong cp = new ChuPhong(ma, ho, ten, sdt, diachi, ngaySinh.getDate(), gioitinh);
 			if (ctDAO.save(cp, "insert")) {
 				tableModel.addRow(cp.getObjects());
-				JOptionPane.showMessageDialog(wrapper, "Thêm sinh viên thành công");
+				JOptionPane.showMessageDialog(wrapper, "Thêm chủ phòng thành công");
 				XoaTrang();
 			} else {
 				JOptionPane.showMessageDialog(wrapper, "Mã chủ phòng trùng");
@@ -217,7 +217,7 @@ public class ChuTroUI implements MouseListener {
 		if (index > -1) {
 			if (hoi == JOptionPane.YES_OPTION) {
 				if (ctDAO.deleteOneById(ma)) {
-					JOptionPane.showMessageDialog(wrapper, "Xoa thành công");
+					JOptionPane.showMessageDialog(wrapper, "Xóa chủ trọ thành công");
 					tableModel.removeRow(index);
 					XoaTrang();
 				}
@@ -284,7 +284,7 @@ public class ChuTroUI implements MouseListener {
 		if (diachi.equals("")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được rỗng");
 			return false;
-		} else if (diachi.matches("[^-.!@#$%^&*()_+=\\[\\]{}\\d;'\"\"':,/~`]+")) {
+		} else if (!diachi.matches("[^-.!@#$%^&*()_+=\\[\\]{};'\"\"':,~`]+")) {
 			JOptionPane.showMessageDialog(wrapper, "Địa chỉ không được chứa số và các kí tự đặt biệt");
 			return false;
 		}

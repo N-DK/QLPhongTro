@@ -196,7 +196,7 @@ public class HopDongUI implements MouseListener {
 				JOptionPane.showMessageDialog(wrapper, "Thêm hợp đồng thành công");
 				lamMoi();
 			} else {
-				JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được trùngF");
+				JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng không được trùng");
 			}
 		}
 	}
@@ -265,9 +265,10 @@ public class HopDongUI implements MouseListener {
 			JOptionPane.showMessageDialog(wrapper, "Mã hợp đồng có dạng là HD và đi theo sau là 3 số");
 			return false;
 		}
-		Object[][] objects = { { ngayKy.getDate(), "Ngày ký hợp đồng" }, { ngayHet.getDate(), "Ngày hết hợp đồng" } };
+		Object[][] objects = { { maSV.getText(), "Mã sinh viên" }, { maPhong.getText(), "Mã phòng" },
+				{ ngayKy.getDate(), "Ngày ký hợp đồng" }, { ngayHet.getDate(), "Ngày hết hợp đồng" } };
 		for (Object[] object : objects) {
-			if (object[0] == null) {
+			if (object[0] == null || object[0].equals("")) {
 				JOptionPane.showMessageDialog(wrapper, object[1] + " không được rỗng");
 				return false;
 			}
