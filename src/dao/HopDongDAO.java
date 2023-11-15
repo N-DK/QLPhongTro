@@ -40,8 +40,7 @@ public class HopDongDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-
+		}		
 		return resutls;
 	}
 

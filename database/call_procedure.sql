@@ -60,7 +60,7 @@ BEGIN
 END
 
 /*Xóa một đối tượng theo mã*/
-CREATE PROCEDURE deleteOneById(@type varchar(255), @ma varchar(255))
+CREATE PROCEDURE deleteOneById(@type va	rchar(255), @ma varchar(255))
 AS
 BEGIN
 	IF @type = 'khoa'
@@ -229,4 +229,3 @@ BEGIN
 	DELETE FROM HopDong WHERE MaHopDong = @ma
 	UPDATE PhongTro SET TinhTrang = 1 WHERE MaPhong = @maPhong
 END
-

@@ -244,8 +244,12 @@ public class PhongTroUI implements MouseListener {
 				int tinhTrang = ((String) this.tinhTrang.getSelectedItem()).equals("Disable") ? 1 : 0;
 				PhongTro phongTro = new PhongTro(ma.getText(), diaChi.getText(), Float.parseFloat(gia.getText()),
 						chuPhong, tinhTrang);
-				phongTroDAO.save(phongTro, "update");
+				if (!((String) this.tinhTrang.getSelectedItem()).equals(table.getValueAt(row, 4))) {
+					JOptionPane.showMessageDialog(wrapper, "Không được sửa tình trạng");
+					return;
+				}
 				if (ma.getText().equals((String) table.getValueAt(row, 0))) {
+					phongTroDAO.save(phongTro, "update");
 					DecimalFormat decimalFormat = new DecimalFormat("#,###");
 					table.setValueAt(phongTro.getMaPhong(), row, 0);
 					table.setValueAt(phongTro.getDiaChi(), row, 1);
